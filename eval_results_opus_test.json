@@ -1,0 +1,15 @@
+{
+  "metadata": {
+    "display_name": "Opus-4.5",
+    "organization": "",
+    "run_name": "opus_test",
+    "notes": ""
+  },
+  "metrics": {
+    "geometric_mean_speedup": 0.0,
+    "fast_p_1_5": 0.0,
+    "total_submitted": 0,
+    "total_correct": 0
+  },
+  "details": {}
+}
