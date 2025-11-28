@@ -40,9 +40,8 @@ class EvalSubmissionConfig(Config):
     def __init__(self):
         self.submission_file = REQUIRED
         self.output_file = None
-        self.hardware = "L40S"
-        self.gpu_arch = "Ada"
-        self.baseline_file = "baseline_time_torch_compile_inductor_default"
+        self.hardware = "H100"
+        self.gpu_arch = "Hopper"
 
     def __repr__(self):
         return f"EvalSubmissionConfig({self.to_dict()})"
@@ -118,31 +117,20 @@ class ModelEvaluator:
 # LOCAL ORCHESTRATION LOGIC
 # =============================================================================
 
-def resolve_hardware_results_dir(hardware: str) -> str:
-    alias_map = {
-        "H100": "H100_PCIe_LambdaLabs",
-        "H100_PCIe": "H100_PCIe_LambdaLabs",
-    }
-    target = alias_map.get(hardware, hardware)
-    timing_root = os.path.join(kb_path_local, "results", "timing")
-    candidate_path = os.path.join(timing_root, target)
-    if os.path.isdir(candidate_path):
-        return target
-    if os.path.isdir(timing_root):
-        for entry in os.listdir(timing_root):
-            entry_path = os.path.join(timing_root, entry)
-            if os.path.isdir(entry_path) and hardware.lower() in entry.lower():
-                return entry
-    return target
+def load_canonical_baselines(hardware: str):
+    """
+    Loads baseline times from the repo's pinned 'baselines/' directory
+    to ensure consistent scoring across all environments.
+    """
+    baseline_path = os.path.join(repo_root, "baselines", f"{hardware}.json")
 
-def load_local_baselines(hardware, baseline_file):
-    hardware_dir = resolve_hardware_results_dir(hardware)
-    path = os.path.join(kb_path_local, "results", "timing", hardware_dir, f"{baseline_file}.json")
-    if not os.path.exists(path):
-        print(f"⚠️  Baseline file not found locally at: {path}")
-        print("    Run KernelBench/scripts/generate_baseline_time.py first if you need accurate speedups.")
-        return {}
-    with open(path, 'r') as f:
+    if not os.path.exists(baseline_path):
+        raise FileNotFoundError(
+            f"Canonical baseline not found for hardware '{hardware}'. "
+            f"Expected at: {baseline_path}"
+        )
+
+    with open(baseline_path, 'r') as f:
         return json.load(f)
 
 def get_ref_name(level, problem_id):
@@ -163,7 +151,7 @@ def main(config: EvalSubmissionConfig):
         data = json.load(f)
     kernels = data["kernels"]
     
-    baselines = load_local_baselines(config.hardware, config.baseline_file)
+    baselines = load_canonical_baselines(config.hardware)
 
     work_items = []
     keys = []
@@ -256,6 +244,10 @@ def main(config: EvalSubmissionConfig):
 
     output_data = {
         "metadata": data.get("metadata", {}),
+        "config": {
+            "hardware": config.hardware,
+            "gpu_arch": config.gpu_arch
+        },
         "metrics": {
             "geometric_mean_speedup": gmsr,
             "fast_p_1_5": fast_p_15,

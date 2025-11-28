@@ -1,0 +1,76 @@
+name: KernelBench Eval
+
+on:
+  pull_request:
+    paths:
+      - 'submissions/*.json'
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install Dependencies
+        run: |
+          pip install modal pydra tqdm numpy
+          pip install -r KernelBench/requirements.txt
+
+      - name: Identify Submission File
+        id: files
+        run: |
+          FILE=$(git diff --name-only origin/main | grep 'submissions/.*\.json' | head -n 1)
+          echo "FILE=$FILE" >> $GITHUB_OUTPUT
+
+      - name: Run Evaluation on Modal
+        env:
+          MODAL_TOKEN_ID: ${{ secrets.MODAL_TOKEN_ID }}
+          MODAL_TOKEN_SECRET: ${{ secrets.MODAL_TOKEN_SECRET }}
+        run: |
+          python scripts/evaluate_submission.py \
+            submission_file=${{ steps.files.outputs.FILE }} \
+            output_file=results.json \
+            hardware=H100
+
+      - name: Update Database
+        run: |
+          python scripts/update_database.py --eval_output results.json
+
+      - name: Upload Results Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: evaluation-results
+          path: results.json
+
+      - name: Post Results Comment
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const results = JSON.parse(fs.readFileSync('results.json', 'utf8'));
+            const metrics = results.metrics;
+            const config = results.config;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## KernelBench Evaluation Results\n\n` +
+                `| Metric | Value |\n` +
+                `|--------|-------|\n` +
+                `| Hardware | ${config.hardware} |\n` +
+                `| GeoMean Speedup | ${metrics.geometric_mean_speedup.toFixed(4)}x |\n` +
+                `| Fast@1.5 | ${(metrics.fast_p_1_5 * 100).toFixed(2)}% |\n` +
+                `| Correct | ${metrics.total_correct}/${metrics.total_submitted} |\n`
+            })

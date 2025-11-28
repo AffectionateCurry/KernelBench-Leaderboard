@@ -1,0 +1,48 @@
+{
+  "_comment": "Placeholder baseline file. Replace with actual timing data from KernelBench baseline generation.",
+  "_schema": {
+    "description": "Each level contains problem entries keyed by filename",
+    "entry_format": {
+      "mean": "Mean execution time in milliseconds",
+      "std": "Standard deviation in milliseconds",
+      "min": "Minimum time across trials",
+      "max": "Maximum time across trials",
+      "num_trials": "Number of benchmark trials (typically 100)",
+      "hardware": "GPU hardware name",
+      "device": "CUDA device identifier"
+    }
+  },
+  "level1": {
+    "1_Square_matrix_multiplication_.py": {
+      "mean": 0.0,
+      "std": 0.0,
+      "min": 0.0,
+      "max": 0.0,
+      "num_trials": 100,
+      "hardware": "NVIDIA H100",
+      "device": "cuda:0"
+    }
+  },
+  "level2": {
+    "1_Conv2D_ReLU_BiasAdd.py": {
+      "mean": 0.0,
+      "std": 0.0,
+      "min": 0.0,
+      "max": 0.0,
+      "num_trials": 100,
+      "hardware": "NVIDIA H100",
+      "device": "cuda:0"
+    }
+  },
+  "level3": {
+    "1_MLP.py": {
+      "mean": 0.0,
+      "std": 0.0,
+      "min": 0.0,
+      "max": 0.0,
+      "num_trials": 100,
+      "hardware": "NVIDIA H100",
+      "device": "cuda:0"
+    }
+  }
+}

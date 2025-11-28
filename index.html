@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KernelBench Leaderboard</title>
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --text-primary: #1a1a2e;
+            --text-secondary: #6c757d;
+            --border-color: #dee2e6;
+            --accent-color: #4f46e5;
+            --accent-hover: #4338ca;
+            --badge-bg: #e0e7ff;
+            --badge-text: #3730a3;
+            --success-color: #10b981;
+            --table-hover: #f1f5f9;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border-color: #334155;
+            --accent-color: #818cf8;
+            --accent-hover: #a5b4fc;
+            --badge-bg: #312e81;
+            --badge-text: #c7d2fe;
+            --success-color: #34d399;
+            --table-hover: #1e293b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.5rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .header-left h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-top: 0.25rem;
+        }
+
+        #theme-toggle {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-size: 1.25rem;
+            transition: background-color 0.2s;
+        }
+
+        #theme-toggle:hover {
+            background-color: var(--table-hover);
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem 1.5rem;
+            min-width: 150px;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+
+        /* Table */
+        .table-container {
+            overflow-x: auto;
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--bg-secondary);
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            position: sticky;
+            top: 0;
+        }
+
+        th.sortable {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        th.sortable:hover {
+            color: var(--accent-color);
+        }
+
+        th.sortable::after {
+            content: ' \2195';
+            opacity: 0.5;
+        }
+
+        th.sorted-asc::after {
+            content: ' \2191';
+            opacity: 1;
+        }
+
+        th.sorted-desc::after {
+            content: ' \2193';
+            opacity: 1;
+        }
+
+        tbody tr:hover {
+            background-color: var(--table-hover);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .rank {
+            font-weight: 700;
+            color: var(--text-secondary);
+        }
+
+        .rank-1 { color: #fbbf24; }
+        .rank-2 { color: #9ca3af; }
+        .rank-3 { color: #d97706; }
+
+        .model-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background-color: var(--badge-bg);
+            color: var(--badge-text);
+        }
+
+        .metric-value {
+            font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+            font-weight: 600;
+        }
+
+        .metric-good {
+            color: var(--success-color);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .empty-state p {
+            margin-bottom: 1.5rem;
+        }
+
+        .empty-state a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        .empty-state a:hover {
+            text-decoration: underline;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 3rem;
+            padding: 2rem 0;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        footer a {
+            color: var(--accent-color);
+            text-decoration: none;
+            margin: 0 0.5rem;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 1.5rem;
+            height: 1.5rem;
+            border: 2px solid var(--border-color);
+            border-top-color: var(--accent-color);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-left: 0.5rem;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .stats-bar {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .stat-item {
+                width: 100%;
+            }
+
+            th, td {
+                padding: 0.75rem 0.5rem;
+                font-size: 0.875rem;
+            }
+
+            .badge {
+                padding: 0.2rem 0.5rem;
+                font-size: 0.7rem;
+            }
+        }
+    </style>
+    <script>
+        // Prevent flash of wrong theme
+        (function() {
+            const theme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="header-left">
+                <h1>KernelBench Leaderboard</h1>
+                <p class="subtitle">CUDA Kernel Optimization Benchmark</p>
+            </div>
+            <button id="theme-toggle" title="Toggle theme">
+                <span class="theme-icon"></span>
+            </button>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="stats-bar" id="stats-bar">
+            <div class="stat-item">
+                <div class="stat-label">Total Submissions</div>
+                <div class="stat-value" id="stat-total">-</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Best GeoMean</div>
+                <div class="stat-value" id="stat-best">-</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Hardware</div>
+                <div class="stat-value" id="stat-hardware">H100</div>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <div class="loading" id="loading">Loading leaderboard</div>
+
+            <table id="leaderboard" class="hidden">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Model</th>
+                        <th>Organization</th>
+                        <th>Hardware</th>
+                        <th class="sortable" data-sort="geo_mean">GeoMean Speedup</th>
+                        <th class="sortable" data-sort="fast_p">Fast@1.5</th>
+                        <th>Correct</th>
+                        <th class="sortable" data-sort="date">Date</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboard-body"></tbody>
+            </table>
+
+            <div id="empty-state" class="empty-state hidden">
+                <h2>No submissions yet</h2>
+                <p>Be the first to submit your optimized CUDA kernels!</p>
+                <a href="https://github.com/ScalingIntelligence/KernelBench">Learn how to submit</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <a href="https://github.com/ScalingIntelligence/KernelBench">KernelBench</a> |
+            <a href="https://github.com/AffectionateCurry/KernelBench-Leaderboard">Leaderboard Repo</a> |
+            <a href="https://github.com/AffectionateCurry/KernelBench-Leaderboard#how-to-submit">How to Submit</a>
+        </div>
+    </footer>
+
+    <script>
+        // Theme toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = themeToggle.querySelector('.theme-icon');
+
+        function updateThemeIcon() {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            themeIcon.textContent = isDark ? '\u2600\uFE0F' : '\uD83C\uDF19';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon();
+        });
+
+        updateThemeIcon();
+
+        // Leaderboard data and rendering
+        let leaderboardData = [];
+        let currentSort = { field: 'geo_mean', direction: 'desc' };
+
+        async function loadLeaderboard() {
+            const loading = document.getElementById('loading');
+            const table = document.getElementById('leaderboard');
+            const emptyState = document.getElementById('empty-state');
+
+            try {
+                const response = await fetch('data/metadata.json');
+                if (!response.ok) throw new Error('Failed to fetch');
+
+                leaderboardData = await response.json();
+
+                loading.classList.add('hidden');
+
+                if (leaderboardData.length === 0) {
+                    emptyState.classList.remove('hidden');
+                    document.getElementById('stat-total').textContent = '0';
+                    document.getElementById('stat-best').textContent = '-';
+                } else {
+                    table.classList.remove('hidden');
+                    updateStats();
+                    sortAndRender();
+                }
+            } catch (error) {
+                console.error('Failed to load leaderboard:', error);
+                loading.textContent = 'Failed to load leaderboard data';
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('stat-total').textContent = leaderboardData.length;
+
+            if (leaderboardData.length > 0) {
+                const best = Math.max(...leaderboardData.map(e => e.metrics?.geo_mean || 0));
+                document.getElementById('stat-best').textContent = best.toFixed(3) + 'x';
+            }
+        }
+
+        function sortAndRender() {
+            const sorted = [...leaderboardData].sort((a, b) => {
+                let aVal, bVal;
+
+                switch (currentSort.field) {
+                    case 'geo_mean':
+                        aVal = a.metrics?.geo_mean || 0;
+                        bVal = b.metrics?.geo_mean || 0;
+                        break;
+                    case 'fast_p':
+                        aVal = a.metrics?.fast_p || 0;
+                        bVal = b.metrics?.fast_p || 0;
+                        break;
+                    case 'date':
+                        aVal = new Date(a.date || 0);
+                        bVal = new Date(b.date || 0);
+                        break;
+                    default:
+                        aVal = 0;
+                        bVal = 0;
+                }
+
+                if (currentSort.direction === 'desc') {
+                    return bVal - aVal;
+                }
+                return aVal - bVal;
+            });
+
+            renderTable(sorted);
+            updateSortIndicators();
+        }
+
+        function renderTable(data) {
+            const tbody = document.getElementById('leaderboard-body');
+            tbody.innerHTML = '';
+
+            data.forEach((entry, index) => {
+                const rank = index + 1;
+                const row = document.createElement('tr');
+
+                const geoMean = entry.metrics?.geo_mean || 0;
+                const fastP = entry.metrics?.fast_p || 0;
+                const totalCorrect = entry.metrics?.total_correct || 0;
+                const totalSubmitted = entry.metrics?.total_submitted || 0;
+
+                let rankClass = 'rank';
+                if (rank <= 3) rankClass += ` rank-${rank}`;
+
+                row.innerHTML = `
+                    <td class="${rankClass}">#${rank}</td>
+                    <td class="model-name">${escapeHtml(entry.name || 'Unknown')}</td>
+                    <td>${escapeHtml(entry.organization || '-')}</td>
+                    <td><span class="badge">${escapeHtml(entry.hardware || 'Unknown')}</span></td>
+                    <td class="metric-value ${geoMean >= 1 ? 'metric-good' : ''}">${geoMean.toFixed(3)}x</td>
+                    <td class="metric-value">${(fastP * 100).toFixed(1)}%</td>
+                    <td>${totalCorrect}/${totalSubmitted}</td>
+                    <td>${entry.date || '-'}</td>
+                `;
+
+                tbody.appendChild(row);
+            });
+        }
+
+        function updateSortIndicators() {
+            document.querySelectorAll('th.sortable').forEach(th => {
+                th.classList.remove('sorted-asc', 'sorted-desc');
+                if (th.dataset.sort === currentSort.field) {
+                    th.classList.add(`sorted-${currentSort.direction}`);
+                }
+            });
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Sort handlers
+        document.querySelectorAll('th.sortable').forEach(th => {
+            th.addEventListener('click', () => {
+                const field = th.dataset.sort;
+                if (currentSort.field === field) {
+                    currentSort.direction = currentSort.direction === 'desc' ? 'asc' : 'desc';
+                } else {
+                    currentSort.field = field;
+                    currentSort.direction = 'desc';
+                }
+                sortAndRender();
+            });
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', loadLeaderboard);
+    </script>
+</body>
+</html>

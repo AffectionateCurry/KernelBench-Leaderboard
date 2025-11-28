@@ -33,25 +33,35 @@ def main():
     # This ID links the metadata, the full dump, and the problem entries together.
     submission_id = new_data["metadata"]["display_name"].lower().replace(" ", "_").replace("-", "_")
 
-    print(f"🔄 Updating Database for: {new_data['metadata']['display_name']} (ID: {submission_id})")
+    # Extract hardware configuration for composite key
+    hardware_tag = new_data.get("config", {}).get("hardware", "unknown")
+    unique_entry_id = f"{submission_id}_{hardware_tag}"
+
+    print(f"🔄 Updating Database for: {new_data['metadata']['display_name']} (ID: {unique_entry_id})")
 
     # -------------------------------------------------------------------------
     # PART A: Update Main Leaderboard (metadata.json)
     # -------------------------------------------------------------------------
     with open(METADATA_FILE, 'r') as f:
         metadata_list = json.load(f)
-    
-    # Remove existing entry if updating a model (to prevent duplicates)
-    metadata_list = [m for m in metadata_list if m["id"] != submission_id]
 
-    # Add new entry
+    # Remove existing entry if updating a model+hardware combo (to prevent duplicates)
+    metadata_list = [m for m in metadata_list if m.get("unique_id") != unique_entry_id]
+
+    # Add new entry with nested metrics structure
     new_entry = {
         "id": submission_id,
+        "unique_id": unique_entry_id,
+        "hardware": hardware_tag,
         "name": new_data["metadata"]["display_name"],
-        "organization": new_data["metadata"]["organization"],
-        "notes": new_data["metadata"]["notes"],
-        "geo_mean": new_data["metrics"]["geometric_mean_speedup"],
-        "fast_p": new_data["metrics"]["fast_p_1_5"],
+        "organization": new_data["metadata"].get("organization", ""),
+        "notes": new_data["metadata"].get("notes", ""),
+        "metrics": {
+            "geo_mean": new_data["metrics"]["geometric_mean_speedup"],
+            "fast_p": new_data["metrics"]["fast_p_1_5"],
+            "total_submitted": new_data["metrics"].get("total_submitted", 0),
+            "total_correct": new_data["metrics"].get("total_correct", 0)
+        },
         "date": datetime.today().strftime('%Y-%m-%d')
     }
     metadata_list.append(new_entry)
@@ -65,10 +75,11 @@ def main():
     # PART B: Save Full Result Dump
     # -------------------------------------------------------------------------
     # This allows users to download the raw data if they want
-    dump_path = os.path.join(RESULTS_DIR, f"{submission_id}.json")
+    # Use unique_entry_id to support same model on different hardware
+    dump_path = os.path.join(RESULTS_DIR, f"{unique_entry_id}.json")
     with open(dump_path, 'w') as f:
         json.dump(new_data, f, indent=2)
-    print(f"✅ Saved full result dump to data/results/{submission_id}.json")
+    print(f"✅ Saved full result dump to data/results/{unique_entry_id}.json")
 
     # -------------------------------------------------------------------------
     # PART C: Update Individual Problem Files
@@ -102,17 +113,18 @@ def main():
         else:
             prob_data = []
 
-        # Remove previous entry from this specific model
-        prob_data = [p for p in prob_data if p["model_id"] != submission_id]
+        # Remove previous entry from this specific model+hardware combo
+        prob_data = [p for p in prob_data if p.get("unique_id") != unique_entry_id]
 
-        # Add new entry
+        # Add new entry with hardware tag
         prob_data.append({
             "model_id": submission_id,
+            "unique_id": unique_entry_id,
             "model_name": new_data["metadata"]["display_name"],
+            "hardware": hardware_tag,
             "speedup": kernel_info["speedup"],
             "runtime": kernel_info.get("runtime_ms", 0),
-            # This is the magic part: We save the code snippet right here
-            "code": new_data["kernels"][key] if "kernels" in new_data else kernel_info.get("code", "") 
+            "code": kernel_info.get("code", "")
         })
 
         # Sort by Speedup (High to Low)
