@@ -1,0 +1,104 @@
+{
+  "entry": {
+    "id": "gemini_2_5_flash",
+    "unique_id": "gemini_2_5_flash_H100",
+    "display_name": "Gemini 2.5 Flash",
+    "organization": "Google",
+    "hardware": "H100",
+    "timestamp": "2025-11-28T23:46:14.063706",
+    "metrics": {
+      "geo_mean": 0.8387552867059214,
+      "fast_p_1_0": 0.224,
+      "fast_p_1_5": 0.132,
+      "fast_p_2_0": 0.064,
+      "total_submitted": 250,
+      "total_compiled": 172,
+      "total_correct": 112,
+      "compile_rate": 0.688,
+      "correct_rate": 0.448
+    },
+    "level_stats": {
+      "level1": {
+        "evaluated": 96,
+        "expected": 100,
+        "compiled": 70,
+        "correct": 42
+      },
+      "level2": {
+        "evaluated": 98,
+        "expected": 100,
+        "compiled": 65,
+        "correct": 52
+      },
+      "level3": {
+        "evaluated": 48,
+        "expected": 50,
+        "compiled": 37,
+        "correct": 18
+      }
+    },
+    "notes": ""
+  },
+  "level_results": [
+    {
+      "run_name": "gemini_2_5_flash_level1",
+      "level": 1,
+      "hardware": "H100",
+      "total_count": 100,
+      "total_eval": 96,
+      "compiled_count": 70,
+      "correct_count": 42,
+      "compilation_rate": 0.7,
+      "correctness_rate": 0.42,
+      "geo_mean_speedup": 0.7450160539533679,
+      "fast_p": {
+        "0.0": 0.42,
+        "0.5": 0.28,
+        "0.8": 0.24,
+        "1.0": 0.21,
+        "1.5": 0.08,
+        "2.0": 0.05
+      }
+    },
+    {
+      "run_name": "gemini_2_5_flash_level2",
+      "level": 2,
+      "hardware": "H100",
+      "total_count": 100,
+      "total_eval": 98,
+      "compiled_count": 65,
+      "correct_count": 52,
+      "compilation_rate": 0.65,
+      "correctness_rate": 0.52,
+      "geo_mean_speedup": 1.03732294344222,
+      "fast_p": {
+        "0.0": 0.52,
+        "0.5": 0.44,
+        "0.8": 0.34,
+        "1.0": 0.26,
+        "1.5": 0.2,
+        "2.0": 0.1
+      }
+    },
+    {
+      "run_name": "gemini_2_5_flash_level3",
+      "level": 3,
+      "hardware": "H100",
+      "total_count": 50,
+      "total_eval": 48,
+      "compiled_count": 37,
+      "correct_count": 18,
+      "compilation_rate": 0.74,
+      "correctness_rate": 0.36,
+      "geo_mean_speedup": 0.5986157601307472,
+      "fast_p": {
+        "0.0": 0.36,
+        "0.5": 0.22,
+        "0.8": 0.2,
+        "1.0": 0.18,
+        "1.5": 0.1,
+        "2.0": 0.02
+      }
+    }
+  ]
+}

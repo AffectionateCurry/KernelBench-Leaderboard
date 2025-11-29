@@ -462,12 +462,12 @@
                         bVal = b.metrics?.geo_mean || 0;
                         break;
                     case 'fast_p':
-                        aVal = a.metrics?.fast_p || 0;
-                        bVal = b.metrics?.fast_p || 0;
+                        aVal = a.metrics?.fast_p_1_5 || 0;
+                        bVal = b.metrics?.fast_p_1_5 || 0;
                         break;
                     case 'date':
-                        aVal = new Date(a.date || 0);
-                        bVal = new Date(b.date || 0);
+                        aVal = new Date(a.timestamp || 0);
+                        bVal = new Date(b.timestamp || 0);
                         break;
                     default:
                         aVal = 0;
@@ -493,22 +493,25 @@
                 const row = document.createElement('tr');
 
                 const geoMean = entry.metrics?.geo_mean || 0;
-                const fastP = entry.metrics?.fast_p || 0;
+                const fastP = entry.metrics?.fast_p_1_5 || 0;
                 const totalCorrect = entry.metrics?.total_correct || 0;
                 const totalSubmitted = entry.metrics?.total_submitted || 0;
 
                 let rankClass = 'rank';
                 if (rank <= 3) rankClass += ` rank-${rank}`;
 
+                // Format date from timestamp
+                const date = entry.timestamp ? new Date(entry.timestamp).toLocaleDateString() : '-';
+
                 row.innerHTML = `
                     <td class="${rankClass}">#${rank}</td>
-                    <td class="model-name">${escapeHtml(entry.name || 'Unknown')}</td>
+                    <td class="model-name">${escapeHtml(entry.display_name || 'Unknown')}</td>
                     <td>${escapeHtml(entry.organization || '-')}</td>
                     <td><span class="badge">${escapeHtml(entry.hardware || 'Unknown')}</span></td>
                     <td class="metric-value ${geoMean >= 1 ? 'metric-good' : ''}">${geoMean.toFixed(3)}x</td>
                     <td class="metric-value">${(fastP * 100).toFixed(1)}%</td>
                     <td>${totalCorrect}/${totalSubmitted}</td>
-                    <td>${entry.date || '-'}</td>
+                    <td>${date}</td>
                 `;
 
                 tbody.appendChild(row);
