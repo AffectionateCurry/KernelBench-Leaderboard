@@ -2,11 +2,14 @@ name: KernelBench Eval
 
 on:
   pull_request:
+    types: [labeled]
     paths:
       - 'submissions/*.json'
 
 jobs:
   evaluate:
+    # Only run when PR has 'evaluate' label
+    if: github.event.label.name == 'evaluate'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -34,14 +37,55 @@ jobs:
         run: |
           modal token set --token-id $MODAL_TOKEN_ID --token-secret $MODAL_TOKEN_SECRET
 
+      - name: Checkout Submodule Branch
+        run: |
+          cd KernelBench
+          git fetch origin leaderboard-analysis-json
+          git checkout leaderboard-analysis-json
+
       - name: Identify Submission File
         id: submission
         run: |
           FILE=$(git diff --name-only origin/main | grep 'submissions/.*\.json' | head -n 1)
+          if [ -z "$FILE" ]; then
+            echo "Error: No submission JSON found in PR"
+            exit 1
+          fi
           echo "file=$FILE" >> $GITHUB_OUTPUT
-          # Extract run name from filename (e.g., submissions/model_name.json -> model_name)
           NAME=$(basename "$FILE" .json)
           echo "name=$NAME" >> $GITHUB_OUTPUT
+
+      - name: Validate Submission Format
+        run: |
+          python3 << 'EOF'
+          import json
+          import sys
+
+          with open("${{ steps.submission.outputs.file }}", "r") as f:
+              data = json.load(f)
+
+          if "metadata" not in data or "kernels" not in data:
+              print("Error: Missing 'metadata' or 'kernels' field")
+              sys.exit(1)
+
+          if "display_name" not in data["metadata"]:
+              print("Error: Missing 'display_name' in metadata")
+              sys.exit(1)
+
+          level_counts = {1: 0, 2: 0, 3: 0}
+          for key in data["kernels"]:
+              parts = key.split("_")
+              if len(parts) >= 4 and parts[0] == "level":
+                  level = int(parts[1])
+                  if level in level_counts:
+                      level_counts[level] += 1
+
+          print(f"Submission: {data['metadata'].get('display_name', 'Unknown')}")
+          print(f"Level 1: {level_counts[1]}/100, Level 2: {level_counts[2]}/100, Level 3: {level_counts[3]}/50")
+          EOF
+
+      - name: Create Data Directory
+        run: mkdir -p data
 
       - name: Convert Submission to Run Format
         run: |
