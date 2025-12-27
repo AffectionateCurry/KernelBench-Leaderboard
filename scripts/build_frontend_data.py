@@ -18,6 +18,7 @@ REPO_ROOT = Path(__file__).parent.parent
 DATA_DIR = REPO_ROOT / "data"
 BASELINES_DIR = REPO_ROOT / "baselines"
 RUNS_DIR = REPO_ROOT / "KernelBench" / "runs"
+PROBLEMS_DIR = REPO_ROOT / "KernelBench" / "KernelBench"
 
 
 def load_baselines(hardware: str = "H100") -> dict:
@@ -71,6 +72,49 @@ def clean_kernel_name(filename: str) -> str:
     return name
 
 
+def load_reference_code(level: int, filename: str) -> str:
+    """Load the reference implementation code for a kernel."""
+    ref_path = PROBLEMS_DIR / f"level{level}" / filename
+    if ref_path.exists():
+        try:
+            with open(ref_path, 'r') as f:
+                return f.read()
+        except Exception as e:
+            print(f"Warning: Could not read {ref_path}: {e}")
+    return ""
+
+
+def load_model_solution_code(model_id: str, level: int, problem_id: int) -> tuple:
+    """Load model's generated kernel code and return (code, error)."""
+    # Try different naming patterns
+    patterns = [
+        f"{model_id}_level{level}",
+        f"{model_id.replace('_H100', '')}_level{level}",
+    ]
+
+    for pattern in patterns:
+        solution_path = RUNS_DIR / pattern / f"level_{level}_problem_{problem_id}_sample_0_kernel.py"
+        if solution_path.exists():
+            try:
+                with open(solution_path, 'r') as f:
+                    return f.read(), None
+            except Exception as e:
+                return "", str(e)
+
+    return "", None
+
+
+def get_compilation_error(result: dict) -> str:
+    """Extract compilation error from result."""
+    metadata = result.get('metadata', {})
+    error = metadata.get('compilation_error', '')
+    if error:
+        # Truncate very long errors
+        if len(error) > 2000:
+            error = error[:2000] + "\n... (truncated)"
+    return error
+
+
 def build_kernels_data(baselines: dict, metadata: list) -> dict:
     """Build comprehensive kernels data structure."""
     kernels = []
@@ -108,6 +152,9 @@ def build_kernels_data(baselines: dict, metadata: list) -> dict:
             problem_id = int(match.group(1))
             baseline_time = baseline_info.get('mean', 0)
 
+            # Load reference implementation code
+            ref_code = load_reference_code(level, filename)
+
             kernel_entry = {
                 "id": f"level_{level}_problem_{problem_id}",
                 "level": level,
@@ -115,6 +162,7 @@ def build_kernels_data(baselines: dict, metadata: list) -> dict:
                 "name": clean_kernel_name(filename),
                 "filename": filename,
                 "baseline_time": baseline_time,
+                "reference_code": ref_code,
                 "models": {}
             }
 
@@ -143,11 +191,20 @@ def build_kernels_data(baselines: dict, metadata: list) -> dict:
                         if correct and runtime > 0 and baseline_time > 0:
                             speedup = baseline_time / runtime
 
+                        # Get compilation error if failed
+                        error = get_compilation_error(result) if not compiled else ""
+
+                        # Load model's solution code
+                        model_id_for_code = unique_id.replace('_H100', '')
+                        solution_code, _ = load_model_solution_code(model_id_for_code, level, problem_id)
+
                         kernel_entry["models"][unique_id] = {
                             "compiled": compiled,
                             "correct": correct,
                             "runtime": runtime,
-                            "speedup": round(speedup, 4)
+                            "speedup": round(speedup, 4),
+                            "error": error,
+                            "code": solution_code
                         }
 
             kernels.append(kernel_entry)

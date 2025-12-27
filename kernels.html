@@ -5,12 +5,319 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kernels - KernelBench</title>
     <link rel="stylesheet" href="css/style.css">
+    <!-- Prism.js for syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cuda.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css">
     <script>
         (function() {
             const theme = localStorage.getItem('theme') || 'dark';
             document.documentElement.setAttribute('data-theme', theme);
         })();
     </script>
+    <style>
+        /* Kernel detail styles */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.875rem;
+            margin-bottom: 1.5rem;
+            transition: color 0.2s;
+        }
+        .back-link:hover {
+            color: var(--text-primary);
+        }
+
+        .kernel-header {
+            margin-bottom: 2rem;
+        }
+        .kernel-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .kernel-badges {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .info-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+        .info-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+        }
+        .info-value {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        /* Code viewer styles */
+        .code-section {
+            margin-bottom: 2rem;
+        }
+        .code-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+        .code-title {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        .copy-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.375rem 0.75rem;
+            font-size: 0.75rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover {
+            color: var(--text-primary);
+            border-color: var(--text-muted);
+        }
+        .copy-btn.copied {
+            color: var(--green);
+            border-color: var(--green);
+        }
+        .code-container {
+            background: #1d1f21;
+            border-radius: 8px;
+            overflow: hidden;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .code-container pre {
+            margin: 0;
+            padding: 1rem;
+            font-size: 0.8125rem;
+            line-height: 1.6;
+        }
+        .code-container code {
+            font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
+        }
+
+        /* Solutions section */
+        .solutions-section {
+            margin-bottom: 2rem;
+        }
+        .solutions-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        .solutions-title {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        .solutions-count {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .solution-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+            overflow: hidden;
+        }
+        .solution-card.expanded {
+            border-color: var(--blue);
+        }
+        .solution-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .solution-header:hover {
+            background: var(--bg-tertiary);
+        }
+        .solution-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .solution-name {
+            font-weight: 500;
+        }
+        .solution-badges {
+            display: flex;
+            gap: 0.375rem;
+        }
+        .solution-stats {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .solution-stat {
+            text-align: right;
+        }
+        .solution-stat-label {
+            font-size: 0.6875rem;
+            color: var(--text-muted);
+        }
+        .solution-stat-value {
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        .solution-progress {
+            width: 100px;
+            height: 4px;
+            background: var(--bg-tertiary);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .solution-progress-fill {
+            height: 100%;
+            border-radius: 2px;
+            transition: width 0.3s;
+        }
+        .solution-progress-fill.good { background: var(--green); }
+        .solution-progress-fill.warning { background: var(--yellow); }
+        .solution-progress-fill.bad { background: var(--red); }
+
+        .solution-expand-icon {
+            color: var(--text-muted);
+            transition: transform 0.2s;
+        }
+        .solution-card.expanded .solution-expand-icon {
+            transform: rotate(180deg);
+        }
+
+        .solution-body {
+            display: none;
+            border-top: 1px solid var(--border);
+        }
+        .solution-card.expanded .solution-body {
+            display: block;
+        }
+
+        .solution-details {
+            padding: 1rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        .detail-label {
+            font-size: 0.6875rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .detail-value {
+            font-size: 0.875rem;
+        }
+
+        .solution-code {
+            padding: 1rem;
+        }
+        .solution-code .code-container {
+            max-height: 500px;
+        }
+
+        .error-box {
+            background: rgba(248, 81, 73, 0.1);
+            border: 1px solid var(--red);
+            border-radius: 6px;
+            padding: 1rem;
+            margin: 1rem;
+        }
+        .error-title {
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: var(--red);
+            margin-bottom: 0.5rem;
+        }
+        .error-content {
+            font-size: 0.75rem;
+            font-family: 'SF Mono', monospace;
+            white-space: pre-wrap;
+            word-break: break-word;
+            color: var(--text-muted);
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.6875rem;
+            font-weight: 500;
+            border-radius: 4px;
+        }
+        .status-pill.success {
+            background: rgba(63, 185, 80, 0.15);
+            color: var(--green);
+        }
+        .status-pill.error {
+            background: rgba(248, 81, 73, 0.15);
+            color: var(--red);
+        }
+
+        /* Tabs for code sections */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .code-tab {
+            padding: 0.5rem 1rem;
+            font-size: 0.8125rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-tab:hover {
+            color: var(--text-primary);
+        }
+        .code-tab.active {
+            background: var(--blue);
+            border-color: var(--blue);
+            color: white;
+        }
+    </style>
 </head>
 <body>
     <!-- Header -->
@@ -33,7 +340,8 @@
 
     <!-- Main Content -->
     <main class="main">
-        <section class="section">
+        <!-- Grid View (shown when no kernel selected) -->
+        <section id="grid-view" class="section">
             <div class="section-header">
                 <h1 class="section-title">Kernels</h1>
                 <p class="section-subtitle">Browse all 250 GPU kernel optimization problems and compare model performance.</p>
@@ -68,25 +376,55 @@
             <!-- Kernels Grid -->
             <div class="cards-grid hidden" id="kernels-grid"></div>
         </section>
-    </main>
 
-    <!-- Kernel Detail Modal -->
-    <div id="kernel-modal" class="modal">
-        <div class="modal-backdrop" onclick="closeModal()"></div>
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title" id="modal-title">Kernel Name</h2>
-                <button class="modal-close" onclick="closeModal()">&times;</button>
+        <!-- Detail View (shown when kernel selected) -->
+        <section id="detail-view" style="display: none;">
+            <a href="kernels.html" class="back-link">&larr; All kernels</a>
+
+            <!-- Kernel Header -->
+            <div class="kernel-header">
+                <h1 class="kernel-title" id="kernel-title">Kernel Name</h1>
+                <div class="kernel-badges" id="kernel-badges"></div>
             </div>
-            <div class="modal-body" id="modal-body"></div>
-        </div>
-    </div>
+
+            <!-- Info Grid -->
+            <div class="info-grid" id="kernel-info"></div>
+
+            <!-- Reference Implementation -->
+            <div class="code-section">
+                <div class="code-header">
+                    <h2 class="code-title">Reference Implementation</h2>
+                    <button class="copy-btn" onclick="copyCode('ref-code')">
+                        <span>&#x1F4CB;</span> Copy
+                    </button>
+                </div>
+                <div class="code-container line-numbers">
+                    <pre><code id="ref-code" class="language-python"></code></pre>
+                </div>
+            </div>
+
+            <!-- Solutions -->
+            <div class="solutions-section">
+                <div class="solutions-header">
+                    <h2 class="solutions-title">Model Solutions</h2>
+                    <span class="solutions-count" id="solutions-count">0 solutions</span>
+                </div>
+                <div id="solutions-list"></div>
+            </div>
+        </section>
+    </main>
 
     <script src="js/common.js"></script>
     <script>
         let kernelsData = null;
         let currentFilter = 'all';
         let searchQuery = '';
+
+        // Check URL for kernel parameter
+        function getKernelIdFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('kernel');
+        }
 
         async function loadKernels() {
             const loading = document.getElementById('loading');
@@ -102,6 +440,17 @@
                 grid.classList.remove('hidden');
 
                 document.getElementById('stat-models').textContent = kernelsData.model_names.length;
+
+                // Check if we should show detail view
+                const kernelId = getKernelIdFromUrl();
+                if (kernelId) {
+                    const kernel = kernelsData.kernels.find(k => k.id === kernelId);
+                    if (kernel) {
+                        showDetailView(kernel);
+                        return;
+                    }
+                }
+
                 renderKernels();
             } catch (error) {
                 console.error('Failed to load kernels:', error);
@@ -141,7 +490,9 @@
         function createKernelCard(kernel) {
             const card = document.createElement('div');
             card.className = 'card';
-            card.onclick = () => showKernelModal(kernel);
+            card.onclick = () => {
+                window.location.href = `kernels.html?kernel=${kernel.id}`;
+            };
 
             const modelResults = Object.entries(kernel.models || {});
             const correctModels = modelResults.filter(([_, r]) => r.correct);
@@ -180,76 +531,201 @@
             return card;
         }
 
-        function showKernelModal(kernel) {
-            const modal = document.getElementById('kernel-modal');
-            const title = document.getElementById('modal-title');
-            const body = document.getElementById('modal-body');
+        function showDetailView(kernel) {
+            document.getElementById('grid-view').style.display = 'none';
+            document.getElementById('detail-view').style.display = 'block';
 
-            title.textContent = kernel.name;
+            // Update page title
+            document.title = `${kernel.name} - KernelBench`;
 
-            let html = `
-                <div class="info-box">
-                    <div class="info-item">
-                        <span class="info-label">Level:</span>
-                        <span class="info-value">${kernel.level}</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Problem:</span>
-                        <span class="info-value">#${kernel.problem_id}</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Baseline:</span>
-                        <span class="info-value">${kernel.baseline_time.toFixed(2)}ms</span>
-                    </div>
-                </div>
-                <div style="font-size: 0.8125rem; color: var(--text-muted); margin-bottom: 0.75rem;">Model Results</div>
+            // Kernel header
+            document.getElementById('kernel-title').textContent = kernel.name;
+
+            const badges = document.getElementById('kernel-badges');
+            badges.innerHTML = `
+                <span class="badge badge-level-${kernel.level}">Level ${kernel.level}</span>
+                <span class="badge" style="background: var(--bg-tertiary);">Problem #${kernel.problem_id}</span>
             `;
 
-            const sortedModels = Object.entries(kernel.models || {})
-                .sort(([, a], [, b]) => (b.speedup || 0) - (a.speedup || 0));
+            // Info grid
+            const modelResults = Object.entries(kernel.models || {});
+            const correctModels = modelResults.filter(([_, r]) => r.correct);
+            const compiledModels = modelResults.filter(([_, r]) => r.compiled);
+            const bestSpeedup = correctModels.length > 0
+                ? Math.max(...correctModels.map(([_, r]) => r.speedup))
+                : 0;
 
-            if (sortedModels.length === 0) {
-                html += '<p style="color: var(--text-muted); font-size: 0.875rem;">No model results available</p>';
-            } else {
-                sortedModels.forEach(([modelId, result]) => {
-                    const compiledIcon = result.compiled
-                        ? '<span class="status-icon success">&#x2713;</span>'
-                        : '<span class="status-icon error">&#x2717;</span>';
-                    const correctIcon = result.correct
-                        ? '<span class="status-icon success">&#x2713;</span>'
-                        : '<span class="status-icon error">&#x2717;</span>';
+            const infoGrid = document.getElementById('kernel-info');
+            infoGrid.innerHTML = `
+                <div class="info-item">
+                    <div class="info-label">Baseline Time</div>
+                    <div class="info-value">${kernel.baseline_time.toFixed(2)} ms</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Best Speedup</div>
+                    <div class="info-value" style="color: ${bestSpeedup >= 1 ? 'var(--green)' : 'var(--text-primary)'}">${bestSpeedup > 0 ? bestSpeedup.toFixed(2) + 'x' : '-'}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Correct Solutions</div>
+                    <div class="info-value">${correctModels.length} / ${modelResults.length}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Compiled</div>
+                    <div class="info-value">${compiledModels.length} / ${modelResults.length}</div>
+                </div>
+            `;
 
-                    const speedupInfo = result.correct && result.speedup > 0
-                        ? formatSpeedup(result.speedup)
-                        : { class: 'bad', text: '-' };
+            // Reference code
+            const refCode = document.getElementById('ref-code');
+            refCode.textContent = kernel.reference_code || '# No reference code available';
+            Prism.highlightElement(refCode);
 
-                    html += `
-                        <div class="model-result">
-                            <span class="model-result-name">${escapeHtml(modelId.replace('_H100', ''))}</span>
-                            <div class="model-result-stats">
-                                <div style="display: flex; gap: 0.25rem;">
-                                    ${compiledIcon}
-                                    ${correctIcon}
+            // Solutions
+            renderSolutions(kernel);
+        }
+
+        function renderSolutions(kernel) {
+            const solutionsList = document.getElementById('solutions-list');
+            const modelResults = Object.entries(kernel.models || {});
+
+            document.getElementById('solutions-count').textContent = `${modelResults.length} solutions`;
+
+            // Sort by speedup (best first)
+            modelResults.sort((a, b) => (b[1].speedup || 0) - (a[1].speedup || 0));
+
+            solutionsList.innerHTML = modelResults.map(([modelId, result], index) => {
+                const displayName = modelId.replace('_H100', '').replace(/_/g, ' ');
+                const speedup = result.speedup || 0;
+
+                let speedupClass = 'bad';
+                if (speedup >= 1.0) speedupClass = 'good';
+                else if (speedup >= 0.8) speedupClass = 'warning';
+
+                const progressWidth = Math.min(speedup * 50, 100);
+
+                const compiledStatus = result.compiled
+                    ? '<span class="status-pill success">&#x2713; Compiled</span>'
+                    : '<span class="status-pill error">&#x2717; Failed</span>';
+
+                const correctStatus = result.correct
+                    ? '<span class="status-pill success">&#x2713; Correct</span>'
+                    : '<span class="status-pill error">&#x2717; Incorrect</span>';
+
+                const errorHtml = result.error ? `
+                    <div class="error-box">
+                        <div class="error-title">Compilation Error</div>
+                        <div class="error-content">${escapeHtml(result.error)}</div>
+                    </div>
+                ` : '';
+
+                const codeHtml = result.code ? `
+                    <div class="solution-code">
+                        <div class="code-header">
+                            <span class="code-title">Generated Kernel</span>
+                            <button class="copy-btn" onclick="copyCode('solution-code-${index}'); event.stopPropagation();">
+                                <span>&#x1F4CB;</span> Copy
+                            </button>
+                        </div>
+                        <div class="code-container line-numbers">
+                            <pre><code id="solution-code-${index}" class="language-python">${escapeHtml(result.code)}</code></pre>
+                        </div>
+                    </div>
+                ` : '<div class="solution-code"><p style="color: var(--text-muted); padding: 1rem;">No code available</p></div>';
+
+                return `
+                    <div class="solution-card" id="solution-${index}">
+                        <div class="solution-header" onclick="toggleSolution(${index})">
+                            <div class="solution-info">
+                                <span class="solution-name">${escapeHtml(displayName)}</span>
+                                <div class="solution-badges">
+                                    ${compiledStatus}
+                                    ${correctStatus}
                                 </div>
-                                <span class="metric ${speedupInfo.class}" style="min-width: 55px; text-align: right;">${speedupInfo.text}</span>
+                            </div>
+                            <div class="solution-stats">
+                                <div class="solution-stat">
+                                    <div class="solution-stat-label">Runtime</div>
+                                    <div class="solution-stat-value">${result.runtime > 0 ? result.runtime.toFixed(2) + ' ms' : '-'}</div>
+                                </div>
+                                <div class="solution-stat">
+                                    <div class="solution-stat-label">Speedup</div>
+                                    <div class="solution-stat-value" style="color: ${speedup >= 1 ? 'var(--green)' : 'inherit'}">${speedup > 0 ? speedup.toFixed(2) + 'x' : '-'}</div>
+                                </div>
+                                <div class="solution-progress">
+                                    <div class="solution-progress-fill ${speedupClass}" style="width: ${progressWidth}%"></div>
+                                </div>
+                                <span class="solution-expand-icon">&#x25BC;</span>
                             </div>
                         </div>
-                    `;
+                        <div class="solution-body">
+                            <div class="solution-details">
+                                <div class="detail-item">
+                                    <span class="detail-label">Model</span>
+                                    <span class="detail-value">${escapeHtml(displayName)}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Hardware</span>
+                                    <span class="detail-value">H100</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Baseline</span>
+                                    <span class="detail-value">${kernel.baseline_time.toFixed(2)} ms</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Model Runtime</span>
+                                    <span class="detail-value">${result.runtime > 0 ? result.runtime.toFixed(2) + ' ms' : '-'}</span>
+                                </div>
+                            </div>
+                            ${errorHtml}
+                            ${codeHtml}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Highlight code after rendering
+            requestAnimationFrame(() => {
+                document.querySelectorAll('#solutions-list pre code').forEach(block => {
+                    Prism.highlightElement(block);
                 });
+            });
+        }
+
+        function toggleSolution(index) {
+            const card = document.getElementById(`solution-${index}`);
+            const wasExpanded = card.classList.contains('expanded');
+
+            // Close all other cards
+            document.querySelectorAll('.solution-card').forEach(c => c.classList.remove('expanded'));
+
+            // Toggle this card
+            if (!wasExpanded) {
+                card.classList.add('expanded');
+                // Re-highlight code when expanded
+                const codeBlock = card.querySelector('pre code');
+                if (codeBlock) {
+                    Prism.highlightElement(codeBlock);
+                }
             }
-
-            body.innerHTML = html;
-            modal.classList.add('active');
         }
 
-        function closeModal() {
-            document.getElementById('kernel-modal').classList.remove('active');
-        }
+        function copyCode(elementId) {
+            const codeElement = document.getElementById(elementId);
+            const code = codeElement.textContent;
 
-        // Close modal on escape
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeModal();
-        });
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = codeElement.closest('.code-section, .solution-code')?.querySelector('.copy-btn');
+                if (btn) {
+                    const originalHtml = btn.innerHTML;
+                    btn.innerHTML = '<span>&#x2713;</span> Copied!';
+                    btn.classList.add('copied');
+                    setTimeout(() => {
+                        btn.innerHTML = originalHtml;
+                        btn.classList.remove('copied');
+                    }, 2000);
+                }
+            });
+        }
 
         // Level filter handlers
         document.querySelectorAll('#level-filters .filter-tab').forEach(tab => {
@@ -265,6 +741,21 @@
         document.getElementById('search-input').addEventListener('input', (e) => {
             searchQuery = e.target.value;
             renderKernels();
+        });
+
+        // Handle back button
+        window.addEventListener('popstate', () => {
+            const kernelId = getKernelIdFromUrl();
+            if (kernelId) {
+                const kernel = kernelsData?.kernels.find(k => k.id === kernelId);
+                if (kernel) {
+                    showDetailView(kernel);
+                }
+            } else {
+                document.getElementById('grid-view').style.display = 'block';
+                document.getElementById('detail-view').style.display = 'none';
+                document.title = 'Kernels - KernelBench';
+            }
         });
 
         // Initialize
