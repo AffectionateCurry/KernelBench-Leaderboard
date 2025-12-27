@@ -4,416 +4,111 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KernelBench Leaderboard</title>
-    <style>
-        :root {
-            --bg-primary: #ffffff;
-            --bg-secondary: #f8f9fa;
-            --text-primary: #1a1a2e;
-            --text-secondary: #6c757d;
-            --border-color: #dee2e6;
-            --accent-color: #4f46e5;
-            --accent-hover: #4338ca;
-            --badge-bg: #e0e7ff;
-            --badge-text: #3730a3;
-            --success-color: #10b981;
-            --table-hover: #f1f5f9;
-        }
-
-        [data-theme="dark"] {
-            --bg-primary: #0f172a;
-            --bg-secondary: #1e293b;
-            --text-primary: #f1f5f9;
-            --text-secondary: #94a3b8;
-            --border-color: #334155;
-            --accent-color: #818cf8;
-            --accent-hover: #a5b4fc;
-            --badge-bg: #312e81;
-            --badge-text: #c7d2fe;
-            --success-color: #34d399;
-            --table-hover: #1e293b;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1rem;
-        }
-
-        /* Header */
-        header {
-            background-color: var(--bg-secondary);
-            border-bottom: 1px solid var(--border-color);
-            padding: 1.5rem 0;
-            margin-bottom: 2rem;
-        }
-
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .header-left h1 {
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .subtitle {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            margin-top: 0.25rem;
-        }
-
-        #theme-toggle {
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 0.5rem 1rem;
-            cursor: pointer;
-            font-size: 1.25rem;
-            transition: background-color 0.2s;
-        }
-
-        #theme-toggle:hover {
-            background-color: var(--table-hover);
-        }
-
-        /* Stats Bar */
-        .stats-bar {
-            display: flex;
-            gap: 2rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-        }
-
-        .stat-item {
-            background-color: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 1rem 1.5rem;
-            min-width: 150px;
-        }
-
-        .stat-label {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .stat-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--accent-color);
-        }
-
-        /* Table */
-        .table-container {
-            overflow-x: auto;
-            background-color: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        th {
-            background-color: var(--bg-secondary);
-            font-weight: 600;
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            position: sticky;
-            top: 0;
-        }
-
-        th.sortable {
-            cursor: pointer;
-            user-select: none;
-        }
-
-        th.sortable:hover {
-            color: var(--accent-color);
-        }
-
-        th.sortable::after {
-            content: ' \2195';
-            opacity: 0.5;
-        }
-
-        th.sorted-asc::after {
-            content: ' \2191';
-            opacity: 1;
-        }
-
-        th.sorted-desc::after {
-            content: ' \2193';
-            opacity: 1;
-        }
-
-        tbody tr:hover {
-            background-color: var(--table-hover);
-        }
-
-        tbody tr:last-child td {
-            border-bottom: none;
-        }
-
-        .rank {
-            font-weight: 700;
-            color: var(--text-secondary);
-        }
-
-        .rank-1 { color: #fbbf24; }
-        .rank-2 { color: #9ca3af; }
-        .rank-3 { color: #d97706; }
-
-        .model-name {
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            background-color: var(--badge-bg);
-            color: var(--badge-text);
-        }
-
-        .metric-value {
-            font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
-            font-weight: 600;
-        }
-
-        .metric-good {
-            color: var(--success-color);
-        }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 4rem 2rem;
-            color: var(--text-secondary);
-        }
-
-        .empty-state h2 {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
-        }
-
-        .empty-state p {
-            margin-bottom: 1.5rem;
-        }
-
-        .empty-state a {
-            color: var(--accent-color);
-            text-decoration: none;
-        }
-
-        .empty-state a:hover {
-            text-decoration: underline;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        /* Footer */
-        footer {
-            margin-top: 3rem;
-            padding: 2rem 0;
-            border-top: 1px solid var(--border-color);
-            text-align: center;
-            color: var(--text-secondary);
-        }
-
-        footer a {
-            color: var(--accent-color);
-            text-decoration: none;
-            margin: 0 0.5rem;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
-        }
-
-        /* Loading State */
-        .loading {
-            text-align: center;
-            padding: 3rem;
-            color: var(--text-secondary);
-        }
-
-        .loading::after {
-            content: '';
-            display: inline-block;
-            width: 1.5rem;
-            height: 1.5rem;
-            border: 2px solid var(--border-color);
-            border-top-color: var(--accent-color);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin-left: 0.5rem;
-            vertical-align: middle;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .stats-bar {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .stat-item {
-                width: 100%;
-            }
-
-            th, td {
-                padding: 0.75rem 0.5rem;
-                font-size: 0.875rem;
-            }
-
-            .badge {
-                padding: 0.2rem 0.5rem;
-                font-size: 0.7rem;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Prevent flash of wrong theme
         (function() {
-            const theme = localStorage.getItem('theme') || 'light';
+            const theme = localStorage.getItem('theme') || 'dark';
             document.documentElement.setAttribute('data-theme', theme);
         })();
     </script>
 </head>
 <body>
-    <header>
-        <div class="container header-content">
-            <div class="header-left">
-                <h1>KernelBench Leaderboard</h1>
-                <p class="subtitle">CUDA Kernel Optimization Benchmark</p>
-            </div>
-            <button id="theme-toggle" title="Toggle theme">
+    <!-- Header -->
+    <header class="header">
+        <a href="index.html" class="logo">
+            <span class="logo-icon">&#x1F9EA;</span>
+            <span>KernelBench</span>
+        </a>
+        <nav class="nav">
+            <a href="index.html" class="nav-link active">Leaderboard</a>
+            <a href="kernels.html" class="nav-link">Kernels</a>
+            <a href="models.html" class="nav-link">Models</a>
+            <a href="https://arxiv.org/abs/2502.10517" class="nav-link external" target="_blank">Paper</a>
+            <a href="https://github.com/ScalingIntelligence/KernelBench" class="nav-link external" target="_blank">GitHub</a>
+            <button class="theme-toggle" id="theme-toggle" title="Toggle theme">
                 <span class="theme-icon"></span>
             </button>
-        </div>
+        </nav>
     </header>
 
-    <main class="container">
-        <div class="stats-bar" id="stats-bar">
-            <div class="stat-item">
-                <div class="stat-label">Total Submissions</div>
-                <div class="stat-value" id="stat-total">-</div>
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Leaderboard Section -->
+        <section class="section">
+            <div class="section-header">
+                <h1 class="section-title">Leaderboard</h1>
+                <p class="section-subtitle">Compare model performance across all 250 GPU kernel optimization tasks.</p>
             </div>
-            <div class="stat-item">
-                <div class="stat-label">Best GeoMean</div>
-                <div class="stat-value" id="stat-best">-</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-label">Hardware</div>
-                <div class="stat-value" id="stat-hardware">H100</div>
-            </div>
-        </div>
 
-        <div class="table-container">
-            <div class="loading" id="loading">Loading leaderboard</div>
-
-            <table id="leaderboard" class="hidden">
-                <thead>
-                    <tr>
-                        <th>Rank</th>
-                        <th>Model</th>
-                        <th>Organization</th>
-                        <th>Hardware</th>
-                        <th class="sortable" data-sort="geo_mean">GeoMean Speedup</th>
-                        <th class="sortable" data-sort="fast_p">Fast@1.5</th>
-                        <th>Correct</th>
-                        <th class="sortable" data-sort="date">Date</th>
-                    </tr>
-                </thead>
-                <tbody id="leaderboard-body"></tbody>
-            </table>
-
-            <div id="empty-state" class="empty-state hidden">
-                <h2>No submissions yet</h2>
-                <p>Be the first to submit your optimized CUDA kernels!</p>
-                <a href="https://github.com/ScalingIntelligence/KernelBench">Learn how to submit</a>
+            <!-- Tabs -->
+            <div class="tabs" id="chart-tabs">
+                <button class="tab active" data-chart="fastp">fast<sub>p</sub></button>
+                <button class="tab" data-chart="correctness">Correctness</button>
             </div>
-        </div>
+
+            <!-- Chart -->
+            <div class="chart-section">
+                <div class="chart-header">
+                    <div>
+                        <div class="chart-title">
+                            <span id="chart-title-text">fast<sub>p</sub></span>
+                        </div>
+                        <div class="chart-info">n = <span id="workload-count">250</span> kernels</div>
+                    </div>
+                    <div class="model-legend" id="model-legend"></div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="main-chart"></canvas>
+                </div>
+                <div class="chart-controls" id="threshold-controls">
+                    <span class="slider-label">Threshold</span>
+                    <input type="range" class="slider" id="threshold-slider" min="0" max="3" step="0.1" value="1">
+                    <span class="slider-value" id="threshold-value">1.0x</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Rankings Section -->
+        <section class="section">
+            <div class="table-container">
+                <div class="table-header">
+                    <span class="table-title">Rankings</span>
+                </div>
+                <div class="loading" id="loading">Loading leaderboard</div>
+                <table id="leaderboard" class="hidden">
+                    <thead>
+                        <tr>
+                            <th style="width: 60px;">Rank</th>
+                            <th>Model</th>
+                            <th>Organization</th>
+                            <th style="width: 80px;">Hardware</th>
+                            <th class="sortable" data-sort="geo_mean" style="width: 120px;">GeoMean</th>
+                            <th class="sortable" data-sort="fast_p" style="width: 100px;">Fast@1x</th>
+                            <th style="width: 100px;">Correct</th>
+                            <th class="sortable" data-sort="date" style="width: 100px;">Date</th>
+                            <th style="width: 80px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-body"></tbody>
+                </table>
+                <div id="empty-state" class="empty-state hidden">
+                    <h3>No submissions yet</h3>
+                    <p>Be the first to submit your optimized CUDA kernels.</p>
+                    <a href="https://github.com/ScalingIntelligence/KernelBench-Leaderboard#how-to-submit">Learn how to submit</a>
+                </div>
+            </div>
+        </section>
     </main>
 
-    <footer>
-        <div class="container">
-            <a href="https://github.com/ScalingIntelligence/KernelBench">KernelBench</a> |
-            <a href="https://github.com/AffectionateCurry/KernelBench-Leaderboard">Leaderboard Repo</a> |
-            <a href="https://github.com/AffectionateCurry/KernelBench-Leaderboard#how-to-submit">How to Submit</a>
-        </div>
-    </footer>
-
+    <script src="js/common.js"></script>
     <script>
-        // Theme toggle
-        const themeToggle = document.getElementById('theme-toggle');
-        const themeIcon = themeToggle.querySelector('.theme-icon');
-
-        function updateThemeIcon() {
-            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-            themeIcon.textContent = isDark ? '\u2600\uFE0F' : '\uD83C\uDF19';
-        }
-
-        themeToggle.addEventListener('click', () => {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            updateThemeIcon();
-        });
-
-        updateThemeIcon();
-
-        // Leaderboard data and rendering
         let leaderboardData = [];
+        let detailedResults = {};
         let currentSort = { field: 'geo_mean', direction: 'desc' };
+        let mainChart = null;
+        let currentChartType = 'fastp';
+        let currentThreshold = 1.0;
 
         async function loadLeaderboard() {
             const loading = document.getElementById('loading');
@@ -430,12 +125,12 @@
 
                 if (leaderboardData.length === 0) {
                     emptyState.classList.remove('hidden');
-                    document.getElementById('stat-total').textContent = '0';
-                    document.getElementById('stat-best').textContent = '-';
                 } else {
                     table.classList.remove('hidden');
-                    updateStats();
                     sortAndRender();
+                    renderModelLegend();
+                    await loadDetailedResults();
+                    renderChart();
                 }
             } catch (error) {
                 console.error('Failed to load leaderboard:', error);
@@ -443,13 +138,28 @@
             }
         }
 
-        function updateStats() {
-            document.getElementById('stat-total').textContent = leaderboardData.length;
-
-            if (leaderboardData.length > 0) {
-                const best = Math.max(...leaderboardData.map(e => e.metrics?.geo_mean || 0));
-                document.getElementById('stat-best').textContent = best.toFixed(3) + 'x';
+        async function loadDetailedResults() {
+            for (const entry of leaderboardData) {
+                const uniqueId = entry.unique_id || entry.id;
+                try {
+                    const response = await fetch(`data/results/${uniqueId}.json`);
+                    if (response.ok) {
+                        detailedResults[uniqueId] = await response.json();
+                    }
+                } catch (e) {
+                    console.warn(`Could not load results for ${uniqueId}`);
+                }
             }
+        }
+
+        function renderModelLegend() {
+            const legend = document.getElementById('model-legend');
+            legend.innerHTML = leaderboardData.map((entry, index) => `
+                <span class="model-badge">
+                    <span class="model-dot" style="background: ${MODEL_COLORS[index % MODEL_COLORS.length]}"></span>
+                    ${escapeHtml(entry.display_name || entry.id)}
+                </span>
+            `).join('');
         }
 
         function sortAndRender() {
@@ -462,8 +172,8 @@
                         bVal = b.metrics?.geo_mean || 0;
                         break;
                     case 'fast_p':
-                        aVal = a.metrics?.fast_p_1_5 || 0;
-                        bVal = b.metrics?.fast_p_1_5 || 0;
+                        aVal = a.metrics?.fast_p_1_0 || 0;
+                        bVal = b.metrics?.fast_p_1_0 || 0;
                         break;
                     case 'date':
                         aVal = new Date(a.timestamp || 0);
@@ -474,10 +184,7 @@
                         bVal = 0;
                 }
 
-                if (currentSort.direction === 'desc') {
-                    return bVal - aVal;
-                }
-                return aVal - bVal;
+                return currentSort.direction === 'desc' ? bVal - aVal : aVal - bVal;
             });
 
             renderTable(sorted);
@@ -493,25 +200,31 @@
                 const row = document.createElement('tr');
 
                 const geoMean = entry.metrics?.geo_mean || 0;
-                const fastP = entry.metrics?.fast_p_1_5 || 0;
+                const fastP = entry.metrics?.fast_p_1_0 || 0;
                 const totalCorrect = entry.metrics?.total_correct || 0;
                 const totalSubmitted = entry.metrics?.total_submitted || 0;
+                const uniqueId = entry.unique_id || entry.id;
 
                 let rankClass = 'rank';
                 if (rank <= 3) rankClass += ` rank-${rank}`;
 
-                // Format date from timestamp
+                let geoClass = 'metric';
+                if (geoMean >= 1.0) geoClass += ' good';
+                else if (geoMean >= 0.8) geoClass += ' warning';
+                else geoClass += ' bad';
+
                 const date = entry.timestamp ? new Date(entry.timestamp).toLocaleDateString() : '-';
 
                 row.innerHTML = `
                     <td class="${rankClass}">#${rank}</td>
                     <td class="model-name">${escapeHtml(entry.display_name || 'Unknown')}</td>
                     <td>${escapeHtml(entry.organization || '-')}</td>
-                    <td><span class="badge">${escapeHtml(entry.hardware || 'Unknown')}</span></td>
-                    <td class="metric-value ${geoMean >= 1 ? 'metric-good' : ''}">${geoMean.toFixed(3)}x</td>
-                    <td class="metric-value">${(fastP * 100).toFixed(1)}%</td>
+                    <td><span class="badge badge-hw">${escapeHtml(entry.hardware || 'Unknown')}</span></td>
+                    <td class="${geoClass}">${geoMean.toFixed(3)}x</td>
+                    <td class="metric">${(fastP * 100).toFixed(1)}%</td>
                     <td>${totalCorrect}/${totalSubmitted}</td>
                     <td>${date}</td>
+                    <td><a href="models.html?model=${encodeURIComponent(uniqueId)}" class="link">Details →</a></td>
                 `;
 
                 tbody.appendChild(row);
@@ -527,11 +240,211 @@
             });
         }
 
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
+        function renderChart() {
+            const ctx = document.getElementById('main-chart').getContext('2d');
+
+            if (mainChart) {
+                mainChart.destroy();
+            }
+
+            if (currentChartType === 'fastp') {
+                renderFastPChart(ctx);
+            } else {
+                renderCorrectnessChart(ctx);
+            }
         }
+
+        function renderFastPChart(ctx) {
+            // Generate threshold points from 0 to 3
+            const thresholds = [];
+            for (let t = 0; t <= 3; t += 0.1) {
+                thresholds.push(parseFloat(t.toFixed(1)));
+            }
+
+            const datasets = leaderboardData.map((entry, index) => {
+                const result = detailedResults[entry.unique_id || entry.id];
+
+                // Calculate percentage of kernels exceeding each threshold
+                const data = thresholds.map(threshold => {
+                    if (result && result.kernel_results) {
+                        const correct = result.kernel_results.filter(k => k.correct && k.speedup >= threshold);
+                        return (correct.length / result.kernel_results.length) * 100;
+                    } else {
+                        // Fallback to summary metrics
+                        const metrics = entry.metrics || {};
+                        if (threshold <= 0) return (metrics.correct_rate || 0) * 100;
+                        if (threshold <= 1.0) return (metrics.fast_p_1_0 || 0) * 100;
+                        if (threshold <= 1.5) return (metrics.fast_p_1_5 || 0) * 100;
+                        if (threshold <= 2.0) return (metrics.fast_p_2_0 || 0) * 100;
+                        return 0;
+                    }
+                });
+
+                return {
+                    label: entry.display_name || entry.id,
+                    data: data,
+                    borderColor: MODEL_COLORS[index % MODEL_COLORS.length],
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    pointRadius: 0,
+                    pointHoverRadius: 4
+                };
+            });
+
+            const textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-muted').trim() || '#8b949e';
+            const borderColor = getComputedStyle(document.documentElement).getPropertyValue('--border').trim() || '#30363d';
+
+            mainChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: thresholds.map(t => t.toFixed(1)),
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                title: (items) => `Threshold: ${items[0].label}x`,
+                                label: (context) => `${context.dataset.label}: ${context.parsed.y.toFixed(1)}%`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Speedup Threshold',
+                                color: textColor
+                            },
+                            grid: { color: borderColor, drawBorder: false },
+                            ticks: {
+                                color: textColor,
+                                callback: (value, index) => index % 5 === 0 ? thresholds[index] + 'x' : ''
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Percentage of Kernels',
+                                color: textColor
+                            },
+                            min: 0,
+                            max: 100,
+                            grid: { color: borderColor, drawBorder: false },
+                            ticks: {
+                                color: textColor,
+                                callback: (value) => value + '%'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Add vertical line at current threshold
+            updateThresholdLine();
+        }
+
+        function renderCorrectnessChart(ctx) {
+            const levels = ['Level 1', 'Level 2', 'Level 3'];
+            const expected = [100, 100, 50];
+
+            const textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-muted').trim() || '#8b949e';
+            const borderColor = getComputedStyle(document.documentElement).getPropertyValue('--border').trim() || '#30363d';
+
+            const datasets = leaderboardData.map((entry, index) => {
+                const stats = entry.level_stats || {};
+                return {
+                    label: entry.display_name || entry.id,
+                    data: [
+                        stats.level1?.correct || 0,
+                        stats.level2?.correct || 0,
+                        stats.level3?.correct || 0
+                    ],
+                    backgroundColor: MODEL_COLORS[index % MODEL_COLORS.length],
+                    borderRadius: 4
+                };
+            });
+
+            mainChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: levels,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => {
+                                    const exp = expected[context.dataIndex];
+                                    return `${context.dataset.label}: ${context.parsed.y}/${exp}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: textColor }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Correct Kernels',
+                                color: textColor
+                            },
+                            grid: { color: borderColor, drawBorder: false },
+                            ticks: { color: textColor }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateThresholdLine() {
+            // This would add a vertical reference line at the selected threshold
+            // For simplicity, we just update the display value
+            document.getElementById('threshold-value').textContent = currentThreshold.toFixed(1) + 'x';
+        }
+
+        // Chart tab switching
+        document.querySelectorAll('#chart-tabs .tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('#chart-tabs .tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentChartType = tab.dataset.chart;
+
+                const titleEl = document.getElementById('chart-title-text');
+                const controlsEl = document.getElementById('threshold-controls');
+
+                if (currentChartType === 'fastp') {
+                    titleEl.innerHTML = 'fast<sub>p</sub>';
+                    controlsEl.classList.remove('hidden');
+                } else {
+                    titleEl.textContent = 'Correctness by Level';
+                    controlsEl.classList.add('hidden');
+                }
+
+                renderChart();
+            });
+        });
+
+        // Threshold slider
+        document.getElementById('threshold-slider').addEventListener('input', (e) => {
+            currentThreshold = parseFloat(e.target.value);
+            updateThresholdLine();
+        });
 
         // Sort handlers
         document.querySelectorAll('th.sortable').forEach(th => {
@@ -548,7 +461,7 @@
         });
 
         // Initialize
-        document.addEventListener('DOMContentLoaded', loadLeaderboard);
+        loadLeaderboard();
     </script>
 </body>
 </html>

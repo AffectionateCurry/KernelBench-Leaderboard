@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Models - KernelBench</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <a href="index.html" class="logo">
+            <span class="logo-icon">&#x1F9EA;</span>
+            <span>KernelBench</span>
+        </a>
+        <nav class="nav">
+            <a href="index.html" class="nav-link">Leaderboard</a>
+            <a href="kernels.html" class="nav-link">Kernels</a>
+            <a href="models.html" class="nav-link active">Models</a>
+            <a href="https://arxiv.org/abs/2502.10517" class="nav-link external" target="_blank">Paper</a>
+            <a href="https://github.com/ScalingIntelligence/KernelBench" class="nav-link external" target="_blank">GitHub</a>
+            <button class="theme-toggle" id="theme-toggle" title="Toggle theme">
+                <span class="theme-icon"></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Model Selector (shown when no model selected) -->
+        <section id="model-selector" class="section" style="display: none;">
+            <div class="section-header">
+                <h1 class="section-title">Models</h1>
+                <p class="section-subtitle">Select a model to view detailed performance statistics.</p>
+            </div>
+            <div class="cards-grid" id="model-list"></div>
+        </section>
+
+        <!-- Model Details (shown when model selected) -->
+        <section id="model-details" style="display: none;">
+            <a href="models.html" class="back-link">&larr; All models</a>
+
+            <!-- Model Header -->
+            <div class="section-header" style="margin-bottom: 1.5rem;">
+                <h1 class="section-title" id="model-name">Model Name</h1>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid" style="margin-bottom: 2rem;">
+                <div class="stat-card">
+                    <div class="stat-label">GeoMean Speedup</div>
+                    <div class="stat-value" id="model-geomean">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Fast@1x</div>
+                    <div class="stat-value" id="model-fastp">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Correct</div>
+                    <div class="stat-value" id="model-correct">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Compiled</div>
+                    <div class="stat-value" id="model-compiled">-</div>
+                </div>
+            </div>
+
+            <!-- Level Breakdown -->
+            <div class="section">
+                <h2 style="font-size: 1rem; font-weight: 600; margin-bottom: 1rem;">Performance by Level</h2>
+                <div class="level-grid">
+                    <div class="level-card level-1">
+                        <div class="level-title">Level 1</div>
+                        <div class="level-stats">
+                            <div class="level-stat">
+                                <span class="level-stat-label">Fast@1x</span>
+                                <span class="level-stat-value" id="level1-fastp">-</span>
+                            </div>
+                            <div class="level-stat">
+                                <span class="level-stat-label">Correct</span>
+                                <span class="level-stat-value" id="level1-correct">-</span>
+                            </div>
+                            <div class="level-stat">
+                                <span class="level-stat-label">Compiled</span>
+                                <span class="level-stat-value" id="level1-compiled">-</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="level-card level-2">
+                        <div class="level-title">Level 2</div>
+                        <div class="level-stats">
+                            <div class="level-stat">
+                                <span class="level-stat-label">Fast@1x</span>
+                                <span class="level-stat-value" id="level2-fastp">-</span>
+                            </div>
+                            <div class="level-stat">
+                                <span class="level-stat-label">Correct</span>
+                                <span class="level-stat-value" id="level2-correct">-</span>
+                            </div>
+                            <div class="level-stat">
+                                <span class="level-stat-label">Compiled</span>
+                                <span class="level-stat-value" id="level2-compiled">-</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="level-card level-3">
+                        <div class="level-title">Level 3</div>
+                        <div class="level-stats">
+                            <div class="level-stat">
+                                <span class="level-stat-label">Fast@1x</span>
+                                <span class="level-stat-value" id="level3-fastp">-</span>
+                            </div>
+                            <div class="level-stat">
+                                <span class="level-stat-label">Correct</span>
+                                <span class="level-stat-value" id="level3-correct">-</span>
+                            </div>
+                            <div class="level-stat">
+                                <span class="level-stat-label">Compiled</span>
+                                <span class="level-stat-value" id="level3-compiled">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Speedup Distribution Chart -->
+            <div class="section">
+                <h2 style="font-size: 1rem; font-weight: 600; margin-bottom: 1rem;">Speedup Distribution</h2>
+                <div class="chart-section">
+                    <div class="chart-container" style="height: 280px;">
+                        <canvas id="speedup-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kernels Table -->
+            <div class="section">
+                <div class="table-container">
+                    <div class="table-header">
+                        <span class="table-title">All Kernels</span>
+                        <div class="table-controls">
+                            <div class="filter-tabs" id="level-filter">
+                                <button class="filter-tab active" data-level="all">All</button>
+                                <button class="filter-tab" data-level="1">L1</button>
+                                <button class="filter-tab" data-level="2">L2</button>
+                                <button class="filter-tab" data-level="3">L3</button>
+                            </div>
+                            <input type="text" class="search-input" id="kernel-search" placeholder="Search...">
+                        </div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="sortable" data-sort="level" style="width: 60px;">Level</th>
+                                <th class="sortable" data-sort="problem" style="width: 50px;">ID</th>
+                                <th class="sortable" data-sort="name">Kernel</th>
+                                <th class="sortable" data-sort="status" style="width: 70px;">Status</th>
+                                <th class="sortable" data-sort="baseline" style="width: 90px;">Baseline</th>
+                                <th class="sortable" data-sort="runtime" style="width: 90px;">Runtime</th>
+                                <th class="sortable" data-sort="speedup" style="width: 90px;">Speedup</th>
+                            </tr>
+                        </thead>
+                        <tbody id="kernels-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/common.js"></script>
+    <script>
+        let kernelsData = null;
+        let metadataData = null;
+        let currentModel = null;
+        let speedupChart = null;
+        let currentLevelFilter = 'all';
+        let currentSort = { column: 'level', direction: 'asc' };
+
+        async function loadData() {
+            try {
+                const [kernelsRes, metadataRes] = await Promise.all([
+                    fetch('data/kernels.json'),
+                    fetch('data/metadata.json')
+                ]);
+                kernelsData = await kernelsRes.json();
+                metadataData = await metadataRes.json();
+
+                const params = getQueryParams();
+                if (params.model) {
+                    showModelDetails(params.model);
+                } else {
+                    showModelSelector();
+                }
+            } catch (error) {
+                console.error('Error loading data:', error);
+            }
+        }
+
+        function showModelSelector() {
+            document.getElementById('model-selector').style.display = 'block';
+            document.getElementById('model-details').style.display = 'none';
+
+            const modelList = document.getElementById('model-list');
+            modelList.innerHTML = '';
+
+            metadataData.forEach((model, index) => {
+                const modelId = model.unique_id || model.id;
+                const geoMean = model.metrics?.geo_mean || 0;
+                const fastP = model.metrics?.fast_p_1_0 || 0;
+
+                let geoClass = '';
+                if (geoMean >= 1.0) geoClass = 'good';
+                else if (geoMean >= 0.8) geoClass = 'warning';
+                else geoClass = 'bad';
+
+                const card = document.createElement('a');
+                card.href = `?model=${encodeURIComponent(modelId)}`;
+                card.className = 'card';
+                card.style.textDecoration = 'none';
+                card.innerHTML = `
+                    <div class="card-header">
+                        <div class="card-title">${escapeHtml(model.display_name || modelId)}</div>
+                        <span class="badge badge-hw">${escapeHtml(model.hardware || 'H100')}</span>
+                    </div>
+                    <div class="card-stats" style="margin-top: 0.5rem;">
+                        <span>GeoMean: <span class="card-stat-value ${geoClass}">${geoMean.toFixed(2)}x</span></span>
+                        <span>Fast@1x: <span class="card-stat-value">${(fastP * 100).toFixed(1)}%</span></span>
+                    </div>
+                `;
+                modelList.appendChild(card);
+            });
+        }
+
+        function showModelDetails(modelId) {
+            currentModel = modelId;
+            document.getElementById('model-selector').style.display = 'none';
+            document.getElementById('model-details').style.display = 'block';
+
+            const modelMeta = metadataData.find(m => (m.unique_id || m.id) === modelId);
+            const displayName = modelMeta?.display_name || modelId;
+
+            document.getElementById('model-name').textContent = displayName;
+
+            // Calculate stats
+            const modelKernels = kernelsData.kernels.filter(k => k.models[modelId]);
+            const stats = calculateModelStats(modelKernels, modelId);
+
+            // Update header stats
+            const geoMeanEl = document.getElementById('model-geomean');
+            geoMeanEl.textContent = stats.geomean.toFixed(3) + 'x';
+            geoMeanEl.className = 'stat-value ' + (stats.geomean >= 1.0 ? 'success' : stats.geomean >= 0.8 ? 'warning' : 'danger');
+
+            document.getElementById('model-fastp').textContent = (stats.fastp * 100).toFixed(1) + '%';
+            document.getElementById('model-correct').textContent = stats.correct + '/' + stats.total;
+            document.getElementById('model-compiled').textContent = stats.compiled + '/' + stats.total;
+
+            // Update level cards
+            for (let level = 1; level <= 3; level++) {
+                const levelStats = calculateLevelStats(modelKernels, modelId, level);
+                document.getElementById(`level${level}-fastp`).textContent = (levelStats.fastp * 100).toFixed(1) + '%';
+                document.getElementById(`level${level}-correct`).textContent = `${levelStats.correct}/${levelStats.total}`;
+                document.getElementById(`level${level}-compiled`).textContent = `${levelStats.compiled}/${levelStats.total}`;
+            }
+
+            renderSpeedupChart(modelKernels, modelId);
+            renderKernelsTable(modelKernels, modelId);
+            setupFilters();
+        }
+
+        function calculateModelStats(kernels, modelId) {
+            let totalCorrect = 0, totalCompiled = 0, totalKernels = 0;
+            let fastCount = 0;
+            let speedups = [];
+
+            kernels.forEach(k => {
+                const result = k.models[modelId];
+                if (result) {
+                    totalKernels++;
+                    if (result.compiled) totalCompiled++;
+                    if (result.correct) {
+                        totalCorrect++;
+                        if (result.speedup >= 1.0) fastCount++;
+                        if (result.speedup > 0) speedups.push(result.speedup);
+                    }
+                }
+            });
+
+            const geomean = speedups.length > 0
+                ? Math.exp(speedups.reduce((sum, s) => sum + Math.log(s), 0) / speedups.length)
+                : 0;
+
+            return {
+                fastp: totalKernels > 0 ? fastCount / totalKernels : 0,
+                correct: totalCorrect,
+                compiled: totalCompiled,
+                total: totalKernels,
+                geomean: geomean
+            };
+        }
+
+        function calculateLevelStats(kernels, modelId, level) {
+            const levelKernels = kernels.filter(k => k.level === level);
+            let compiled = 0, correct = 0, fast = 0;
+
+            levelKernels.forEach(k => {
+                const result = k.models[modelId];
+                if (result) {
+                    if (result.compiled) compiled++;
+                    if (result.correct) {
+                        correct++;
+                        if (result.speedup >= 1.0) fast++;
+                    }
+                }
+            });
+
+            return {
+                total: levelKernels.length,
+                compiled,
+                correct,
+                fastp: levelKernels.length > 0 ? fast / levelKernels.length : 0
+            };
+        }
+
+        function renderSpeedupChart(kernels, modelId) {
+            const ctx = document.getElementById('speedup-chart').getContext('2d');
+
+            if (speedupChart) {
+                speedupChart.destroy();
+            }
+
+            const buckets = {
+                'Failed': 0,
+                '<0.5x': 0,
+                '0.5-0.8x': 0,
+                '0.8-1.0x': 0,
+                '1.0-1.5x': 0,
+                '1.5-2.0x': 0,
+                '>2.0x': 0
+            };
+
+            kernels.forEach(k => {
+                const result = k.models[modelId];
+                if (!result || !result.correct) {
+                    buckets['Failed']++;
+                } else if (result.speedup < 0.5) {
+                    buckets['<0.5x']++;
+                } else if (result.speedup < 0.8) {
+                    buckets['0.5-0.8x']++;
+                } else if (result.speedup < 1.0) {
+                    buckets['0.8-1.0x']++;
+                } else if (result.speedup < 1.5) {
+                    buckets['1.0-1.5x']++;
+                } else if (result.speedup < 2.0) {
+                    buckets['1.5-2.0x']++;
+                } else {
+                    buckets['>2.0x']++;
+                }
+            });
+
+            const colors = {
+                'Failed': '#6b7280',
+                '<0.5x': '#f85149',
+                '0.5-0.8x': '#db6d28',
+                '0.8-1.0x': '#d29922',
+                '1.0-1.5x': '#3fb950',
+                '1.5-2.0x': '#2ea043',
+                '>2.0x': '#238636'
+            };
+
+            const textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-muted').trim() || '#8b949e';
+            const borderColor = getComputedStyle(document.documentElement).getPropertyValue('--border').trim() || '#30363d';
+
+            speedupChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(buckets),
+                    datasets: [{
+                        data: Object.values(buckets),
+                        backgroundColor: Object.keys(buckets).map(k => colors[k]),
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: borderColor, drawBorder: false },
+                            ticks: { color: textColor }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: textColor }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderKernelsTable(kernels, modelId) {
+            const tbody = document.getElementById('kernels-tbody');
+
+            // Filter by level
+            let filtered = currentLevelFilter === 'all'
+                ? kernels
+                : kernels.filter(k => k.level === parseInt(currentLevelFilter));
+
+            // Filter by search
+            const searchTerm = document.getElementById('kernel-search')?.value?.toLowerCase() || '';
+            if (searchTerm) {
+                filtered = filtered.filter(k =>
+                    k.name.toLowerCase().includes(searchTerm) ||
+                    k.filename.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            // Sort
+            filtered.sort((a, b) => {
+                const resultA = a.models[modelId] || {};
+                const resultB = b.models[modelId] || {};
+                let valA, valB;
+
+                switch (currentSort.column) {
+                    case 'level': valA = a.level; valB = b.level; break;
+                    case 'problem': valA = a.problem_id; valB = b.problem_id; break;
+                    case 'name': valA = a.name; valB = b.name; break;
+                    case 'status':
+                        valA = resultA.correct ? 2 : resultA.compiled ? 1 : 0;
+                        valB = resultB.correct ? 2 : resultB.compiled ? 1 : 0;
+                        break;
+                    case 'baseline': valA = a.baseline_time; valB = b.baseline_time; break;
+                    case 'runtime': valA = resultA.runtime || 999999; valB = resultB.runtime || 999999; break;
+                    case 'speedup': valA = resultA.speedup || 0; valB = resultB.speedup || 0; break;
+                    default: valA = a.level; valB = b.level;
+                }
+
+                if (typeof valA === 'string') {
+                    return currentSort.direction === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
+                }
+                return currentSort.direction === 'asc' ? valA - valB : valB - valA;
+            });
+
+            tbody.innerHTML = filtered.map(kernel => {
+                const result = kernel.models[modelId] || {};
+                const speedupInfo = result.correct && result.speedup > 0
+                    ? formatSpeedup(result.speedup)
+                    : { class: 'bad', text: '-' };
+
+                let statusHtml = '';
+                if (result.correct) {
+                    statusHtml = '<span class="status-icon success" title="Correct">&#10003;</span>';
+                } else if (result.compiled) {
+                    statusHtml = '<span class="status-icon" style="background: rgba(210, 153, 34, 0.15); color: var(--warning);" title="Compiled">!</span>';
+                } else {
+                    statusHtml = '<span class="status-icon error" title="Failed">&#10007;</span>';
+                }
+
+                return `
+                    <tr>
+                        <td><span class="badge badge-level-${kernel.level}">L${kernel.level}</span></td>
+                        <td>${kernel.problem_id}</td>
+                        <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${escapeHtml(kernel.name)}</td>
+                        <td>${statusHtml}</td>
+                        <td class="metric">${kernel.baseline_time.toFixed(2)} ms</td>
+                        <td class="metric">${result.runtime > 0 ? result.runtime.toFixed(2) + ' ms' : '-'}</td>
+                        <td class="metric ${speedupInfo.class}">${speedupInfo.text}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function setupFilters() {
+            // Level filter tabs
+            document.querySelectorAll('#level-filter .filter-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('#level-filter .filter-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    currentLevelFilter = tab.dataset.level;
+                    renderKernelsTable(
+                        kernelsData.kernels.filter(k => k.models[currentModel]),
+                        currentModel
+                    );
+                });
+            });
+
+            // Search
+            document.getElementById('kernel-search').addEventListener('input', () => {
+                renderKernelsTable(
+                    kernelsData.kernels.filter(k => k.models[currentModel]),
+                    currentModel
+                );
+            });
+
+            // Sortable columns
+            document.querySelectorAll('.sortable').forEach(th => {
+                th.addEventListener('click', () => {
+                    const column = th.dataset.sort;
+                    if (currentSort.column === column) {
+                        currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+                    } else {
+                        currentSort.column = column;
+                        currentSort.direction = 'asc';
+                    }
+
+                    document.querySelectorAll('.sortable').forEach(h => {
+                        h.classList.remove('sorted-asc', 'sorted-desc');
+                    });
+                    th.classList.add(currentSort.direction === 'asc' ? 'sorted-asc' : 'sorted-desc');
+
+                    renderKernelsTable(
+                        kernelsData.kernels.filter(k => k.models[currentModel]),
+                        currentModel
+                    );
+                });
+            });
+        }
+
+        // Initialize
+        loadData();
+    </script>
+</body>
+</html>

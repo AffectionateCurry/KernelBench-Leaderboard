@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kernels - KernelBench</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <a href="index.html" class="logo">
+            <span class="logo-icon">&#x1F9EA;</span>
+            <span>KernelBench</span>
+        </a>
+        <nav class="nav">
+            <a href="index.html" class="nav-link">Leaderboard</a>
+            <a href="kernels.html" class="nav-link active">Kernels</a>
+            <a href="models.html" class="nav-link">Models</a>
+            <a href="https://arxiv.org/abs/2502.10517" class="nav-link external" target="_blank">Paper</a>
+            <a href="https://github.com/ScalingIntelligence/KernelBench" class="nav-link external" target="_blank">GitHub</a>
+            <button class="theme-toggle" id="theme-toggle" title="Toggle theme">
+                <span class="theme-icon"></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <section class="section">
+            <div class="section-header">
+                <h1 class="section-title">Kernels</h1>
+                <p class="section-subtitle">Browse all 250 GPU kernel optimization problems and compare model performance.</p>
+            </div>
+
+            <!-- Controls -->
+            <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; align-items: center;">
+                <input type="text" class="search-input" id="search-input" placeholder="Search kernels..." style="width: 280px;">
+                <div class="filter-tabs" id="level-filters">
+                    <button class="filter-tab active" data-level="all">All (250)</button>
+                    <button class="filter-tab" data-level="1">Level 1 (100)</button>
+                    <button class="filter-tab" data-level="2">Level 2 (100)</button>
+                    <button class="filter-tab" data-level="3">Level 3 (50)</button>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-grid" style="grid-template-columns: repeat(2, 1fr); max-width: 300px;">
+                <div class="stat-card">
+                    <div class="stat-label">Showing</div>
+                    <div class="stat-value" id="stat-showing">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Models</div>
+                    <div class="stat-value" id="stat-models">-</div>
+                </div>
+            </div>
+
+            <!-- Loading -->
+            <div class="loading" id="loading">Loading kernels</div>
+
+            <!-- Kernels Grid -->
+            <div class="cards-grid hidden" id="kernels-grid"></div>
+        </section>
+    </main>
+
+    <!-- Kernel Detail Modal -->
+    <div id="kernel-modal" class="modal">
+        <div class="modal-backdrop" onclick="closeModal()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modal-title">Kernel Name</h2>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body"></div>
+        </div>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script>
+        let kernelsData = null;
+        let currentFilter = 'all';
+        let searchQuery = '';
+
+        async function loadKernels() {
+            const loading = document.getElementById('loading');
+            const grid = document.getElementById('kernels-grid');
+
+            try {
+                const response = await fetch('data/kernels.json');
+                if (!response.ok) throw new Error('Failed to fetch');
+
+                kernelsData = await response.json();
+
+                loading.classList.add('hidden');
+                grid.classList.remove('hidden');
+
+                document.getElementById('stat-models').textContent = kernelsData.model_names.length;
+                renderKernels();
+            } catch (error) {
+                console.error('Failed to load kernels:', error);
+                loading.textContent = 'Failed to load kernels data';
+            }
+        }
+
+        function renderKernels() {
+            const grid = document.getElementById('kernels-grid');
+            grid.innerHTML = '';
+
+            let filteredKernels = kernelsData.kernels;
+
+            // Apply level filter
+            if (currentFilter !== 'all') {
+                const level = parseInt(currentFilter);
+                filteredKernels = filteredKernels.filter(k => k.level === level);
+            }
+
+            // Apply search
+            if (searchQuery) {
+                const query = searchQuery.toLowerCase();
+                filteredKernels = filteredKernels.filter(k =>
+                    k.name.toLowerCase().includes(query) ||
+                    k.filename.toLowerCase().includes(query)
+                );
+            }
+
+            document.getElementById('stat-showing').textContent = filteredKernels.length;
+
+            filteredKernels.forEach(kernel => {
+                const card = createKernelCard(kernel);
+                grid.appendChild(card);
+            });
+        }
+
+        function createKernelCard(kernel) {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.onclick = () => showKernelModal(kernel);
+
+            const modelResults = Object.entries(kernel.models || {});
+            const correctModels = modelResults.filter(([_, r]) => r.correct);
+            const bestSpeedup = correctModels.length > 0
+                ? Math.max(...correctModels.map(([_, r]) => r.speedup))
+                : 0;
+
+            let speedupClass = 'bad';
+            if (bestSpeedup >= 1.0) speedupClass = 'good';
+            else if (bestSpeedup >= 0.8) speedupClass = 'warning';
+
+            const fillWidth = Math.min(bestSpeedup * 50, 100);
+
+            card.innerHTML = `
+                <div class="card-header">
+                    <div>
+                        <div class="card-title">${escapeHtml(kernel.name)}</div>
+                        <div class="card-subtitle">Problem ${kernel.problem_id}</div>
+                    </div>
+                    <span class="badge badge-level-${kernel.level}">L${kernel.level}</span>
+                </div>
+                <div class="card-body">
+                    <div class="progress-bar">
+                        <div class="progress-track">
+                            <div class="progress-fill ${speedupClass}" style="width: ${fillWidth}%;"></div>
+                        </div>
+                        <span class="progress-value">${bestSpeedup > 0 ? bestSpeedup.toFixed(2) + 'x' : '-'}</span>
+                    </div>
+                    <div class="card-stats" style="margin-top: 0.75rem;">
+                        <span><span class="card-stat-value">${correctModels.length}/${modelResults.length}</span> correct</span>
+                        <span>Baseline: <span class="card-stat-value">${kernel.baseline_time.toFixed(2)}ms</span></span>
+                    </div>
+                </div>
+            `;
+
+            return card;
+        }
+
+        function showKernelModal(kernel) {
+            const modal = document.getElementById('kernel-modal');
+            const title = document.getElementById('modal-title');
+            const body = document.getElementById('modal-body');
+
+            title.textContent = kernel.name;
+
+            let html = `
+                <div class="info-box">
+                    <div class="info-item">
+                        <span class="info-label">Level:</span>
+                        <span class="info-value">${kernel.level}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Problem:</span>
+                        <span class="info-value">#${kernel.problem_id}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Baseline:</span>
+                        <span class="info-value">${kernel.baseline_time.toFixed(2)}ms</span>
+                    </div>
+                </div>
+                <div style="font-size: 0.8125rem; color: var(--text-muted); margin-bottom: 0.75rem;">Model Results</div>
+            `;
+
+            const sortedModels = Object.entries(kernel.models || {})
+                .sort(([, a], [, b]) => (b.speedup || 0) - (a.speedup || 0));
+
+            if (sortedModels.length === 0) {
+                html += '<p style="color: var(--text-muted); font-size: 0.875rem;">No model results available</p>';
+            } else {
+                sortedModels.forEach(([modelId, result]) => {
+                    const compiledIcon = result.compiled
+                        ? '<span class="status-icon success">&#x2713;</span>'
+                        : '<span class="status-icon error">&#x2717;</span>';
+                    const correctIcon = result.correct
+                        ? '<span class="status-icon success">&#x2713;</span>'
+                        : '<span class="status-icon error">&#x2717;</span>';
+
+                    const speedupInfo = result.correct && result.speedup > 0
+                        ? formatSpeedup(result.speedup)
+                        : { class: 'bad', text: '-' };
+
+                    html += `
+                        <div class="model-result">
+                            <span class="model-result-name">${escapeHtml(modelId.replace('_H100', ''))}</span>
+                            <div class="model-result-stats">
+                                <div style="display: flex; gap: 0.25rem;">
+                                    ${compiledIcon}
+                                    ${correctIcon}
+                                </div>
+                                <span class="metric ${speedupInfo.class}" style="min-width: 55px; text-align: right;">${speedupInfo.text}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            body.innerHTML = html;
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('kernel-modal').classList.remove('active');
+        }
+
+        // Close modal on escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // Level filter handlers
+        document.querySelectorAll('#level-filters .filter-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('#level-filters .filter-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentFilter = tab.dataset.level;
+                renderKernels();
+            });
+        });
+
+        // Search handler
+        document.getElementById('search-input').addEventListener('input', (e) => {
+            searchQuery = e.target.value;
+            renderKernels();
+        });
+
+        // Initialize
+        loadKernels();
+    </script>
+</body>
+</html>

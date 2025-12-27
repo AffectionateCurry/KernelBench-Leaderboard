@@ -1,0 +1,5466 @@
+{
+  "kernels": [
+    {
+      "id": "level_1_problem_1",
+      "level": 1,
+      "problem_id": 1,
+      "name": "Square matrix multiplication",
+      "filename": "1_Square_matrix_multiplication_.py",
+      "baseline_time": 3.81,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 15.3,
+          "speedup": 0.249
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 16.8,
+          "speedup": 0.2268
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_2",
+      "level": 1,
+      "problem_id": 2,
+      "name": "Standard matrix multiplication",
+      "filename": "2_Standard_matrix_multiplication_.py",
+      "baseline_time": 4.73,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 17.0,
+          "speedup": 0.2782
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_3",
+      "level": 1,
+      "problem_id": 3,
+      "name": "Batched matrix multiplication",
+      "filename": "3_Batched_matrix_multiplication.py",
+      "baseline_time": 8.47,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 29.5,
+          "speedup": 0.2871
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 45.1,
+          "speedup": 0.1878
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_4",
+      "level": 1,
+      "problem_id": 4,
+      "name": "Matrix vector multiplication",
+      "filename": "4_Matrix_vector_multiplication_.py",
+      "baseline_time": 4.53,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 3.83,
+          "speedup": 1.1828
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_5",
+      "level": 1,
+      "problem_id": 5,
+      "name": "Matrix scalar multiplication",
+      "filename": "5_Matrix_scalar_multiplication.py",
+      "baseline_time": 4.67,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 3.59,
+          "speedup": 1.3008
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 3.59,
+          "speedup": 1.3008
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_6",
+      "level": 1,
+      "problem_id": 6,
+      "name": "Matmul with large K dimension",
+      "filename": "6_Matmul_with_large_K_dimension_.py",
+      "baseline_time": 1.83,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 8.25,
+          "speedup": 0.2218
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 35.5,
+          "speedup": 0.0515
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_7",
+      "level": 1,
+      "problem_id": 7,
+      "name": "Matmul with small K dimension",
+      "filename": "7_Matmul_with_small_K_dimension_.py",
+      "baseline_time": 6.34,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 18.1,
+          "speedup": 0.3503
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_8",
+      "level": 1,
+      "problem_id": 8,
+      "name": "Matmul with irregular shapes",
+      "filename": "8_Matmul_with_irregular_shapes_.py",
+      "baseline_time": 7.99,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 32.7,
+          "speedup": 0.2443
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 46.6,
+          "speedup": 0.1715
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_9",
+      "level": 1,
+      "problem_id": 9,
+      "name": "Tall skinny matrix multiplication",
+      "filename": "9_Tall_skinny_matrix_multiplication_.py",
+      "baseline_time": 4.33,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 4.08,
+          "speedup": 1.0613
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 14.2,
+          "speedup": 0.3049
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_10",
+      "level": 1,
+      "problem_id": 10,
+      "name": "3D tensor matrix multiplication",
+      "filename": "10_3D_tensor_matrix_multiplication.py",
+      "baseline_time": 1.56,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 5.56,
+          "speedup": 0.2806
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 12.2,
+          "speedup": 0.1279
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_11",
+      "level": 1,
+      "problem_id": 11,
+      "name": "4D tensor matrix multiplication",
+      "filename": "11_4D_tensor_matrix_multiplication.py",
+      "baseline_time": 13.1,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 61.0,
+          "speedup": 0.2148
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_12",
+      "level": 1,
+      "problem_id": 12,
+      "name": "Matmul with diagonal matrices",
+      "filename": "12_Matmul_with_diagonal_matrices_.py",
+      "baseline_time": 3.7,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 0.0849,
+          "speedup": 43.5807
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 0.0726,
+          "speedup": 50.9642
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_13",
+      "level": 1,
+      "problem_id": 13,
+      "name": "Matmul for symmetric matrices",
+      "filename": "13_Matmul_for_symmetric_matrices.py",
+      "baseline_time": 3.78,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 19.4,
+          "speedup": 0.1948
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 25.6,
+          "speedup": 0.1477
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_14",
+      "level": 1,
+      "problem_id": 14,
+      "name": "Matmul for upper triangular matrices",
+      "filename": "14_Matmul_for_upper_triangular_matrices.py",
+      "baseline_time": 3.74,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.52,
+          "speedup": 1.4841
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 4.36,
+          "speedup": 0.8578
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_15",
+      "level": 1,
+      "problem_id": 15,
+      "name": "Matmul for lower triangular matrices",
+      "filename": "15_Matmul_for_lower_triangular_matrices.py",
+      "baseline_time": 3.77,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.88,
+          "speedup": 1.309
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_16",
+      "level": 1,
+      "problem_id": 16,
+      "name": "Matmul with transposed A",
+      "filename": "16_Matmul_with_transposed_A.py",
+      "baseline_time": 3.51,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 19.5,
+          "speedup": 0.18
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 25.4,
+          "speedup": 0.1382
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_17",
+      "level": 1,
+      "problem_id": 17,
+      "name": "Matmul with transposed B",
+      "filename": "17_Matmul_with_transposed_B.py",
+      "baseline_time": 5.05,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 19.6,
+          "speedup": 0.2577
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 276.0,
+          "speedup": 0.0183
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_18",
+      "level": 1,
+      "problem_id": 18,
+      "name": "Matmul with transposed both",
+      "filename": "18_Matmul_with_transposed_both.py",
+      "baseline_time": 3.64,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 20.0,
+          "speedup": 0.182
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_19",
+      "level": 1,
+      "problem_id": 19,
+      "name": "ReLU",
+      "filename": "19_ReLU.py",
+      "baseline_time": 6.97,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 4.56,
+          "speedup": 1.5285
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_20",
+      "level": 1,
+      "problem_id": 20,
+      "name": "LeakyReLU",
+      "filename": "20_LeakyReLU.py",
+      "baseline_time": 6.97,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 4.48,
+          "speedup": 1.5558
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 5.4,
+          "speedup": 1.2907
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_21",
+      "level": 1,
+      "problem_id": 21,
+      "name": "Sigmoid",
+      "filename": "21_Sigmoid.py",
+      "baseline_time": 6.97,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 4.38,
+          "speedup": 1.5913
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 5.46,
+          "speedup": 1.2766
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_22",
+      "level": 1,
+      "problem_id": 22,
+      "name": "Tanh",
+      "filename": "22_Tanh.py",
+      "baseline_time": 6.99,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 4.5,
+          "speedup": 1.5533
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 5.51,
+          "speedup": 1.2686
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_23",
+      "level": 1,
+      "problem_id": 23,
+      "name": "Softmax",
+      "filename": "23_Softmax.py",
+      "baseline_time": 13.9,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 6.45,
+          "speedup": 2.155
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_24",
+      "level": 1,
+      "problem_id": 24,
+      "name": "LogSoftmax",
+      "filename": "24_LogSoftmax.py",
+      "baseline_time": 13.9,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 7.37,
+          "speedup": 1.886
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_25",
+      "level": 1,
+      "problem_id": 25,
+      "name": "Swish",
+      "filename": "25_Swish.py",
+      "baseline_time": 6.98,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 4.49,
+          "speedup": 1.5546
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 5.74,
+          "speedup": 1.216
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_26",
+      "level": 1,
+      "problem_id": 26,
+      "name": "GELU",
+      "filename": "26_GELU_.py",
+      "baseline_time": 6.98,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 4.23,
+          "speedup": 1.6501
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_27",
+      "level": 1,
+      "problem_id": 27,
+      "name": "SELU",
+      "filename": "27_SELU_.py",
+      "baseline_time": 6.98,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 4.55,
+          "speedup": 1.5341
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 5.39,
+          "speedup": 1.295
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_28",
+      "level": 1,
+      "problem_id": 28,
+      "name": "HardSigmoid",
+      "filename": "28_HardSigmoid.py",
+      "baseline_time": 6.98,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 3.84,
+          "speedup": 1.8177
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 5.61,
+          "speedup": 1.2442
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_29",
+      "level": 1,
+      "problem_id": 29,
+      "name": "Softplus",
+      "filename": "29_Softplus.py",
+      "baseline_time": 6.98,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 4.25,
+          "speedup": 1.6424
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 5.5,
+          "speedup": 1.2691
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_30",
+      "level": 1,
+      "problem_id": 30,
+      "name": "Softsign",
+      "filename": "30_Softsign.py",
+      "baseline_time": 6.98,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 4.25,
+          "speedup": 1.6424
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 5.42,
+          "speedup": 1.2878
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_31",
+      "level": 1,
+      "problem_id": 31,
+      "name": "ELU",
+      "filename": "31_ELU.py",
+      "baseline_time": 6.98,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 5.39,
+          "speedup": 1.295
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 5.45,
+          "speedup": 1.2807
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_32",
+      "level": 1,
+      "problem_id": 32,
+      "name": "HardTanh",
+      "filename": "32_HardTanh.py",
+      "baseline_time": 6.97,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 4.47,
+          "speedup": 1.5593
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 5.39,
+          "speedup": 1.2931
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_33",
+      "level": 1,
+      "problem_id": 33,
+      "name": "BatchNorm",
+      "filename": "33_BatchNorm.py",
+      "baseline_time": 6.87,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 8.87,
+          "speedup": 0.7745
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_34",
+      "level": 1,
+      "problem_id": 34,
+      "name": "InstanceNorm",
+      "filename": "34_InstanceNorm.py",
+      "baseline_time": 12.4,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 8.94,
+          "speedup": 1.387
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_35",
+      "level": 1,
+      "problem_id": 35,
+      "name": "GroupNorm",
+      "filename": "35_GroupNorm_.py",
+      "baseline_time": 12.1,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 7.55,
+          "speedup": 1.6026
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 24.8,
+          "speedup": 0.4879
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_36",
+      "level": 1,
+      "problem_id": 36,
+      "name": "RMSNorm",
+      "filename": "36_RMSNorm_.py",
+      "baseline_time": 12.3,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 6.59,
+          "speedup": 1.8665
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_37",
+      "level": 1,
+      "problem_id": 37,
+      "name": "FrobeniusNorm",
+      "filename": "37_FrobeniusNorm_.py",
+      "baseline_time": 11.9,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 8.74,
+          "speedup": 1.3616
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 16.9,
+          "speedup": 0.7041
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_38",
+      "level": 1,
+      "problem_id": 38,
+      "name": "L1Norm",
+      "filename": "38_L1Norm_.py",
+      "baseline_time": 18.4,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 13.1,
+          "speedup": 1.4046
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 13.4,
+          "speedup": 1.3731
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_39",
+      "level": 1,
+      "problem_id": 39,
+      "name": "L2Norm",
+      "filename": "39_L2Norm_.py",
+      "baseline_time": 19.0,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 11.5,
+          "speedup": 1.6522
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_40",
+      "level": 1,
+      "problem_id": 40,
+      "name": "LayerNorm",
+      "filename": "40_LayerNorm.py",
+      "baseline_time": 0.81,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 3.73,
+          "speedup": 0.2172
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 12.9,
+          "speedup": 0.0628
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_41",
+      "level": 1,
+      "problem_id": 41,
+      "name": "Max Pooling 1D",
+      "filename": "41_Max_Pooling_1D.py",
+      "baseline_time": 14.0,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 5.92,
+          "speedup": 2.3649
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_42",
+      "level": 1,
+      "problem_id": 42,
+      "name": "Max Pooling 2D",
+      "filename": "42_Max_Pooling_2D.py",
+      "baseline_time": 6.13,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 7.06,
+          "speedup": 0.8683
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_43",
+      "level": 1,
+      "problem_id": 43,
+      "name": "Max Pooling 3D",
+      "filename": "43_Max_Pooling_3D.py",
+      "baseline_time": 5.29,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 3.75,
+          "speedup": 1.4107
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 3.45,
+          "speedup": 1.5333
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_44",
+      "level": 1,
+      "problem_id": 44,
+      "name": "Average Pooling 1D",
+      "filename": "44_Average_Pooling_1D.py",
+      "baseline_time": 2.78,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 4.0,
+          "speedup": 0.695
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_45",
+      "level": 1,
+      "problem_id": 45,
+      "name": "Average Pooling 2D",
+      "filename": "45_Average_Pooling_2D.py",
+      "baseline_time": 9.82,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_46",
+      "level": 1,
+      "problem_id": 46,
+      "name": "Average Pooling 3D",
+      "filename": "46_Average_Pooling_3D.py",
+      "baseline_time": 11.4,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 7.32,
+          "speedup": 1.5574
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 6.11,
+          "speedup": 1.8658
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_47",
+      "level": 1,
+      "problem_id": 47,
+      "name": "Sum reduction over a dimension",
+      "filename": "47_Sum_reduction_over_a_dimension.py",
+      "baseline_time": 5.41,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 3.75,
+          "speedup": 1.4427
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_48",
+      "level": 1,
+      "problem_id": 48,
+      "name": "Mean reduction over a dimension",
+      "filename": "48_Mean_reduction_over_a_dimension.py",
+      "baseline_time": 5.34,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 3.33,
+          "speedup": 1.6036
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_49",
+      "level": 1,
+      "problem_id": 49,
+      "name": "Max reduction over a dimension",
+      "filename": "49_Max_reduction_over_a_dimension.py",
+      "baseline_time": 5.32,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 3.62,
+          "speedup": 1.4696
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 14.8,
+          "speedup": 0.3595
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_50",
+      "level": 1,
+      "problem_id": 50,
+      "name": "conv standard 2D  square input  square kernel",
+      "filename": "50_conv_standard_2D__square_input__square_kernel.py",
+      "baseline_time": 2.26,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_51",
+      "level": 1,
+      "problem_id": 51,
+      "name": "Argmax over a dimension",
+      "filename": "51_Argmax_over_a_dimension.py",
+      "baseline_time": 4.59,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 3.02,
+          "speedup": 1.5199
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_52",
+      "level": 1,
+      "problem_id": 52,
+      "name": "Argmin over a dimension",
+      "filename": "52_Argmin_over_a_dimension.py",
+      "baseline_time": 4.59,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.96,
+          "speedup": 1.5507
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 3.14,
+          "speedup": 1.4618
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_53",
+      "level": 1,
+      "problem_id": 53,
+      "name": "Min reduction over a dimension",
+      "filename": "53_Min_reduction_over_a_dimension.py",
+      "baseline_time": 5.51,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 3.63,
+          "speedup": 1.5179
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_54",
+      "level": 1,
+      "problem_id": 54,
+      "name": "conv standard 3D  square input  square kernel",
+      "filename": "54_conv_standard_3D__square_input__square_kernel.py",
+      "baseline_time": 1.8,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 21.1,
+          "speedup": 0.0853
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 1.86,
+          "speedup": 0.9677
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_55",
+      "level": 1,
+      "problem_id": 55,
+      "name": "conv standard 2D  asymmetric input  square kernel",
+      "filename": "55_conv_standard_2D__asymmetric_input__square_kernel.py",
+      "baseline_time": 6.75,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_56",
+      "level": 1,
+      "problem_id": 56,
+      "name": "conv standard 2D  asymmetric input  asymmetric kernel",
+      "filename": "56_conv_standard_2D__asymmetric_input__asymmetric_kernel.py",
+      "baseline_time": 5.54,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_57",
+      "level": 1,
+      "problem_id": 57,
+      "name": "conv transposed 2D  square input  square kernel",
+      "filename": "57_conv_transposed_2D__square_input__square_kernel.py",
+      "baseline_time": 9.07,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_58",
+      "level": 1,
+      "problem_id": 58,
+      "name": "conv transposed 3D  asymmetric input  asymmetric kernel",
+      "filename": "58_conv_transposed_3D__asymmetric_input__asymmetric_kernel.py",
+      "baseline_time": 2.6,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_59",
+      "level": 1,
+      "problem_id": 59,
+      "name": "conv standard 3D  asymmetric input  square kernel",
+      "filename": "59_conv_standard_3D__asymmetric_input__square_kernel.py",
+      "baseline_time": 2.75,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_60",
+      "level": 1,
+      "problem_id": 60,
+      "name": "conv standard 3D  square input  asymmetric kernel",
+      "filename": "60_conv_standard_3D__square_input__asymmetric_kernel.py",
+      "baseline_time": 7.09,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_61",
+      "level": 1,
+      "problem_id": 61,
+      "name": "conv transposed 3D  square input  square kernel",
+      "filename": "61_conv_transposed_3D__square_input__square_kernel.py",
+      "baseline_time": 6.44,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_62",
+      "level": 1,
+      "problem_id": 62,
+      "name": "conv standard 2D  square input  asymmetric kernel",
+      "filename": "62_conv_standard_2D__square_input__asymmetric_kernel.py",
+      "baseline_time": 4.07,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_63",
+      "level": 1,
+      "problem_id": 63,
+      "name": "conv standard 2D  square input  square kernel",
+      "filename": "63_conv_standard_2D__square_input__square_kernel.py",
+      "baseline_time": 19.4,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_64",
+      "level": 1,
+      "problem_id": 64,
+      "name": "conv transposed 1D",
+      "filename": "64_conv_transposed_1D.py",
+      "baseline_time": 8.07,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_65",
+      "level": 1,
+      "problem_id": 65,
+      "name": "conv transposed 2D  square input  asymmetric kernel",
+      "filename": "65_conv_transposed_2D__square_input__asymmetric_kernel.py",
+      "baseline_time": 3.54,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_66",
+      "level": 1,
+      "problem_id": 66,
+      "name": "conv standard 3D  asymmetric input  asymmetric kernel",
+      "filename": "66_conv_standard_3D__asymmetric_input__asymmetric_kernel.py",
+      "baseline_time": 3.48,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 24.2,
+          "speedup": 0.1438
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 29.6,
+          "speedup": 0.1176
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_67",
+      "level": 1,
+      "problem_id": 67,
+      "name": "conv standard 1D",
+      "filename": "67_conv_standard_1D.py",
+      "baseline_time": 4.0,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_68",
+      "level": 1,
+      "problem_id": 68,
+      "name": "conv transposed 3D  square input  asymmetric kernel",
+      "filename": "68_conv_transposed_3D__square_input__asymmetric_kernel.py",
+      "baseline_time": 11.9,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_69",
+      "level": 1,
+      "problem_id": 69,
+      "name": "conv transposed 2D  asymmetric input  asymmetric kernel",
+      "filename": "69_conv_transposed_2D__asymmetric_input__asymmetric_kernel.py",
+      "baseline_time": 4.25,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_70",
+      "level": 1,
+      "problem_id": 70,
+      "name": "conv transposed 3D  asymmetric input  square kernel",
+      "filename": "70_conv_transposed_3D__asymmetric_input__square_kernel.py",
+      "baseline_time": 12.0,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_71",
+      "level": 1,
+      "problem_id": 71,
+      "name": "conv transposed 2D  asymmetric input  square kernel",
+      "filename": "71_conv_transposed_2D__asymmetric_input__square_kernel.py",
+      "baseline_time": 2.19,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_72",
+      "level": 1,
+      "problem_id": 72,
+      "name": "conv transposed 3D asymmetric input asymmetric kernel   strided padded grouped",
+      "filename": "72_conv_transposed_3D_asymmetric_input_asymmetric_kernel___strided_padded_grouped_.py",
+      "baseline_time": 3.24,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.49,
+          "speedup": 1.3012
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_73",
+      "level": 1,
+      "problem_id": 73,
+      "name": "conv transposed 3D asymmetric input square kernel  strided padded  grouped",
+      "filename": "73_conv_transposed_3D_asymmetric_input_square_kernel__strided_padded__grouped.py",
+      "baseline_time": 3.07,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_74",
+      "level": 1,
+      "problem_id": 74,
+      "name": "conv transposed 1D dilated",
+      "filename": "74_conv_transposed_1D_dilated.py",
+      "baseline_time": 2.91,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_75",
+      "level": 1,
+      "problem_id": 75,
+      "name": "conv transposed 2D asymmetric input asymmetric kernel strided  grouped    padded    dilated",
+      "filename": "75_conv_transposed_2D_asymmetric_input_asymmetric_kernel_strided__grouped____padded____dilated__.py",
+      "baseline_time": 7.3,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 15.3,
+          "speedup": 0.4771
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_76",
+      "level": 1,
+      "problem_id": 76,
+      "name": "conv standard 1D dilated strided",
+      "filename": "76_conv_standard_1D_dilated_strided__.py",
+      "baseline_time": 19.1,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_77",
+      "level": 1,
+      "problem_id": 77,
+      "name": "conv transposed 3D square input square kernel   padded    dilated    strided",
+      "filename": "77_conv_transposed_3D_square_input_square_kernel___padded____dilated____strided__.py",
+      "baseline_time": 2.45,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_78",
+      "level": 1,
+      "problem_id": 78,
+      "name": "conv transposed 2D asymmetric input asymmetric kernel   padded",
+      "filename": "78_conv_transposed_2D_asymmetric_input_asymmetric_kernel___padded__.py",
+      "baseline_time": 3.15,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_79",
+      "level": 1,
+      "problem_id": 79,
+      "name": "conv transposed 1D asymmetric input square kernel   padded    strided    dilated",
+      "filename": "79_conv_transposed_1D_asymmetric_input_square_kernel___padded____strided____dilated__.py",
+      "baseline_time": 2.74,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_80",
+      "level": 1,
+      "problem_id": 80,
+      "name": "conv standard 2D square input asymmetric kernel   dilated    padded",
+      "filename": "80_conv_standard_2D_square_input_asymmetric_kernel___dilated____padded__.py",
+      "baseline_time": 4.03,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_81",
+      "level": 1,
+      "problem_id": 81,
+      "name": "conv transposed 2D asymmetric input square kernel   dilated    padded    strided",
+      "filename": "81_conv_transposed_2D_asymmetric_input_square_kernel___dilated____padded____strided__.py",
+      "baseline_time": 2.58,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_82",
+      "level": 1,
+      "problem_id": 82,
+      "name": "conv depthwise 2D square input square kernel",
+      "filename": "82_conv_depthwise_2D_square_input_square_kernel.py",
+      "baseline_time": 3.95,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 3.32,
+          "speedup": 1.1898
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_83",
+      "level": 1,
+      "problem_id": 83,
+      "name": "conv depthwise 2D square input asymmetric kernel",
+      "filename": "83_conv_depthwise_2D_square_input_asymmetric_kernel.py",
+      "baseline_time": 28.9,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 0.823,
+          "speedup": 35.1154
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 1.42,
+          "speedup": 20.3521
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_84",
+      "level": 1,
+      "problem_id": 84,
+      "name": "conv depthwise 2D asymmetric input square kernel",
+      "filename": "84_conv_depthwise_2D_asymmetric_input_square_kernel.py",
+      "baseline_time": 15.5,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 11.7,
+          "speedup": 1.3248
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_85",
+      "level": 1,
+      "problem_id": 85,
+      "name": "conv depthwise 2D asymmetric input asymmetric kernel",
+      "filename": "85_conv_depthwise_2D_asymmetric_input_asymmetric_kernel.py",
+      "baseline_time": 18.5,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.21,
+          "speedup": 8.371
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_86",
+      "level": 1,
+      "problem_id": 86,
+      "name": "conv depthwise separable 2D",
+      "filename": "86_conv_depthwise_separable_2D.py",
+      "baseline_time": 6.91,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_87",
+      "level": 1,
+      "problem_id": 87,
+      "name": "conv pointwise 2D",
+      "filename": "87_conv_pointwise_2D.py",
+      "baseline_time": 22.2,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_88",
+      "level": 1,
+      "problem_id": 88,
+      "name": "MinGPTNewGelu",
+      "filename": "88_MinGPTNewGelu.py",
+      "baseline_time": 0.321,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 0.265,
+          "speedup": 1.2113
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 0.238,
+          "speedup": 1.3487
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_89",
+      "level": 1,
+      "problem_id": 89,
+      "name": "cumsum",
+      "filename": "89_cumsum.py",
+      "baseline_time": 5.06,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 4.23,
+          "speedup": 1.1962
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_90",
+      "level": 1,
+      "problem_id": 90,
+      "name": "cumprod",
+      "filename": "90_cumprod.py",
+      "baseline_time": 5.07,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 5.94,
+          "speedup": 0.8535
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 5.67,
+          "speedup": 0.8942
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_91",
+      "level": 1,
+      "problem_id": 91,
+      "name": "cumsum reverse",
+      "filename": "91_cumsum_reverse.py",
+      "baseline_time": 9.47,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_92",
+      "level": 1,
+      "problem_id": 92,
+      "name": "cumsum exclusive",
+      "filename": "92_cumsum_exclusive.py",
+      "baseline_time": 7.37,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 8.85,
+          "speedup": 0.8328
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_93",
+      "level": 1,
+      "problem_id": 93,
+      "name": "masked cumsum",
+      "filename": "93_masked_cumsum.py",
+      "baseline_time": 5.5,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_94",
+      "level": 1,
+      "problem_id": 94,
+      "name": "MSELoss",
+      "filename": "94_MSELoss.py",
+      "baseline_time": 4.35,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.83,
+          "speedup": 1.5371
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_95",
+      "level": 1,
+      "problem_id": 95,
+      "name": "CrossEntropyLoss",
+      "filename": "95_CrossEntropyLoss.py",
+      "baseline_time": 0.329,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_96",
+      "level": 1,
+      "problem_id": 96,
+      "name": "HuberLoss",
+      "filename": "96_HuberLoss.py",
+      "baseline_time": 4.35,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_97",
+      "level": 1,
+      "problem_id": 97,
+      "name": "ScaledDotProductAttention",
+      "filename": "97_ScaledDotProductAttention.py",
+      "baseline_time": 13.2,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_98",
+      "level": 1,
+      "problem_id": 98,
+      "name": "KLDivLoss",
+      "filename": "98_KLDivLoss.py",
+      "baseline_time": 1.14,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 1.57,
+          "speedup": 0.7261
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_99",
+      "level": 1,
+      "problem_id": 99,
+      "name": "TripletMarginLoss",
+      "filename": "99_TripletMarginLoss.py",
+      "baseline_time": 1.66,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 0.941,
+          "speedup": 1.7641
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 1.08,
+          "speedup": 1.537
+        }
+      }
+    },
+    {
+      "id": "level_1_problem_100",
+      "level": 1,
+      "problem_id": 100,
+      "name": "HingeLoss",
+      "filename": "100_HingeLoss.py",
+      "baseline_time": 2.21,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 6.8,
+          "speedup": 0.325
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_1",
+      "level": 2,
+      "problem_id": 1,
+      "name": "Conv2D ReLU BiasAdd",
+      "filename": "1_Conv2D_ReLU_BiasAdd.py",
+      "baseline_time": 3.08,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 4.81,
+          "speedup": 0.6403
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 3.93,
+          "speedup": 0.7837
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_2",
+      "level": 2,
+      "problem_id": 2,
+      "name": "ConvTranspose2d BiasAdd Clamp Scaling Clamp Divide",
+      "filename": "2_ConvTranspose2d_BiasAdd_Clamp_Scaling_Clamp_Divide.py",
+      "baseline_time": 5.49,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 7.64,
+          "speedup": 0.7186
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 8.56,
+          "speedup": 0.6414
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_3",
+      "level": 2,
+      "problem_id": 3,
+      "name": "ConvTranspose3d Sum LayerNorm AvgPool GELU",
+      "filename": "3_ConvTranspose3d_Sum_LayerNorm_AvgPool_GELU.py",
+      "baseline_time": 4.13,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 4.2,
+          "speedup": 0.9833
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_4",
+      "level": 2,
+      "problem_id": 4,
+      "name": "Conv2d Mish Mish",
+      "filename": "4_Conv2d_Mish_Mish.py",
+      "baseline_time": 7.42,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 8.54,
+          "speedup": 0.8689
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 9.0,
+          "speedup": 0.8244
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_5",
+      "level": 2,
+      "problem_id": 5,
+      "name": "ConvTranspose2d Subtract Tanh",
+      "filename": "5_ConvTranspose2d_Subtract_Tanh.py",
+      "baseline_time": 5.72,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 7.9,
+          "speedup": 0.7241
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 8.16,
+          "speedup": 0.701
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_6",
+      "level": 2,
+      "problem_id": 6,
+      "name": "Conv3d Softmax MaxPool MaxPool",
+      "filename": "6_Conv3d_Softmax_MaxPool_MaxPool.py",
+      "baseline_time": 1.43,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 0.709,
+          "speedup": 2.0169
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_7",
+      "level": 2,
+      "problem_id": 7,
+      "name": "Conv3d ReLU LeakyReLU GELU Sigmoid BiasAdd",
+      "filename": "7_Conv3d_ReLU_LeakyReLU_GELU_Sigmoid_BiasAdd.py",
+      "baseline_time": 8.68,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 4.11,
+          "speedup": 2.1119
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_8",
+      "level": 2,
+      "problem_id": 8,
+      "name": "Conv3d Divide Max GlobalAvgPool BiasAdd Sum",
+      "filename": "8_Conv3d_Divide_Max_GlobalAvgPool_BiasAdd_Sum.py",
+      "baseline_time": 8.56,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.93,
+          "speedup": 2.9215
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_9",
+      "level": 2,
+      "problem_id": 9,
+      "name": "Matmul Subtract Multiply ReLU",
+      "filename": "9_Matmul_Subtract_Multiply_ReLU.py",
+      "baseline_time": 5.02,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.73,
+          "speedup": 1.8388
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.75,
+          "speedup": 1.8255
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_10",
+      "level": 2,
+      "problem_id": 10,
+      "name": "ConvTranspose2d MaxPool Hardtanh Mean Tanh",
+      "filename": "10_ConvTranspose2d_MaxPool_Hardtanh_Mean_Tanh.py",
+      "baseline_time": 9.61,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 8.35,
+          "speedup": 1.1509
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_11",
+      "level": 2,
+      "problem_id": 11,
+      "name": "ConvTranspose2d BatchNorm Tanh MaxPool GroupNorm",
+      "filename": "11_ConvTranspose2d_BatchNorm_Tanh_MaxPool_GroupNorm.py",
+      "baseline_time": 2.2,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_12",
+      "level": 2,
+      "problem_id": 12,
+      "name": "Gemm Multiply LeakyReLU",
+      "filename": "12_Gemm_Multiply_LeakyReLU.py",
+      "baseline_time": 5.0,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 41.5,
+          "speedup": 0.1205
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 3.19,
+          "speedup": 1.5674
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_13",
+      "level": 2,
+      "problem_id": 13,
+      "name": "ConvTranspose3d Mean Add Softmax Tanh Scaling",
+      "filename": "13_ConvTranspose3d_Mean_Add_Softmax_Tanh_Scaling.py",
+      "baseline_time": 11.0,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 10.5,
+          "speedup": 1.0476
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 12.8,
+          "speedup": 0.8594
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_14",
+      "level": 2,
+      "problem_id": 14,
+      "name": "Gemm Divide Sum Scaling",
+      "filename": "14_Gemm_Divide_Sum_Scaling.py",
+      "baseline_time": 5.01,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_15",
+      "level": 2,
+      "problem_id": 15,
+      "name": "ConvTranspose3d BatchNorm Subtract",
+      "filename": "15_ConvTranspose3d_BatchNorm_Subtract.py",
+      "baseline_time": 1.67,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.28,
+          "speedup": 0.7325
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_16",
+      "level": 2,
+      "problem_id": 16,
+      "name": "ConvTranspose2d Mish Add Hardtanh Scaling",
+      "filename": "16_ConvTranspose2d_Mish_Add_Hardtanh_Scaling.py",
+      "baseline_time": 5.51,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 7.22,
+          "speedup": 0.7632
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 7.3,
+          "speedup": 0.7548
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_17",
+      "level": 2,
+      "problem_id": 17,
+      "name": "Conv2d InstanceNorm Divide",
+      "filename": "17_Conv2d_InstanceNorm_Divide.py",
+      "baseline_time": 4.04,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 4.73,
+          "speedup": 0.8541
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 4.86,
+          "speedup": 0.8313
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_18",
+      "level": 2,
+      "problem_id": 18,
+      "name": "Matmul Sum Max AvgPool LogSumExp LogSumExp",
+      "filename": "18_Matmul_Sum_Max_AvgPool_LogSumExp_LogSumExp.py",
+      "baseline_time": 4.75,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 3.18,
+          "speedup": 1.4937
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_19",
+      "level": 2,
+      "problem_id": 19,
+      "name": "ConvTranspose2d GELU GroupNorm",
+      "filename": "19_ConvTranspose2d_GELU_GroupNorm.py",
+      "baseline_time": 11.4,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_20",
+      "level": 2,
+      "problem_id": 20,
+      "name": "ConvTranspose3d Sum ResidualAdd Multiply ResidualAdd",
+      "filename": "20_ConvTranspose3d_Sum_ResidualAdd_Multiply_ResidualAdd.py",
+      "baseline_time": 1.78,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 1.89,
+          "speedup": 0.9418
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_21",
+      "level": 2,
+      "problem_id": 21,
+      "name": "Conv2d Add Scale Sigmoid GroupNorm",
+      "filename": "21_Conv2d_Add_Scale_Sigmoid_GroupNorm.py",
+      "baseline_time": 4.22,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 5.17,
+          "speedup": 0.8162
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_22",
+      "level": 2,
+      "problem_id": 22,
+      "name": "Matmul Scale ResidualAdd Clamp LogSumExp Mish",
+      "filename": "22_Matmul_Scale_ResidualAdd_Clamp_LogSumExp_Mish.py",
+      "baseline_time": 5.01,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.74,
+          "speedup": 1.8285
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.78,
+          "speedup": 1.8022
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_23",
+      "level": 2,
+      "problem_id": 23,
+      "name": "Conv3d GroupNorm Mean",
+      "filename": "23_Conv3d_GroupNorm_Mean.py",
+      "baseline_time": 1.66,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 1.05,
+          "speedup": 1.581
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.06,
+          "speedup": 0.8058
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_24",
+      "level": 2,
+      "problem_id": 24,
+      "name": "Conv3d Min Softmax",
+      "filename": "24_Conv3d_Min_Softmax.py",
+      "baseline_time": 1.53,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 0.962,
+          "speedup": 1.5904
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 1.81,
+          "speedup": 0.8453
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_25",
+      "level": 2,
+      "problem_id": 25,
+      "name": "Conv2d Min Tanh Tanh",
+      "filename": "25_Conv2d_Min_Tanh_Tanh.py",
+      "baseline_time": 4.39,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 6.19,
+          "speedup": 0.7092
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_26",
+      "level": 2,
+      "problem_id": 26,
+      "name": "ConvTranspose3d Add HardSwish",
+      "filename": "26_ConvTranspose3d_Add_HardSwish.py",
+      "baseline_time": 3.97,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 3.46,
+          "speedup": 1.1474
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 3.48,
+          "speedup": 1.1408
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_27",
+      "level": 2,
+      "problem_id": 27,
+      "name": "Conv3d HardSwish GroupNorm Mean",
+      "filename": "27_Conv3d_HardSwish_GroupNorm_Mean.py",
+      "baseline_time": 6.4,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 9.03,
+          "speedup": 0.7087
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_28",
+      "level": 2,
+      "problem_id": 28,
+      "name": "BMM InstanceNorm Sum ResidualAdd Multiply",
+      "filename": "28_BMM_InstanceNorm_Sum_ResidualAdd_Multiply.py",
+      "baseline_time": 4.86,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.8,
+          "speedup": 1.7357
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_29",
+      "level": 2,
+      "problem_id": 29,
+      "name": "Matmul Mish Mish",
+      "filename": "29_Matmul_Mish_Mish.py",
+      "baseline_time": 5.04,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 3.3,
+          "speedup": 1.5273
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 3.44,
+          "speedup": 1.4651
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_30",
+      "level": 2,
+      "problem_id": 30,
+      "name": "Gemm GroupNorm Hardtanh",
+      "filename": "30_Gemm_GroupNorm_Hardtanh.py",
+      "baseline_time": 4.8,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.8,
+          "speedup": 1.7143
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_31",
+      "level": 2,
+      "problem_id": 31,
+      "name": "Conv2d Min Add Multiply",
+      "filename": "31_Conv2d_Min_Add_Multiply.py",
+      "baseline_time": 3.08,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 3.83,
+          "speedup": 0.8042
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 3.88,
+          "speedup": 0.7938
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_32",
+      "level": 2,
+      "problem_id": 32,
+      "name": "Conv2d Scaling Min",
+      "filename": "32_Conv2d_Scaling_Min.py",
+      "baseline_time": 5.01,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 6.54,
+          "speedup": 0.7661
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 6.39,
+          "speedup": 0.784
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_33",
+      "level": 2,
+      "problem_id": 33,
+      "name": "Gemm Scale BatchNorm",
+      "filename": "33_Gemm_Scale_BatchNorm.py",
+      "baseline_time": 5.07,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.98,
+          "speedup": 1.7013
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.85,
+          "speedup": 1.7789
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_34",
+      "level": 2,
+      "problem_id": 34,
+      "name": "ConvTranspose3d LayerNorm GELU Scaling",
+      "filename": "34_ConvTranspose3d_LayerNorm_GELU_Scaling.py",
+      "baseline_time": 3.51,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_35",
+      "level": 2,
+      "problem_id": 35,
+      "name": "Conv2d Subtract HardSwish MaxPool Mish",
+      "filename": "35_Conv2d_Subtract_HardSwish_MaxPool_Mish.py",
+      "baseline_time": 4.35,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 3.71,
+          "speedup": 1.1725
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 4.73,
+          "speedup": 0.9197
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_36",
+      "level": 2,
+      "problem_id": 36,
+      "name": "ConvTranspose2d Min Sum GELU Add",
+      "filename": "36_ConvTranspose2d_Min_Sum_GELU_Add.py",
+      "baseline_time": 0.924,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 8.2,
+          "speedup": 0.1127
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_37",
+      "level": 2,
+      "problem_id": 37,
+      "name": "Matmul Swish Sum GroupNorm",
+      "filename": "37_Matmul_Swish_Sum_GroupNorm.py",
+      "baseline_time": 8.82,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 6.44,
+          "speedup": 1.3696
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 9.14,
+          "speedup": 0.965
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_38",
+      "level": 2,
+      "problem_id": 38,
+      "name": "ConvTranspose3d AvgPool Clamp Softmax Multiply",
+      "filename": "38_ConvTranspose3d_AvgPool_Clamp_Softmax_Multiply.py",
+      "baseline_time": 4.93,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 4.54,
+          "speedup": 1.0859
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_39",
+      "level": 2,
+      "problem_id": 39,
+      "name": "Gemm Scale BatchNorm",
+      "filename": "39_Gemm_Scale_BatchNorm.py",
+      "baseline_time": 16.3,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 11.3,
+          "speedup": 1.4425
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_40",
+      "level": 2,
+      "problem_id": 40,
+      "name": "Matmul Scaling ResidualAdd",
+      "filename": "40_Matmul_Scaling_ResidualAdd.py",
+      "baseline_time": 16.2,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 353.0,
+          "speedup": 0.0459
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_41",
+      "level": 2,
+      "problem_id": 41,
+      "name": "Gemm BatchNorm GELU ReLU",
+      "filename": "41_Gemm_BatchNorm_GELU_ReLU.py",
+      "baseline_time": 16.4,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 11.4,
+          "speedup": 1.4386
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_42",
+      "level": 2,
+      "problem_id": 42,
+      "name": "ConvTranspose2d GlobalAvgPool BiasAdd LogSumExp Sum Multiply",
+      "filename": "42_ConvTranspose2d_GlobalAvgPool_BiasAdd_LogSumExp_Sum_Multiply.py",
+      "baseline_time": 5.28,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 7.43,
+          "speedup": 0.7106
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 8.18,
+          "speedup": 0.6455
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_43",
+      "level": 2,
+      "problem_id": 43,
+      "name": "Conv3d Max LogSumExp ReLU",
+      "filename": "43_Conv3d_Max_LogSumExp_ReLU.py",
+      "baseline_time": 3.69,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.87,
+          "speedup": 1.2857
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.55,
+          "speedup": 1.4471
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_44",
+      "level": 2,
+      "problem_id": 44,
+      "name": "ConvTranspose2d Multiply GlobalAvgPool GlobalAvgPool Mean",
+      "filename": "44_ConvTranspose2d_Multiply_GlobalAvgPool_GlobalAvgPool_Mean.py",
+      "baseline_time": 0.911,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 1.47,
+          "speedup": 0.6197
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 1.47,
+          "speedup": 0.6197
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_45",
+      "level": 2,
+      "problem_id": 45,
+      "name": "Gemm Sigmoid LogSumExp",
+      "filename": "45_Gemm_Sigmoid_LogSumExp.py",
+      "baseline_time": 12.4,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 8.6,
+          "speedup": 1.4419
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 8.5,
+          "speedup": 1.4588
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_46",
+      "level": 2,
+      "problem_id": 46,
+      "name": "Conv2d Subtract Tanh Subtract AvgPool",
+      "filename": "46_Conv2d_Subtract_Tanh_Subtract_AvgPool.py",
+      "baseline_time": 4.33,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 3.44,
+          "speedup": 1.2587
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 4.49,
+          "speedup": 0.9644
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_47",
+      "level": 2,
+      "problem_id": 47,
+      "name": "Conv3d Mish Tanh",
+      "filename": "47_Conv3d_Mish_Tanh.py",
+      "baseline_time": 2.92,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.46,
+          "speedup": 1.187
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.38,
+          "speedup": 1.2269
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_48",
+      "level": 2,
+      "problem_id": 48,
+      "name": "Conv3d Scaling Tanh Multiply Sigmoid",
+      "filename": "48_Conv3d_Scaling_Tanh_Multiply_Sigmoid.py",
+      "baseline_time": 3.84,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.56,
+          "speedup": 1.5
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_49",
+      "level": 2,
+      "problem_id": 49,
+      "name": "ConvTranspose3d Softmax Sigmoid",
+      "filename": "49_ConvTranspose3d_Softmax_Sigmoid.py",
+      "baseline_time": 2.27,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 1.96,
+          "speedup": 1.1582
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_50",
+      "level": 2,
+      "problem_id": 50,
+      "name": "ConvTranspose3d Scaling AvgPool BiasAdd Scaling",
+      "filename": "50_ConvTranspose3d_Scaling_AvgPool_BiasAdd_Scaling.py",
+      "baseline_time": 5.81,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 4.46,
+          "speedup": 1.3027
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_51",
+      "level": 2,
+      "problem_id": 51,
+      "name": "Gemm Subtract GlobalAvgPool LogSumExp GELU ResidualAdd",
+      "filename": "51_Gemm_Subtract_GlobalAvgPool_LogSumExp_GELU_ResidualAdd.py",
+      "baseline_time": 8.04,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 5.52,
+          "speedup": 1.4565
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_52",
+      "level": 2,
+      "problem_id": 52,
+      "name": "Conv2d Activation BatchNorm",
+      "filename": "52_Conv2d_Activation_BatchNorm.py",
+      "baseline_time": 2.23,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.8,
+          "speedup": 0.7964
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.76,
+          "speedup": 0.808
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_53",
+      "level": 2,
+      "problem_id": 53,
+      "name": "Gemm Scaling Hardtanh GELU",
+      "filename": "53_Gemm_Scaling_Hardtanh_GELU.py",
+      "baseline_time": 7.94,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 5.48,
+          "speedup": 1.4489
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 5.48,
+          "speedup": 1.4489
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_54",
+      "level": 2,
+      "problem_id": 54,
+      "name": "Conv2d Multiply LeakyReLU GELU",
+      "filename": "54_Conv2d_Multiply_LeakyReLU_GELU.py",
+      "baseline_time": 4.31,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 5.0,
+          "speedup": 0.862
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_55",
+      "level": 2,
+      "problem_id": 55,
+      "name": "Matmul MaxPool Sum Scale",
+      "filename": "55_Matmul_MaxPool_Sum_Scale.py",
+      "baseline_time": 10.7,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 6.89,
+          "speedup": 1.553
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 8.86,
+          "speedup": 1.2077
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_56",
+      "level": 2,
+      "problem_id": 56,
+      "name": "Matmul Sigmoid Sum",
+      "filename": "56_Matmul_Sigmoid_Sum.py",
+      "baseline_time": 10.3,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 5.39,
+          "speedup": 1.9109
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 5.32,
+          "speedup": 1.9361
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_57",
+      "level": 2,
+      "problem_id": 57,
+      "name": "Conv2d ReLU HardSwish",
+      "filename": "57_Conv2d_ReLU_HardSwish.py",
+      "baseline_time": 1.29,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 1.57,
+          "speedup": 0.8217
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 1.57,
+          "speedup": 0.8217
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_58",
+      "level": 2,
+      "problem_id": 58,
+      "name": "ConvTranspose3d LogSumExp HardSwish Subtract Clamp",
+      "filename": "58_ConvTranspose3d_LogSumExp_HardSwish_Subtract_Clamp.py",
+      "baseline_time": 4.71,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 4.58,
+          "speedup": 1.0284
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 4.54,
+          "speedup": 1.0374
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_59",
+      "level": 2,
+      "problem_id": 59,
+      "name": "Matmul Swish Scaling",
+      "filename": "59_Matmul_Swish_Scaling.py",
+      "baseline_time": 10.4,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 5.29,
+          "speedup": 1.966
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_60",
+      "level": 2,
+      "problem_id": 60,
+      "name": "ConvTranspose3d Swish GroupNorm HardSwish",
+      "filename": "60_ConvTranspose3d_Swish_GroupNorm_HardSwish.py",
+      "baseline_time": 6.1,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 6.97,
+          "speedup": 0.8752
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_61",
+      "level": 2,
+      "problem_id": 61,
+      "name": "ConvTranspose3d ReLU GroupNorm",
+      "filename": "61_ConvTranspose3d_ReLU_GroupNorm.py",
+      "baseline_time": 2.26,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 4.79,
+          "speedup": 0.4718
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_62",
+      "level": 2,
+      "problem_id": 62,
+      "name": "Matmul GroupNorm LeakyReLU Sum",
+      "filename": "62_Matmul_GroupNorm_LeakyReLU_Sum.py",
+      "baseline_time": 4.82,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 3.23,
+          "speedup": 1.4923
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_63",
+      "level": 2,
+      "problem_id": 63,
+      "name": "Gemm ReLU Divide",
+      "filename": "63_Gemm_ReLU_Divide.py",
+      "baseline_time": 5.01,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.74,
+          "speedup": 1.8285
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_64",
+      "level": 2,
+      "problem_id": 64,
+      "name": "Gemm LogSumExp LeakyReLU LeakyReLU GELU GELU",
+      "filename": "64_Gemm_LogSumExp_LeakyReLU_LeakyReLU_GELU_GELU.py",
+      "baseline_time": 4.79,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.74,
+          "speedup": 1.7482
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_65",
+      "level": 2,
+      "problem_id": 65,
+      "name": "Conv2d AvgPool Sigmoid Sum",
+      "filename": "65_Conv2d_AvgPool_Sigmoid_Sum.py",
+      "baseline_time": 14.5,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 11.5,
+          "speedup": 1.2609
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_66",
+      "level": 2,
+      "problem_id": 66,
+      "name": "Matmul Dropout Softmax",
+      "filename": "66_Matmul_Dropout_Softmax.py",
+      "baseline_time": 2.5,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_67",
+      "level": 2,
+      "problem_id": 67,
+      "name": "Conv2d GELU GlobalAvgPool",
+      "filename": "67_Conv2d_GELU_GlobalAvgPool.py",
+      "baseline_time": 4.28,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 5.11,
+          "speedup": 0.8376
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_68",
+      "level": 2,
+      "problem_id": 68,
+      "name": "Matmul Min Subtract",
+      "filename": "68_Matmul_Min_Subtract.py",
+      "baseline_time": 2.44,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 1.49,
+          "speedup": 1.6376
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_69",
+      "level": 2,
+      "problem_id": 69,
+      "name": "Conv2d HardSwish ReLU",
+      "filename": "69_Conv2d_HardSwish_ReLU.py",
+      "baseline_time": 1.3,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 1.61,
+          "speedup": 0.8075
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 1.6,
+          "speedup": 0.8125
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_70",
+      "level": 2,
+      "problem_id": 70,
+      "name": "Gemm Sigmoid Scaling ResidualAdd",
+      "filename": "70_Gemm_Sigmoid_Scaling_ResidualAdd.py",
+      "baseline_time": 5.0,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.74,
+          "speedup": 1.8248
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.76,
+          "speedup": 1.8116
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_71",
+      "level": 2,
+      "problem_id": 71,
+      "name": "Conv2d Divide LeakyReLU",
+      "filename": "71_Conv2d_Divide_LeakyReLU.py",
+      "baseline_time": 1.3,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 4.39,
+          "speedup": 0.2961
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 1.57,
+          "speedup": 0.828
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_72",
+      "level": 2,
+      "problem_id": 72,
+      "name": "ConvTranspose3d BatchNorm AvgPool AvgPool",
+      "filename": "72_ConvTranspose3d_BatchNorm_AvgPool_AvgPool.py",
+      "baseline_time": 6.94,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_73",
+      "level": 2,
+      "problem_id": 73,
+      "name": "Conv2d BatchNorm Scaling",
+      "filename": "73_Conv2d_BatchNorm_Scaling.py",
+      "baseline_time": 1.65,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.62,
+          "speedup": 0.6298
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_74",
+      "level": 2,
+      "problem_id": 74,
+      "name": "ConvTranspose3d LeakyReLU Multiply LeakyReLU Max",
+      "filename": "74_ConvTranspose3d_LeakyReLU_Multiply_LeakyReLU_Max.py",
+      "baseline_time": 1.28,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 1.18,
+          "speedup": 1.0847
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_75",
+      "level": 2,
+      "problem_id": 75,
+      "name": "Gemm GroupNorm Min BiasAdd",
+      "filename": "75_Gemm_GroupNorm_Min_BiasAdd.py",
+      "baseline_time": 4.87,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.8,
+          "speedup": 1.7393
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_76",
+      "level": 2,
+      "problem_id": 76,
+      "name": "Gemm Add ReLU",
+      "filename": "76_Gemm_Add_ReLU.py",
+      "baseline_time": 5.05,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 21.7,
+          "speedup": 0.2327
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.79,
+          "speedup": 1.81
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_77",
+      "level": 2,
+      "problem_id": 77,
+      "name": "ConvTranspose3d Scale BatchNorm GlobalAvgPool",
+      "filename": "77_ConvTranspose3d_Scale_BatchNorm_GlobalAvgPool.py",
+      "baseline_time": 4.81,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 5.5,
+          "speedup": 0.8745
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_78",
+      "level": 2,
+      "problem_id": 78,
+      "name": "ConvTranspose3d Max Max Sum",
+      "filename": "78_ConvTranspose3d_Max_Max_Sum.py",
+      "baseline_time": 6.57,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 47.6,
+          "speedup": 0.138
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 47.2,
+          "speedup": 0.1392
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_79",
+      "level": 2,
+      "problem_id": 79,
+      "name": "Conv3d Multiply InstanceNorm Clamp Multiply Max",
+      "filename": "79_Conv3d_Multiply_InstanceNorm_Clamp_Multiply_Max.py",
+      "baseline_time": 0.985,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 0.824,
+          "speedup": 1.1954
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_80",
+      "level": 2,
+      "problem_id": 80,
+      "name": "Gemm Max Subtract GELU",
+      "filename": "80_Gemm_Max_Subtract_GELU.py",
+      "baseline_time": 4.78,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.73,
+          "speedup": 1.7509
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_81",
+      "level": 2,
+      "problem_id": 81,
+      "name": "Gemm Swish Divide Clamp Tanh Clamp",
+      "filename": "81_Gemm_Swish_Divide_Clamp_Tanh_Clamp.py",
+      "baseline_time": 5.06,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.74,
+          "speedup": 1.8467
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.74,
+          "speedup": 1.8467
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_82",
+      "level": 2,
+      "problem_id": 82,
+      "name": "Conv2d Tanh Scaling BiasAdd Max",
+      "filename": "82_Conv2d_Tanh_Scaling_BiasAdd_Max.py",
+      "baseline_time": 6.42,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 5.15,
+          "speedup": 1.2466
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 8.0,
+          "speedup": 0.8025
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_83",
+      "level": 2,
+      "problem_id": 83,
+      "name": "Conv3d GroupNorm Min Clamp Dropout",
+      "filename": "83_Conv3d_GroupNorm_Min_Clamp_Dropout.py",
+      "baseline_time": 4.19,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_84",
+      "level": 2,
+      "problem_id": 84,
+      "name": "Gemm BatchNorm Scaling Softmax",
+      "filename": "84_Gemm_BatchNorm_Scaling_Softmax.py",
+      "baseline_time": 4.86,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.83,
+          "speedup": 1.7173
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_85",
+      "level": 2,
+      "problem_id": 85,
+      "name": "Conv2d GroupNorm Scale MaxPool Clamp",
+      "filename": "85_Conv2d_GroupNorm_Scale_MaxPool_Clamp.py",
+      "baseline_time": 2.09,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.05,
+          "speedup": 1.0195
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_86",
+      "level": 2,
+      "problem_id": 86,
+      "name": "Matmul Divide GELU",
+      "filename": "86_Matmul_Divide_GELU.py",
+      "baseline_time": 5.04,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.78,
+          "speedup": 1.8129
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_87",
+      "level": 2,
+      "problem_id": 87,
+      "name": "Conv2d Subtract Subtract Mish",
+      "filename": "87_Conv2d_Subtract_Subtract_Mish.py",
+      "baseline_time": 5.38,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 6.47,
+          "speedup": 0.8315
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 6.43,
+          "speedup": 0.8367
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_88",
+      "level": 2,
+      "problem_id": 88,
+      "name": "Gemm GroupNorm Swish Multiply Swish",
+      "filename": "88_Gemm_GroupNorm_Swish_Multiply_Swish.py",
+      "baseline_time": 4.83,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.82,
+          "speedup": 1.7128
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.92,
+          "speedup": 1.6541
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_89",
+      "level": 2,
+      "problem_id": 89,
+      "name": "ConvTranspose3d MaxPool Softmax Subtract Swish Max",
+      "filename": "89_ConvTranspose3d_MaxPool_Softmax_Subtract_Swish_Max.py",
+      "baseline_time": 6.69,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 5.03,
+          "speedup": 1.33
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 5.04,
+          "speedup": 1.3274
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_90",
+      "level": 2,
+      "problem_id": 90,
+      "name": "Conv3d LeakyReLU Sum Clamp GELU",
+      "filename": "90_Conv3d_LeakyReLU_Sum_Clamp_GELU.py",
+      "baseline_time": 8.63,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 8.3,
+          "speedup": 1.0398
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 8.23,
+          "speedup": 1.0486
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_91",
+      "level": 2,
+      "problem_id": 91,
+      "name": "ConvTranspose2d Softmax BiasAdd Scaling Sigmoid",
+      "filename": "91_ConvTranspose2d_Softmax_BiasAdd_Scaling_Sigmoid.py",
+      "baseline_time": 3.11,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_92",
+      "level": 2,
+      "problem_id": 92,
+      "name": "Conv2d GroupNorm Tanh HardSwish ResidualAdd LogSumExp",
+      "filename": "92_Conv2d_GroupNorm_Tanh_HardSwish_ResidualAdd_LogSumExp.py",
+      "baseline_time": 1.74,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 4.17,
+          "speedup": 0.4173
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_93",
+      "level": 2,
+      "problem_id": 93,
+      "name": "ConvTranspose2d Add Min GELU Multiply",
+      "filename": "93_ConvTranspose2d_Add_Min_GELU_Multiply.py",
+      "baseline_time": 2.5,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 3.63,
+          "speedup": 0.6887
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_94",
+      "level": 2,
+      "problem_id": 94,
+      "name": "Gemm BiasAdd Hardtanh Mish GroupNorm",
+      "filename": "94_Gemm_BiasAdd_Hardtanh_Mish_GroupNorm.py",
+      "baseline_time": 5.12,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.77,
+          "speedup": 1.8484
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.96,
+          "speedup": 1.7297
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_95",
+      "level": 2,
+      "problem_id": 95,
+      "name": "Matmul Add Swish Tanh GELU Hardtanh",
+      "filename": "95_Matmul_Add_Swish_Tanh_GELU_Hardtanh.py",
+      "baseline_time": 5.07,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 3.41,
+          "speedup": 1.4868
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 3.22,
+          "speedup": 1.5745
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_96",
+      "level": 2,
+      "problem_id": 96,
+      "name": "ConvTranspose3d Multiply Max GlobalAvgPool Clamp",
+      "filename": "96_ConvTranspose3d_Multiply_Max_GlobalAvgPool_Clamp.py",
+      "baseline_time": 7.38,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 4.73,
+          "speedup": 1.5603
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_97",
+      "level": 2,
+      "problem_id": 97,
+      "name": "Matmul BatchNorm BiasAdd Divide Swish",
+      "filename": "97_Matmul_BatchNorm_BiasAdd_Divide_Swish.py",
+      "baseline_time": 4.86,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.8,
+          "speedup": 1.7357
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_98",
+      "level": 2,
+      "problem_id": 98,
+      "name": "Matmul AvgPool GELU Scale Max",
+      "filename": "98_Matmul_AvgPool_GELU_Scale_Max.py",
+      "baseline_time": 4.83,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.75,
+          "speedup": 1.7564
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_99",
+      "level": 2,
+      "problem_id": 99,
+      "name": "Matmul GELU Softmax",
+      "filename": "99_Matmul_GELU_Softmax.py",
+      "baseline_time": 5.16,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.78,
+          "speedup": 1.8561
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_2_problem_100",
+      "level": 2,
+      "problem_id": 100,
+      "name": "ConvTranspose3d Clamp Min Divide",
+      "filename": "100_ConvTranspose3d_Clamp_Min_Divide.py",
+      "baseline_time": 12.8,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 11.8,
+          "speedup": 1.0847
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 11.8,
+          "speedup": 1.0847
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_1",
+      "level": 3,
+      "problem_id": 1,
+      "name": "MLP",
+      "filename": "1_MLP.py",
+      "baseline_time": 6.03,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 28.1,
+          "speedup": 0.2146
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_2",
+      "level": 3,
+      "problem_id": 2,
+      "name": "ShallowWideMLP",
+      "filename": "2_ShallowWideMLP.py",
+      "baseline_time": 20.8,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 88.6,
+          "speedup": 0.2348
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 10.9,
+          "speedup": 1.9083
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_3",
+      "level": 3,
+      "problem_id": 3,
+      "name": "DeepNarrowMLP",
+      "filename": "3_DeepNarrowMLP.py",
+      "baseline_time": 2.53,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 9.44,
+          "speedup": 0.268
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 1.95,
+          "speedup": 1.2974
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_4",
+      "level": 3,
+      "problem_id": 4,
+      "name": "LeNet5",
+      "filename": "4_LeNet5.py",
+      "baseline_time": 3.71,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 0.764,
+          "speedup": 4.856
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 0.948,
+          "speedup": 3.9135
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_5",
+      "level": 3,
+      "problem_id": 5,
+      "name": "AlexNet",
+      "filename": "5_AlexNet.py",
+      "baseline_time": 24.3,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 21.7,
+          "speedup": 1.1198
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 24.3,
+          "speedup": 1.0
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_6",
+      "level": 3,
+      "problem_id": 6,
+      "name": "GoogleNetInceptionModule",
+      "filename": "6_GoogleNetInceptionModule.py",
+      "baseline_time": 10.7,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_7",
+      "level": 3,
+      "problem_id": 7,
+      "name": "GoogleNetInceptionV1",
+      "filename": "7_GoogleNetInceptionV1.py",
+      "baseline_time": 1.82,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.51,
+          "speedup": 0.7251
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_8",
+      "level": 3,
+      "problem_id": 8,
+      "name": "ResNetBasicBlock",
+      "filename": "8_ResNetBasicBlock.py",
+      "baseline_time": 1.36,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 1.64,
+          "speedup": 0.8293
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_9",
+      "level": 3,
+      "problem_id": 9,
+      "name": "ResNet18",
+      "filename": "9_ResNet18.py",
+      "baseline_time": 1.52,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.06,
+          "speedup": 0.7379
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_10",
+      "level": 3,
+      "problem_id": 10,
+      "name": "ResNet101",
+      "filename": "10_ResNet101.py",
+      "baseline_time": 7.04,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 9.16,
+          "speedup": 0.7686
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_11",
+      "level": 3,
+      "problem_id": 11,
+      "name": "VGG16",
+      "filename": "11_VGG16.py",
+      "baseline_time": 3.12,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 3.5,
+          "speedup": 0.8914
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 3.61,
+          "speedup": 0.8643
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_12",
+      "level": 3,
+      "problem_id": 12,
+      "name": "VGG19",
+      "filename": "12_VGG19.py",
+      "baseline_time": 3.64,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 3.98,
+          "speedup": 0.9146
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_13",
+      "level": 3,
+      "problem_id": 13,
+      "name": "DenseNet121TransitionLayer",
+      "filename": "13_DenseNet121TransitionLayer.py",
+      "baseline_time": 5.06,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_14",
+      "level": 3,
+      "problem_id": 14,
+      "name": "DenseNet121DenseBlock",
+      "filename": "14_DenseNet121DenseBlock.py",
+      "baseline_time": 7.84,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_15",
+      "level": 3,
+      "problem_id": 15,
+      "name": "DenseNet121",
+      "filename": "15_DenseNet121.py",
+      "baseline_time": 12.6,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 6.28,
+          "speedup": 2.0064
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_16",
+      "level": 3,
+      "problem_id": 16,
+      "name": "DenseNet201",
+      "filename": "16_DenseNet201.py",
+      "baseline_time": 18.3,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 13.4,
+          "speedup": 1.3657
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_17",
+      "level": 3,
+      "problem_id": 17,
+      "name": "SqueezeNetFireModule",
+      "filename": "17_SqueezeNetFireModule.py",
+      "baseline_time": 15.3,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 11.0,
+          "speedup": 1.3909
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 14.0,
+          "speedup": 1.0929
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_18",
+      "level": 3,
+      "problem_id": 18,
+      "name": "SqueezeNet",
+      "filename": "18_SqueezeNet.py",
+      "baseline_time": 21.0,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 25.5,
+          "speedup": 0.8235
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 28.0,
+          "speedup": 0.75
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_19",
+      "level": 3,
+      "problem_id": 19,
+      "name": "MobileNetV1",
+      "filename": "19_MobileNetV1.py",
+      "baseline_time": 3.35,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_20",
+      "level": 3,
+      "problem_id": 20,
+      "name": "MobileNetV2",
+      "filename": "20_MobileNetV2.py",
+      "baseline_time": 3.45,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 4.25,
+          "speedup": 0.8118
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_21",
+      "level": 3,
+      "problem_id": 21,
+      "name": "EfficientNetMBConv",
+      "filename": "21_EfficientNetMBConv.py",
+      "baseline_time": 5.73,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_22",
+      "level": 3,
+      "problem_id": 22,
+      "name": "EfficientNetB0",
+      "filename": "22_EfficientNetB0.py",
+      "baseline_time": 4.87,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 6.3,
+          "speedup": 0.773
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 3.88,
+          "speedup": 1.2552
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_23",
+      "level": 3,
+      "problem_id": 23,
+      "name": "EfficientNetB1",
+      "filename": "23_EfficientNetB1.py",
+      "baseline_time": 2.97,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 1.95,
+          "speedup": 1.5231
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_24",
+      "level": 3,
+      "problem_id": 24,
+      "name": "EfficientNetB2",
+      "filename": "24_EfficientNetB2.py",
+      "baseline_time": 2.17,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 4.17,
+          "speedup": 0.5204
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_25",
+      "level": 3,
+      "problem_id": 25,
+      "name": "ShuffleNetUnit",
+      "filename": "25_ShuffleNetUnit.py",
+      "baseline_time": 14.7,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 8.28,
+          "speedup": 1.7754
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 9.21,
+          "speedup": 1.5961
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_26",
+      "level": 3,
+      "problem_id": 26,
+      "name": "ShuffleNet",
+      "filename": "26_ShuffleNet.py",
+      "baseline_time": 13.5,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 8.62,
+          "speedup": 1.5661
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_27",
+      "level": 3,
+      "problem_id": 27,
+      "name": "RegNet",
+      "filename": "27_RegNet.py",
+      "baseline_time": 1.6,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.46,
+          "speedup": 0.6504
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_28",
+      "level": 3,
+      "problem_id": 28,
+      "name": "VisionTransformer",
+      "filename": "28_VisionTransformer.py",
+      "baseline_time": 1.59,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.38,
+          "speedup": 0.6681
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_29",
+      "level": 3,
+      "problem_id": 29,
+      "name": "SwinMLP",
+      "filename": "29_SwinMLP.py",
+      "baseline_time": 4.18,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 5.35,
+          "speedup": 0.7813
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 4.72,
+          "speedup": 0.8856
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_30",
+      "level": 3,
+      "problem_id": 30,
+      "name": "SwinTransformerV2",
+      "filename": "30_SwinTransformerV2.py",
+      "baseline_time": 6.47,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 11.2,
+          "speedup": 0.5777
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_31",
+      "level": 3,
+      "problem_id": 31,
+      "name": "VisionAttention",
+      "filename": "31_VisionAttention.py",
+      "baseline_time": 19.2,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 21.8,
+          "speedup": 0.8807
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 25.9,
+          "speedup": 0.7413
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_32",
+      "level": 3,
+      "problem_id": 32,
+      "name": "ConvolutionalVisionTransformer",
+      "filename": "32_ConvolutionalVisionTransformer.py",
+      "baseline_time": 1.15,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.42,
+          "speedup": 0.4752
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_33",
+      "level": 3,
+      "problem_id": 33,
+      "name": "VanillaRNN",
+      "filename": "33_VanillaRNN.py",
+      "baseline_time": 11.0,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 6.88,
+          "speedup": 1.5988
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 609.0,
+          "speedup": 0.0181
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_34",
+      "level": 3,
+      "problem_id": 34,
+      "name": "VanillaRNNHidden",
+      "filename": "34_VanillaRNNHidden.py",
+      "baseline_time": 10.6,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 1.77,
+          "speedup": 5.9887
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 46.7,
+          "speedup": 0.227
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_35",
+      "level": 3,
+      "problem_id": 35,
+      "name": "LSTM",
+      "filename": "35_LSTM.py",
+      "baseline_time": 38.7,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 33.9,
+          "speedup": 1.1416
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 27.1,
+          "speedup": 1.428
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_36",
+      "level": 3,
+      "problem_id": 36,
+      "name": "LSTMHn",
+      "filename": "36_LSTMHn.py",
+      "baseline_time": 29.5,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 27.7,
+          "speedup": 1.065
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_37",
+      "level": 3,
+      "problem_id": 37,
+      "name": "LSTMCn",
+      "filename": "37_LSTMCn.py",
+      "baseline_time": 29.5,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 17.9,
+          "speedup": 1.648
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_38",
+      "level": 3,
+      "problem_id": 38,
+      "name": "LSTMBidirectional",
+      "filename": "38_LSTMBidirectional.py",
+      "baseline_time": 57.6,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 38.9,
+          "speedup": 1.4807
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_39",
+      "level": 3,
+      "problem_id": 39,
+      "name": "GRU",
+      "filename": "39_GRU.py",
+      "baseline_time": 22.1,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_40",
+      "level": 3,
+      "problem_id": 40,
+      "name": "GRUHidden",
+      "filename": "40_GRUHidden.py",
+      "baseline_time": 22.1,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_41",
+      "level": 3,
+      "problem_id": 41,
+      "name": "GRUBidirectional",
+      "filename": "41_GRUBidirectional.py",
+      "baseline_time": 43.1,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_42",
+      "level": 3,
+      "problem_id": 42,
+      "name": "GRUBidirectionalHidden",
+      "filename": "42_GRUBidirectionalHidden.py",
+      "baseline_time": 43.3,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_43",
+      "level": 3,
+      "problem_id": 43,
+      "name": "MinGPTCausalAttention",
+      "filename": "43_MinGPTCausalAttention.py",
+      "baseline_time": 15.7,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 11.7,
+          "speedup": 1.3419
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_44",
+      "level": 3,
+      "problem_id": 44,
+      "name": "MiniGPTBlock",
+      "filename": "44_MiniGPTBlock.py",
+      "baseline_time": 36.7,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 26.9,
+          "speedup": 1.3643
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_45",
+      "level": 3,
+      "problem_id": 45,
+      "name": "UNetSoftmax",
+      "filename": "45_UNetSoftmax.py",
+      "baseline_time": 6.56,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_46",
+      "level": 3,
+      "problem_id": 46,
+      "name": "NetVladWithGhostClusters",
+      "filename": "46_NetVladWithGhostClusters.py",
+      "baseline_time": 1.5,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.62,
+          "speedup": 0.5725
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": false,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_47",
+      "level": 3,
+      "problem_id": 47,
+      "name": "NetVladNoGhostClusters",
+      "filename": "47_NetVladNoGhostClusters.py",
+      "baseline_time": 1.35,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 2.47,
+          "speedup": 0.5466
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_48",
+      "level": 3,
+      "problem_id": 48,
+      "name": "Mamba2ReturnY",
+      "filename": "48_Mamba2ReturnY.py",
+      "baseline_time": 7.47,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 7.4,
+          "speedup": 1.0095
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_49",
+      "level": 3,
+      "problem_id": 49,
+      "name": "Mamba2ReturnFinalState",
+      "filename": "49_Mamba2ReturnFinalState.py",
+      "baseline_time": 2.66,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 7.37,
+          "speedup": 0.3609
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": false,
+          "runtime": -1.0,
+          "speedup": 0
+        }
+      }
+    },
+    {
+      "id": "level_3_problem_50",
+      "level": 3,
+      "problem_id": 50,
+      "name": "ReLUSelfAttention",
+      "filename": "50_ReLUSelfAttention.py",
+      "baseline_time": 4.97,
+      "models": {
+        "gemini_3_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 4.03,
+          "speedup": 1.2333
+        },
+        "gemini_2_5_flash_H100": {
+          "compiled": true,
+          "correct": true,
+          "runtime": 4.53,
+          "speedup": 1.0971
+        }
+      }
+    }
+  ],
+  "model_names": [
+    "gemini_3_H100",
+    "gemini_2_5_flash_H100"
+  ],
+  "total_kernels": 250,
+  "levels": {
+    "1": 100,
+    "2": 100,
+    "3": 50
+  }
+}
