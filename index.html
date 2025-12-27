@@ -64,7 +64,7 @@
                 </div>
                 <div class="chart-controls" id="threshold-controls">
                     <span class="slider-label">P range</span>
-                    <input type="range" class="slider" id="range-slider" min="0.5" max="3" step="0.1" value="3">
+                    <input type="range" class="slider" id="range-slider" min="0.5" max="3" step="0.01" value="3">
                     <span class="slider-value" id="range-value">3.0x</span>
                 </div>
             </div>
@@ -111,6 +111,8 @@
         let currentChartType = 'fastp';
         let currentThreshold = 1.0;  // Vertical line position (controlled by click)
         let currentXAxisMax = 3.0;   // X-axis maximum (controlled by slider)
+        let precomputedChartData = null;  // Pre-computed data for smooth updates
+        let rafPending = false;  // For requestAnimationFrame throttling
 
         async function loadLeaderboard() {
             const loading = document.getElementById('loading');
@@ -256,31 +258,34 @@
             }
         }
 
-        function renderFastPChart(ctx) {
-            // Generate threshold points from 0 to currentXAxisMax
-            const thresholds = [];
-            const step = currentXAxisMax <= 1 ? 0.05 : 0.1;  // Finer steps for zoomed in view
-            for (let t = 0; t <= currentXAxisMax; t += step) {
-                thresholds.push(parseFloat(t.toFixed(2)));
+        // Pre-compute chart data once for smooth slider updates
+        function precomputeChartData() {
+            if (precomputedChartData) return precomputedChartData;
+
+            // Pre-compute at fine granularity (0.01 intervals from 0 to 3)
+            const allThresholds = [];
+            for (let t = 0; t <= 3; t += 0.02) {
+                allThresholds.push(parseFloat(t.toFixed(2)));
             }
 
             const datasets = leaderboardData.map((entry, index) => {
                 const result = detailedResults[entry.unique_id || entry.id];
 
-                // Calculate percentage of kernels exceeding each threshold
-                const data = thresholds.map(threshold => {
+                // Pre-compute all data points as {x, y} coordinates
+                const data = allThresholds.map(threshold => {
+                    let y;
                     if (result && result.kernel_results) {
                         const correct = result.kernel_results.filter(k => k.correct && k.speedup >= threshold);
-                        return (correct.length / result.kernel_results.length) * 100;
+                        y = (correct.length / result.kernel_results.length) * 100;
                     } else {
-                        // Fallback to summary metrics
                         const metrics = entry.metrics || {};
-                        if (threshold <= 0) return (metrics.correct_rate || 0) * 100;
-                        if (threshold <= 1.0) return (metrics.fast_p_1_0 || 0) * 100;
-                        if (threshold <= 1.5) return (metrics.fast_p_1_5 || 0) * 100;
-                        if (threshold <= 2.0) return (metrics.fast_p_2_0 || 0) * 100;
-                        return 0;
+                        if (threshold <= 0) y = (metrics.correct_rate || 0) * 100;
+                        else if (threshold <= 1.0) y = (metrics.fast_p_1_0 || 0) * 100;
+                        else if (threshold <= 1.5) y = (metrics.fast_p_1_5 || 0) * 100;
+                        else if (threshold <= 2.0) y = (metrics.fast_p_2_0 || 0) * 100;
+                        else y = 0;
                     }
+                    return { x: threshold, y: y };
                 });
 
                 return {
@@ -291,37 +296,44 @@
                     borderWidth: 2,
                     tension: 0.3,
                     pointRadius: 0,
-                    pointHoverRadius: 4
+                    pointHoverRadius: 4,
+                    showLine: true
                 };
             });
+
+            precomputedChartData = { datasets };
+            return precomputedChartData;
+        }
+
+        function renderFastPChart(ctx) {
+            // Get pre-computed data
+            const chartData = precomputeChartData();
+
+            // Clone datasets for the chart
+            const datasets = chartData.datasets.map(ds => ({ ...ds }));
 
             const textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-muted').trim() || '#8b949e';
             const borderColor = getComputedStyle(document.documentElement).getPropertyValue('--border').trim() || '#30363d';
 
-            // Find the index for the current threshold
-            const thresholdIndex = thresholds.findIndex(t => t >= currentThreshold);
-
             mainChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: thresholds.map(t => t.toFixed(1)),
-                    datasets: datasets
-                },
+                type: 'scatter',
+                data: { datasets: datasets },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    animation: false,  // Disable animation for smooth updates
                     interaction: {
-                        mode: 'index',
+                        mode: 'nearest',
+                        axis: 'x',
                         intersect: false
                     },
                     onClick: (event, elements, chart) => {
                         // Allow clicking on chart to pin threshold (like FlashInfer)
                         const canvasPosition = Chart.helpers.getRelativePosition(event, chart);
                         const xScale = chart.scales.x;
-                        const clickedIndex = xScale.getValueForPixel(canvasPosition.x);
-                        if (clickedIndex >= 0 && clickedIndex < thresholds.length) {
-                            const newThreshold = thresholds[Math.round(clickedIndex)];
-                            currentThreshold = parseFloat(newThreshold.toFixed(2));
+                        const clickedX = xScale.getValueForPixel(canvasPosition.x);
+                        if (clickedX >= 0 && clickedX <= currentXAxisMax) {
+                            currentThreshold = parseFloat(Math.max(0, Math.min(clickedX, currentXAxisMax)).toFixed(2));
                             updateThresholdLine();
                         }
                     },
@@ -329,7 +341,7 @@
                         legend: { display: false },
                         tooltip: {
                             callbacks: {
-                                title: (items) => `Threshold: ${items[0].label}x`,
+                                title: (items) => `Threshold: ${items[0].parsed.x.toFixed(2)}x`,
                                 label: (context) => `${context.dataset.label}: ${context.parsed.y.toFixed(1)}%`
                             }
                         },
@@ -337,11 +349,10 @@
                             annotations: {
                                 thresholdLine: {
                                     type: 'line',
-                                    xMin: currentThreshold.toFixed(2),
-                                    xMax: currentThreshold.toFixed(2),
+                                    xMin: currentThreshold,
+                                    xMax: currentThreshold,
                                     borderColor: '#58a6ff',
                                     borderWidth: 2,
-                                    borderDash: [],
                                     label: {
                                         display: true,
                                         content: `p = ${currentThreshold.toFixed(2)}`,
@@ -357,6 +368,9 @@
                     },
                     scales: {
                         x: {
+                            type: 'linear',
+                            min: 0,
+                            max: currentXAxisMax,
                             title: {
                                 display: true,
                                 text: 'Speedup Threshold',
@@ -365,17 +379,7 @@
                             grid: { color: borderColor, drawBorder: false },
                             ticks: {
                                 color: textColor,
-                                maxTicksLimit: 10,
-                                callback: (value, index) => {
-                                    if (thresholds[index] !== undefined) {
-                                        // Show fewer labels for cleaner display
-                                        const labelInterval = Math.ceil(thresholds.length / 8);
-                                        if (index % labelInterval === 0 || index === thresholds.length - 1) {
-                                            return thresholds[index] + 'x';
-                                        }
-                                    }
-                                    return '';
-                                }
+                                callback: (value) => value.toFixed(1) + 'x'
                             }
                         },
                         y: {
@@ -464,11 +468,41 @@
             // Update the chart annotation if chart exists (for click-to-pin behavior)
             if (mainChart && mainChart.options.plugins.annotation) {
                 const annotation = mainChart.options.plugins.annotation.annotations.thresholdLine;
-                annotation.xMin = currentThreshold.toFixed(2);
-                annotation.xMax = currentThreshold.toFixed(2);
+                annotation.xMin = currentThreshold;
+                annotation.xMax = currentThreshold;
                 annotation.label.content = `p = ${currentThreshold.toFixed(2)}`;
                 mainChart.update('none'); // Update without animation for smooth interaction
             }
+        }
+
+        // Smooth chart range update - just changes x-axis scale, no data recalculation
+        function updateChartRange() {
+            if (!mainChart || currentChartType !== 'fastp') return;
+
+            // Just update the x-axis max - data stays the same!
+            mainChart.options.scales.x.max = currentXAxisMax;
+
+            // Update annotation position (clamp to visible range)
+            if (mainChart.options.plugins.annotation) {
+                const annotation = mainChart.options.plugins.annotation.annotations.thresholdLine;
+                const clampedThreshold = Math.min(currentThreshold, currentXAxisMax);
+                annotation.xMin = clampedThreshold;
+                annotation.xMax = clampedThreshold;
+                annotation.label.content = `p = ${clampedThreshold.toFixed(2)}`;
+            }
+
+            // Update without animation for instant response
+            mainChart.update('none');
+        }
+
+        // Throttled update using requestAnimationFrame
+        function scheduleChartUpdate() {
+            if (rafPending) return;
+            rafPending = true;
+            requestAnimationFrame(() => {
+                updateChartRange();
+                rafPending = false;
+            });
         }
 
         // Chart tab switching
@@ -493,7 +527,7 @@
             });
         });
 
-        // P range slider - controls x-axis zoom
+        // P range slider - controls x-axis zoom (smooth update with RAF throttling)
         document.getElementById('range-slider').addEventListener('input', (e) => {
             currentXAxisMax = parseFloat(e.target.value);
             document.getElementById('range-value').textContent = currentXAxisMax.toFixed(1) + 'x';
@@ -503,8 +537,8 @@
                 currentThreshold = currentXAxisMax;
             }
 
-            // Re-render the chart with new x-axis range
-            renderChart();
+            // Use requestAnimationFrame for smooth updates
+            scheduleChartUpdate();
         });
 
         // Sort handlers
