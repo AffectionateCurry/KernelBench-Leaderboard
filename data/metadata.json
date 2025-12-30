@@ -1,5 +1,45 @@
 [
   {
+    "id": "gemini_3_flash",
+    "unique_id": "gemini_3_flash_H100",
+    "display_name": "Gemini 3 Flash",
+    "organization": "Google",
+    "hardware": "H100",
+    "timestamp": "2025-12-30T17:17:31.988367",
+    "metrics": {
+      "geo_mean": 1.36112022255944,
+      "fast_p_1_0": 0.604,
+      "fast_p_1_5": 0.46,
+      "fast_p_2_0": 0.168,
+      "total_submitted": 250,
+      "total_compiled": 241,
+      "total_correct": 187,
+      "compile_rate": 0.964,
+      "correct_rate": 0.748
+    },
+    "level_stats": {
+      "level1": {
+        "evaluated": 100,
+        "expected": 100,
+        "compiled": 95,
+        "correct": 65
+      },
+      "level2": {
+        "evaluated": 100,
+        "expected": 100,
+        "compiled": 97,
+        "correct": 94
+      },
+      "level3": {
+        "evaluated": 50,
+        "expected": 50,
+        "compiled": 49,
+        "correct": 28
+      }
+    },
+    "notes": ""
+  },
+  {
     "id": "gemini_3",
     "unique_id": "gemini_3_H100",
     "display_name": "Gemini 3 Pro",

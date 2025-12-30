@@ -1,0 +1,104 @@
+{
+  "entry": {
+    "id": "gemini_3_flash",
+    "unique_id": "gemini_3_flash_H100",
+    "display_name": "Gemini 3 Flash",
+    "organization": "Google",
+    "hardware": "H100",
+    "timestamp": "2025-12-30T17:17:31.988367",
+    "metrics": {
+      "geo_mean": 1.36112022255944,
+      "fast_p_1_0": 0.604,
+      "fast_p_1_5": 0.46,
+      "fast_p_2_0": 0.168,
+      "total_submitted": 250,
+      "total_compiled": 241,
+      "total_correct": 187,
+      "compile_rate": 0.964,
+      "correct_rate": 0.748
+    },
+    "level_stats": {
+      "level1": {
+        "evaluated": 100,
+        "expected": 100,
+        "compiled": 95,
+        "correct": 65
+      },
+      "level2": {
+        "evaluated": 100,
+        "expected": 100,
+        "compiled": 97,
+        "correct": 94
+      },
+      "level3": {
+        "evaluated": 50,
+        "expected": 50,
+        "compiled": 49,
+        "correct": 28
+      }
+    },
+    "notes": ""
+  },
+  "level_results": [
+    {
+      "run_name": "gemini_3_flash_level1",
+      "level": 1,
+      "hardware": "H100_PCIe_LambdaLabs",
+      "total_count": 100,
+      "total_eval": 100,
+      "compiled_count": 95,
+      "correct_count": 65,
+      "compilation_rate": 0.95,
+      "correctness_rate": 0.65,
+      "geo_mean_speedup": 0.952774279002989,
+      "fast_p": {
+        "0.0": 0.65,
+        "0.5": 0.46,
+        "0.8": 0.44,
+        "1.0": 0.43,
+        "1.5": 0.24,
+        "2.0": 0.13
+      }
+    },
+    {
+      "run_name": "gemini_3_flash_level2",
+      "level": 2,
+      "hardware": "H100_PCIe_LambdaLabs",
+      "total_count": 100,
+      "total_eval": 100,
+      "compiled_count": 97,
+      "correct_count": 94,
+      "compilation_rate": 0.97,
+      "correctness_rate": 0.94,
+      "geo_mean_speedup": 1.7687385860242588,
+      "fast_p": {
+        "0.0": 0.94,
+        "0.5": 0.93,
+        "0.8": 0.91,
+        "1.0": 0.89,
+        "1.5": 0.76,
+        "2.0": 0.25
+      }
+    },
+    {
+      "run_name": "gemini_3_flash_level3",
+      "level": 3,
+      "hardware": "H100_PCIe_LambdaLabs",
+      "total_count": 50,
+      "total_eval": 50,
+      "compiled_count": 49,
+      "correct_count": 28,
+      "compilation_rate": 0.98,
+      "correctness_rate": 0.56,
+      "geo_mean_speedup": 1.2929095753212172,
+      "fast_p": {
+        "0.0": 0.56,
+        "0.5": 0.5,
+        "0.8": 0.4,
+        "1.0": 0.38,
+        "1.5": 0.3,
+        "2.0": 0.08
+      }
+    }
+  ]
+}
