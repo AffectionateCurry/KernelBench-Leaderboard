@@ -185,6 +185,13 @@ a:hover {
     background: var(--bg-hover);
 }
 
+.tab-description {
+    color: var(--text-muted);
+    font-size: 0.8125rem;
+    margin-bottom: 1rem;
+    margin-top: -0.5rem;
+}
+
 /* Chart Section */
 .chart-section {
     background: var(--bg-card);
@@ -238,6 +245,19 @@ a:hover {
     font-size: 0.75rem;
     font-weight: 500;
     color: var(--text);
+}
+
+.model-badge.clickable {
+    cursor: pointer;
+    transition: opacity 0.15s, border-color 0.15s;
+}
+
+.model-badge.clickable:hover {
+    border-color: var(--accent);
+}
+
+.model-badge.dimmed {
+    opacity: 0.4;
 }
 
 .model-dot {
@@ -424,6 +444,17 @@ tbody tr:last-child td {
 
 .model-name {
     font-weight: 500;
+}
+
+.model-name-link {
+    color: var(--text);
+    text-decoration: none;
+    transition: color 0.15s;
+}
+
+.model-name-link:hover {
+    color: var(--accent);
+    text-decoration: underline;
 }
 
 .metric {
@@ -850,6 +881,44 @@ tbody tr:last-child td {
 
 .hidden {
     display: none !important;
+}
+
+/* Footer */
+.footer {
+    border-top: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    margin-top: auto;
+}
+
+.footer-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.footer-text {
+    color: var(--text-muted);
+    font-size: 0.8125rem;
+}
+
+.footer-divider {
+    color: var(--border);
+    font-size: 0.75rem;
+}
+
+.footer-link {
+    color: var(--text-muted);
+    font-size: 0.8125rem;
+    text-decoration: none;
+    transition: color 0.15s;
+}
+
+.footer-link:hover {
+    color: var(--accent);
 }
 
 /* Mobile */

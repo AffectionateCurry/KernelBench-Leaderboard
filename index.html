@@ -47,6 +47,7 @@
                 <button class="tab active" data-chart="fastp">fast<sub>p</sub></button>
                 <button class="tab" data-chart="correctness">Correctness</button>
             </div>
+            <p class="tab-description" id="tab-description">Percentage of kernels achieving at least P× speedup over baseline. Higher is better. Click on the chart to pin a threshold.</p>
 
             <!-- Chart -->
             <div class="chart-section">
@@ -102,6 +103,19 @@
         </section>
     </main>
 
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <span class="footer-text">KernelBench Leaderboard</span>
+            <span class="footer-divider">|</span>
+            <a href="https://github.com/ScalingIntelligence/KernelBench" class="footer-link" target="_blank">GitHub</a>
+            <span class="footer-divider">|</span>
+            <a href="https://arxiv.org/abs/2502.10517" class="footer-link" target="_blank">Paper</a>
+            <span class="footer-divider">|</span>
+            <a href="https://github.com/ScalingIntelligence/KernelBench-Leaderboard#how-to-submit" class="footer-link" target="_blank">Submit</a>
+        </div>
+    </footer>
+
     <script src="js/common.js"></script>
     <script>
         let leaderboardData = [];
@@ -113,6 +127,7 @@
         let currentXAxisMax = 3.0;   // X-axis maximum (controlled by slider)
         let precomputedChartData = null;  // Pre-computed data for smooth updates
         let rafPending = false;  // For requestAnimationFrame throttling
+        let hiddenDatasets = new Set();  // Track which datasets are hidden
 
         async function loadLeaderboard() {
             const loading = document.getElementById('loading');
@@ -159,11 +174,37 @@
         function renderModelLegend() {
             const legend = document.getElementById('model-legend');
             legend.innerHTML = leaderboardData.map((entry, index) => `
-                <span class="model-badge">
+                <span class="model-badge clickable" data-index="${index}">
                     <span class="model-dot" style="background: ${MODEL_COLORS[index % MODEL_COLORS.length]}"></span>
                     ${escapeHtml(entry.display_name || entry.id)}
                 </span>
             `).join('');
+
+            // Add click handlers to toggle dataset visibility
+            legend.querySelectorAll('.model-badge').forEach(badge => {
+                badge.addEventListener('click', () => {
+                    const index = parseInt(badge.dataset.index);
+                    toggleDataset(index, badge);
+                });
+            });
+        }
+
+        function toggleDataset(index, badge) {
+            if (!mainChart) return;
+
+            if (hiddenDatasets.has(index)) {
+                hiddenDatasets.delete(index);
+                badge.classList.remove('dimmed');
+            } else {
+                hiddenDatasets.add(index);
+                badge.classList.add('dimmed');
+            }
+
+            // Update chart dataset visibility
+            if (mainChart.data.datasets[index]) {
+                mainChart.data.datasets[index].hidden = hiddenDatasets.has(index);
+                mainChart.update('none');
+            }
         }
 
         function sortAndRender() {
@@ -221,7 +262,7 @@
 
                 row.innerHTML = `
                     <td class="${rankClass}">#${rank}</td>
-                    <td class="model-name">${escapeHtml(entry.display_name || 'Unknown')}</td>
+                    <td class="model-name"><a href="models.html?model=${encodeURIComponent(uniqueId)}" class="model-name-link">${escapeHtml(entry.display_name || 'Unknown')}</a></td>
                     <td>${escapeHtml(entry.organization || '-')}</td>
                     <td><span class="badge badge-hw">${escapeHtml(entry.hardware || 'Unknown')}</span></td>
                     <td class="${geoClass}">${geoMean.toFixed(3)}x</td>
@@ -309,8 +350,11 @@
             // Get pre-computed data
             const chartData = precomputeChartData();
 
-            // Clone datasets for the chart
-            const datasets = chartData.datasets.map(ds => ({ ...ds }));
+            // Clone datasets for the chart and apply hidden state
+            const datasets = chartData.datasets.map((ds, index) => ({
+                ...ds,
+                hidden: hiddenDatasets.has(index)
+            }));
 
             const textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-muted').trim() || '#8b949e';
             const borderColor = getComputedStyle(document.documentElement).getPropertyValue('--border').trim() || '#30363d';
@@ -421,7 +465,8 @@
                         stats.level3?.correct || 0
                     ],
                     backgroundColor: MODEL_COLORS[index % MODEL_COLORS.length],
-                    borderRadius: 4
+                    borderRadius: 4,
+                    hidden: hiddenDatasets.has(index)
                 };
             });
 
@@ -514,13 +559,16 @@
 
                 const titleEl = document.getElementById('chart-title-text');
                 const controlsEl = document.getElementById('threshold-controls');
+                const descEl = document.getElementById('tab-description');
 
                 if (currentChartType === 'fastp') {
                     titleEl.innerHTML = 'fast<sub>p</sub>';
                     controlsEl.classList.remove('hidden');
+                    descEl.textContent = 'Percentage of kernels achieving at least P× speedup over baseline. Higher is better. Click on the chart to pin a threshold.';
                 } else {
                     titleEl.textContent = 'Correctness by Level';
                     controlsEl.classList.add('hidden');
+                    descEl.textContent = 'Number of kernels producing correct output for each difficulty level. Level 1 has 100 problems, Level 2 has 100, and Level 3 has 50.';
                 }
 
                 renderChart();

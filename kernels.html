@@ -292,6 +292,10 @@
             background: rgba(248, 81, 73, 0.15);
             color: var(--red);
         }
+        .status-pill.best {
+            background: rgba(255, 215, 0, 0.15);
+            color: #ffd700;
+        }
 
         /* Tabs for code sections */
         .code-tabs {
@@ -413,6 +417,19 @@
             </div>
         </section>
     </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <span class="footer-text">KernelBench Leaderboard</span>
+            <span class="footer-divider">|</span>
+            <a href="https://github.com/ScalingIntelligence/KernelBench" class="footer-link" target="_blank">GitHub</a>
+            <span class="footer-divider">|</span>
+            <a href="https://arxiv.org/abs/2502.10517" class="footer-link" target="_blank">Paper</a>
+            <span class="footer-divider">|</span>
+            <a href="https://github.com/ScalingIntelligence/KernelBench-Leaderboard#how-to-submit" class="footer-link" target="_blank">Submit</a>
+        </div>
+    </footer>
 
     <script src="js/common.js"></script>
     <script>
@@ -605,15 +622,21 @@
                 autoExpandIndex = modelResults.findIndex(([modelId, _]) => modelId === autoExpandModelId);
             }
 
+            // Find the best solution (first correct one with highest speedup - already sorted)
+            const bestIndex = modelResults.findIndex(([_, r]) => r.correct && r.speedup > 0);
+
             solutionsList.innerHTML = modelResults.map(([modelId, result], index) => {
                 const displayName = modelId.replace('_H100', '').replace(/_/g, ' ');
                 const speedup = result.speedup || 0;
+                const isBest = index === bestIndex;
 
                 let speedupClass = 'bad';
                 if (speedup >= 1.0) speedupClass = 'good';
                 else if (speedup >= 0.8) speedupClass = 'warning';
 
                 const progressWidth = Math.min(speedup * 50, 100);
+
+                const bestBadge = isBest ? '<span class="status-pill best">&#x1F3C6; Best</span>' : '';
 
                 const compiledStatus = result.compiled
                     ? '<span class="status-pill success">&#x2713; Compiled</span>'
@@ -650,6 +673,7 @@
                             <div class="solution-info">
                                 <span class="solution-name">${escapeHtml(displayName)}</span>
                                 <div class="solution-badges">
+                                    ${bestBadge}
                                     ${compiledStatus}
                                     ${correctStatus}
                                 </div>
