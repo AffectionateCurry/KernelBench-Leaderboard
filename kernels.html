@@ -420,10 +420,15 @@
         let currentFilter = 'all';
         let searchQuery = '';
 
-        // Check URL for kernel parameter
+        // Check URL for kernel and model parameters
         function getKernelIdFromUrl() {
             const params = new URLSearchParams(window.location.search);
             return params.get('kernel');
+        }
+
+        function getModelIdFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('model');
         }
 
         async function loadKernels() {
@@ -580,11 +585,12 @@
             refCode.textContent = kernel.reference_code || '# No reference code available';
             Prism.highlightElement(refCode);
 
-            // Solutions
-            renderSolutions(kernel);
+            // Solutions - pass model ID from URL for auto-expand
+            const autoExpandModelId = getModelIdFromUrl();
+            renderSolutions(kernel, autoExpandModelId);
         }
 
-        function renderSolutions(kernel) {
+        function renderSolutions(kernel, autoExpandModelId = null) {
             const solutionsList = document.getElementById('solutions-list');
             const modelResults = Object.entries(kernel.models || {});
 
@@ -592,6 +598,12 @@
 
             // Sort by speedup (best first)
             modelResults.sort((a, b) => (b[1].speedup || 0) - (a[1].speedup || 0));
+
+            // Find index of model to auto-expand
+            let autoExpandIndex = -1;
+            if (autoExpandModelId) {
+                autoExpandIndex = modelResults.findIndex(([modelId, _]) => modelId === autoExpandModelId);
+            }
 
             solutionsList.innerHTML = modelResults.map(([modelId, result], index) => {
                 const displayName = modelId.replace('_H100', '').replace(/_/g, ' ');
@@ -688,6 +700,16 @@
                 document.querySelectorAll('#solutions-list pre code').forEach(block => {
                     Prism.highlightElement(block);
                 });
+
+                // Auto-expand the specified model's solution
+                if (autoExpandIndex >= 0) {
+                    toggleSolution(autoExpandIndex);
+                    // Scroll the solution into view
+                    const card = document.getElementById(`solution-${autoExpandIndex}`);
+                    if (card) {
+                        card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }
             });
         }
 

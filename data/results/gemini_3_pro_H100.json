@@ -1,0 +1,104 @@
+{
+  "entry": {
+    "id": "gemini_3_pro",
+    "unique_id": "gemini_3_pro_H100",
+    "display_name": "Gemini 3 Pro",
+    "organization": "Google",
+    "hardware": "H100",
+    "timestamp": "2025-12-30T22:14:29.897246",
+    "metrics": {
+      "geo_mean": 0.7111692157745207,
+      "fast_p_1_0": 0.196,
+      "fast_p_1_5": 0.04,
+      "fast_p_2_0": 0.024,
+      "total_submitted": 250,
+      "total_compiled": 229,
+      "total_correct": 178,
+      "compile_rate": 0.916,
+      "correct_rate": 0.712
+    },
+    "level_stats": {
+      "level1": {
+        "evaluated": 100,
+        "expected": 100,
+        "compiled": 88,
+        "correct": 60
+      },
+      "level2": {
+        "evaluated": 100,
+        "expected": 100,
+        "compiled": 91,
+        "correct": 83
+      },
+      "level3": {
+        "evaluated": 50,
+        "expected": 50,
+        "compiled": 50,
+        "correct": 35
+      }
+    },
+    "notes": ""
+  },
+  "level_results": [
+    {
+      "run_name": "gemini_3_pro_level1",
+      "level": 1,
+      "hardware": "H100_Modal",
+      "total_count": 100,
+      "total_eval": 100,
+      "compiled_count": 88,
+      "correct_count": 60,
+      "compilation_rate": 0.88,
+      "correctness_rate": 0.6,
+      "geo_mean_speedup": 0.6423302115958985,
+      "fast_p": {
+        "0.0": 0.6,
+        "0.5": 0.43,
+        "0.8": 0.35,
+        "1.0": 0.09,
+        "1.5": 0.04,
+        "2.0": 0.03
+      }
+    },
+    {
+      "run_name": "gemini_3_pro_level2",
+      "level": 2,
+      "hardware": "H100_Modal",
+      "total_count": 100,
+      "total_eval": 100,
+      "compiled_count": 91,
+      "correct_count": 83,
+      "compilation_rate": 0.91,
+      "correctness_rate": 0.83,
+      "geo_mean_speedup": 0.7922530851276107,
+      "fast_p": {
+        "0.0": 0.83,
+        "0.5": 0.74,
+        "0.8": 0.52,
+        "1.0": 0.33,
+        "1.5": 0.04,
+        "2.0": 0.01
+      }
+    },
+    {
+      "run_name": "gemini_3_pro_level3",
+      "level": 3,
+      "hardware": "H100_Modal",
+      "total_count": 50,
+      "total_eval": 50,
+      "compiled_count": 50,
+      "correct_count": 35,
+      "compilation_rate": 1.0,
+      "correctness_rate": 0.7,
+      "geo_mean_speedup": 0.6554970973984914,
+      "fast_p": {
+        "0.0": 0.7,
+        "0.5": 0.52,
+        "0.8": 0.26,
+        "1.0": 0.14,
+        "1.5": 0.04,
+        "2.0": 0.04
+      }
+    }
+  ]
+}

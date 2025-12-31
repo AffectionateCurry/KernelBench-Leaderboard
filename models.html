@@ -470,7 +470,7 @@
                     <tr>
                         <td><span class="badge badge-level-${kernel.level}">L${kernel.level}</span></td>
                         <td>${kernel.problem_id}</td>
-                        <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${escapeHtml(kernel.name)}</td>
+                        <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><a href="kernels.html?kernel=level_${kernel.level}_problem_${kernel.problem_id}&model=${encodeURIComponent(modelId)}" class="kernel-link">${escapeHtml(kernel.name)}</a></td>
                         <td>${statusHtml}</td>
                         <td class="metric">${kernel.baseline_time.toFixed(2)} ms</td>
                         <td class="metric">${result.runtime > 0 ? result.runtime.toFixed(2) + ' ms' : '-'}</td>

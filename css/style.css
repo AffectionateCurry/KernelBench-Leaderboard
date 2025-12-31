@@ -474,6 +474,18 @@ tbody tr:last-child td {
     font-size: 0.8125rem;
 }
 
+/* Kernel Link in Tables */
+.kernel-link {
+    color: var(--text);
+    text-decoration: none;
+    transition: color 0.15s;
+}
+
+.kernel-link:hover {
+    color: var(--accent);
+    text-decoration: underline;
+}
+
 /* Search */
 .search-input {
     padding: 0.5rem 0.75rem;

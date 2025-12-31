@@ -1,16 +1,56 @@
 [
   {
+    "id": "gemini_3_pro",
+    "unique_id": "gemini_3_pro_H100",
+    "display_name": "Gemini 3 Pro",
+    "organization": "Google",
+    "hardware": "H100",
+    "timestamp": "2025-12-30T22:14:29.897246",
+    "metrics": {
+      "geo_mean": 0.7111692157745207,
+      "fast_p_1_0": 0.196,
+      "fast_p_1_5": 0.04,
+      "fast_p_2_0": 0.024,
+      "total_submitted": 250,
+      "total_compiled": 229,
+      "total_correct": 178,
+      "compile_rate": 0.916,
+      "correct_rate": 0.712
+    },
+    "level_stats": {
+      "level1": {
+        "evaluated": 100,
+        "expected": 100,
+        "compiled": 88,
+        "correct": 60
+      },
+      "level2": {
+        "evaluated": 100,
+        "expected": 100,
+        "compiled": 91,
+        "correct": 83
+      },
+      "level3": {
+        "evaluated": 50,
+        "expected": 50,
+        "compiled": 50,
+        "correct": 35
+      }
+    },
+    "notes": ""
+  },
+  {
     "id": "gemini_3_flash",
     "unique_id": "gemini_3_flash_H100",
     "display_name": "Gemini 3 Flash",
     "organization": "Google",
     "hardware": "H100",
-    "timestamp": "2025-12-30T17:17:31.988367",
+    "timestamp": "2025-12-30T22:14:23.044265",
     "metrics": {
-      "geo_mean": 1.36112022255944,
-      "fast_p_1_0": 0.604,
-      "fast_p_1_5": 0.46,
-      "fast_p_2_0": 0.168,
+      "geo_mean": 0.6964242753371583,
+      "fast_p_1_0": 0.172,
+      "fast_p_1_5": 0.032,
+      "fast_p_2_0": 0.024,
       "total_submitted": 250,
       "total_compiled": 241,
       "total_correct": 187,
@@ -35,86 +75,6 @@
         "expected": 50,
         "compiled": 49,
         "correct": 28
-      }
-    },
-    "notes": ""
-  },
-  {
-    "id": "gemini_3",
-    "unique_id": "gemini_3_H100",
-    "display_name": "Gemini 3 Pro",
-    "organization": "Google",
-    "hardware": "H100",
-    "timestamp": "2025-11-29T00:56:08.524093",
-    "metrics": {
-      "geo_mean": 1.0005329161082626,
-      "fast_p_1_0": 0.44,
-      "fast_p_1_5": 0.24,
-      "fast_p_2_0": 0.044,
-      "total_submitted": 250,
-      "total_compiled": 231,
-      "total_correct": 183,
-      "compile_rate": 0.924,
-      "correct_rate": 0.732
-    },
-    "level_stats": {
-      "level1": {
-        "evaluated": 100,
-        "expected": 100,
-        "compiled": 90,
-        "correct": 61
-      },
-      "level2": {
-        "evaluated": 100,
-        "expected": 100,
-        "compiled": 92,
-        "correct": 85
-      },
-      "level3": {
-        "evaluated": 50,
-        "expected": 50,
-        "compiled": 49,
-        "correct": 37
-      }
-    },
-    "notes": ""
-  },
-  {
-    "id": "gemini_2_5_flash",
-    "unique_id": "gemini_2_5_flash_H100",
-    "display_name": "Gemini 2.5 Flash",
-    "organization": "Google",
-    "hardware": "H100",
-    "timestamp": "2025-11-28T23:46:14.063706",
-    "metrics": {
-      "geo_mean": 0.8387552867059214,
-      "fast_p_1_0": 0.224,
-      "fast_p_1_5": 0.132,
-      "fast_p_2_0": 0.064,
-      "total_submitted": 250,
-      "total_compiled": 172,
-      "total_correct": 112,
-      "compile_rate": 0.688,
-      "correct_rate": 0.448
-    },
-    "level_stats": {
-      "level1": {
-        "evaluated": 96,
-        "expected": 100,
-        "compiled": 70,
-        "correct": 42
-      },
-      "level2": {
-        "evaluated": 98,
-        "expected": 100,
-        "compiled": 65,
-        "correct": 52
-      },
-      "level3": {
-        "evaluated": 48,
-        "expected": 50,
-        "compiled": 37,
-        "correct": 18
       }
     },
     "notes": ""
