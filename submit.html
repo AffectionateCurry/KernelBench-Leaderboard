@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit - KernelBench</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+    <style>
+        .submit-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .submit-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .submit-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .submit-subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        .submit-content {
+            line-height: 1.7;
+        }
+
+        .submit-content p {
+            font-size: 0.9375rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .submit-content strong {
+            color: var(--text);
+        }
+
+        .notice-box {
+            background: rgba(210, 153, 34, 0.1);
+            border: 1px solid rgba(210, 153, 34, 0.3);
+            border-left: 4px solid var(--warning);
+            border-radius: 0.5rem;
+            padding: 1.25rem 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .notice-box-title {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--warning);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .notice-box p {
+            margin: 0;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .info-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 1.25rem 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .info-box-title {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--text);
+            margin-bottom: 0.75rem;
+        }
+
+        .info-box ul {
+            margin: 0;
+            padding-left: 1.25rem;
+        }
+
+        .info-box li {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .info-box li:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-box code {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--bg);
+            padding: 0.125rem 0.375rem;
+            border-radius: 0.25rem;
+            font-size: 0.8125rem;
+            color: var(--accent);
+        }
+
+        .info-box a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .info-box a:hover {
+            text-decoration: underline;
+        }
+
+        .caution-list {
+            background: rgba(248, 81, 73, 0.1);
+            border: 1px solid rgba(248, 81, 73, 0.3);
+            border-radius: 0.5rem;
+            padding: 1.25rem 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .caution-list-title {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--error);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .caution-list ul {
+            margin: 0;
+            padding-left: 1.25rem;
+        }
+
+        .caution-list li {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .caution-list li:last-child {
+            margin-bottom: 0;
+        }
+
+        .contact-section {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .contact-section p {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .contact-section a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .contact-section a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <a href="index.html" class="logo">
+            <img src="assets/KernelBenchMascot-removebg-preview.png" alt="KernelBench" class="logo-img">
+            <span>KernelBench</span>
+        </a>
+        <nav class="nav">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+            <a href="kernels.html" class="nav-link">Kernels</a>
+            <a href="models.html" class="nav-link">Models</a>
+            <a href="eval.html" class="nav-link">Eval</a>
+            <a href="submit.html" class="nav-link active">Submit</a>
+            <div class="nav-dropdown">
+                <button class="nav-dropdown-toggle">
+                    About <span class="nav-dropdown-arrow">▼</span>
+                </button>
+                <div class="nav-dropdown-menu">
+                    <a href="https://arxiv.org/abs/2502.10517" class="nav-dropdown-item" target="_blank">
+                        <span class="nav-dropdown-item-icon">📄</span>
+                        Paper
+                        <span class="nav-dropdown-item-arrow">↗</span>
+                    </a>
+                    <a href="https://github.com/ScalingIntelligence/KernelBench" class="nav-dropdown-item" target="_blank">
+                        <span class="nav-dropdown-item-icon">💻</span>
+                        GitHub
+                        <span class="nav-dropdown-item-arrow">↗</span>
+                    </a>
+                </div>
+            </div>
+            <button class="theme-toggle" id="theme-toggle" title="Toggle theme">
+                <span class="theme-icon"></span>
+            </button>
+        </nav>
+    </header>
+
+    <main class="submit-container">
+        <div class="submit-header">
+            <h1 class="submit-title">Submitting to the Leaderboard</h1>
+            <p class="submit-subtitle">How to report your model's performance on KernelBench</p>
+        </div>
+
+        <div class="submit-content">
+            <div class="notice-box">
+                <div class="notice-box-title">
+                    <span>⚠️</span>
+                    <span>Self-Reported Results</span>
+                </div>
+                <p>
+                    Unfortunately, we don't currently have the bandwidth to manually verify submissions or coordinate with organizations. 
+                    Instead, we ask that you <strong>run our evaluation script yourself</strong> and report your numbers.
+                </p>
+            </div>
+
+            <p>
+                To ensure fair and reproducible comparisons across the leaderboard, all submissions should use our standardized evaluation pipeline. 
+                This means running the same evaluation script, on the same hardware configuration, with the same prompting setup.
+            </p>
+
+            <div class="info-box">
+                <div class="info-box-title">Evaluation Steps</div>
+                <ul>
+                    <li>Generate kernel outputs using your model with <strong>1-shot prompting</strong> (minimum example)</li>
+                    <li>Use <strong>Pass@1</strong> sampling (single generation per problem)</li>
+                    <li>Run evaluation on <strong>NVIDIA H100 GPU</strong> using our <a href="https://github.com/ScalingIntelligence/KernelBench/blob/main/scripts/eval_from_generations.py" target="_blank">Modal eval script</a></li>
+                    <li>Report the resulting metrics (GeoMean, fast_p values, correctness)</li>
+                </ul>
+            </div>
+
+            <div class="caution-list">
+                <div class="caution-list-title">
+                    <span>🚨</span>
+                    <span>Please Be Extra Careful</span>
+                </div>
+                <ul>
+                    <li><strong>Double-check your numbers</strong> before submitting — errors are difficult to correct after publication</li>
+                    <li><strong>Use the exact evaluation setup</strong> described above for fair comparison</li>
+                    <li><strong>Don't cherry-pick results</strong> — report the actual Pass@1 performance, not best-of-N</li>
+                    <li><strong>Verify correctness checking</strong> is working properly — incorrect kernels should not be counted as correct</li>
+                    <li><strong>Be transparent</strong> about any deviations from the standard evaluation setup</li>
+                </ul>
+            </div>
+
+            <p>
+                Since we rely on self-reported results, the integrity of the leaderboard depends on the community's honesty and diligence. 
+                We trust that submitters will report accurate numbers in good faith.
+            </p>
+
+            <div class="contact-section">
+                <p>
+                    To submit your results, please open a pull request to the 
+                    <a href="https://github.com/ScalingIntelligence/KernelBench-Leaderboard" target="_blank">KernelBench-Leaderboard repository</a> 
+                    with your model's evaluation data. See the repository README for the expected data format.
+                </p>
+                <p style="margin-top: 0.75rem;">
+                    For questions or issues, please open a <a href="https://github.com/ScalingIntelligence/KernelBench/issues" target="_blank">GitHub issue</a>.
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <span class="footer-text">KernelBench Leaderboard</span>
+        </div>
+    </footer>
+
+    <script src="js/common.js"></script>
+</body>
+</html>
+

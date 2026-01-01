@@ -327,15 +327,33 @@
     <!-- Header -->
     <header class="header">
         <a href="index.html" class="logo">
-            <span class="logo-icon">&#x1F9EA;</span>
+            <img src="assets/KernelBenchMascot-removebg-preview.png" alt="KernelBench" class="logo-img">
             <span>KernelBench</span>
         </a>
         <nav class="nav">
-            <a href="index.html" class="nav-link">Leaderboard</a>
-            <a href="kernels.html" class="nav-link active">Kernels</a>
-            <a href="models.html" class="nav-link">Models</a>
-            <a href="https://arxiv.org/abs/2502.10517" class="nav-link external" target="_blank">Paper</a>
-            <a href="https://github.com/ScalingIntelligence/KernelBench" class="nav-link external" target="_blank">GitHub</a>
+<a href="index.html" class="nav-link">Home</a>
+                <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+                <a href="kernels.html" class="nav-link active">Kernels</a>
+                <a href="models.html" class="nav-link">Models</a>
+                <a href="eval.html" class="nav-link">Eval</a>
+                <a href="submit.html" class="nav-link">Submit</a>
+            <div class="nav-dropdown">
+                <button class="nav-dropdown-toggle">
+                    About <span class="nav-dropdown-arrow">▼</span>
+                </button>
+                <div class="nav-dropdown-menu">
+                    <a href="https://arxiv.org/abs/2502.10517" class="nav-dropdown-item" target="_blank">
+                        <span class="nav-dropdown-item-icon">📄</span>
+                        Paper
+                        <span class="nav-dropdown-item-arrow">↗</span>
+                    </a>
+                    <a href="https://github.com/ScalingIntelligence/KernelBench" class="nav-dropdown-item" target="_blank">
+                        <span class="nav-dropdown-item-icon">💻</span>
+                        GitHub
+                        <span class="nav-dropdown-item-arrow">↗</span>
+                    </a>
+                </div>
+            </div>
             <button class="theme-toggle" id="theme-toggle" title="Toggle theme">
                 <span class="theme-icon"></span>
             </button>
@@ -349,6 +367,14 @@
             <div class="section-header">
                 <h1 class="section-title">Kernels</h1>
                 <p class="section-subtitle">Browse all 250 GPU kernel optimization problems and compare model performance.</p>
+            </div>
+
+            <!-- Eval context banner -->
+            <div class="eval-context-banner">
+                <span class="eval-context-icon">📊</span>
+                <span class="eval-context-text">
+                    Results show <strong>Pass@1</strong> performance with <strong>1-shot prompting</strong>, evaluated on <strong>H100 GPU</strong> via Modal.
+                </span>
             </div>
 
             <!-- Controls -->
@@ -422,12 +448,6 @@
     <footer class="footer">
         <div class="footer-content">
             <span class="footer-text">KernelBench Leaderboard</span>
-            <span class="footer-divider">|</span>
-            <a href="https://github.com/ScalingIntelligence/KernelBench" class="footer-link" target="_blank">GitHub</a>
-            <span class="footer-divider">|</span>
-            <a href="https://arxiv.org/abs/2502.10517" class="footer-link" target="_blank">Paper</a>
-            <span class="footer-divider">|</span>
-            <a href="https://github.com/ScalingIntelligence/KernelBench-Leaderboard#how-to-submit" class="footer-link" target="_blank">Submit</a>
         </div>
     </footer>
 

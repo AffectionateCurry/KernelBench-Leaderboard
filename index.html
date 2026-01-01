@@ -3,608 +3,699 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KernelBench Leaderboard</title>
+    <title>KernelBench - Can LLMs Write Efficient GPU Kernels?</title>
     <link rel="stylesheet" href="css/style.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script>
         (function() {
             const theme = localStorage.getItem('theme') || 'dark';
             document.documentElement.setAttribute('data-theme', theme);
         })();
     </script>
+    <style>
+        /* Homepage-specific styles */
+        .home-body {
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            padding: 4rem 2rem 5rem;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(88, 166, 255, 0.15), transparent),
+                radial-gradient(ellipse 60% 40% at 80% 60%, rgba(163, 113, 247, 0.1), transparent),
+                radial-gradient(ellipse 50% 30% at 20% 80%, rgba(247, 120, 186, 0.08), transparent);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .hero-mascot {
+            width: 320px;
+            height: auto;
+            display: block;
+            margin-bottom: 2rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.375rem 1rem;
+            background: rgba(88, 166, 255, 0.1);
+            border: 1px solid rgba(88, 166, 255, 0.3);
+            border-radius: 2rem;
+            font-size: 0.8125rem;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--text) 0%, var(--text-muted) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-title .highlight {
+            background: linear-gradient(135deg, #58a6ff 0%, #a371f7 50%, #f778ba 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 650px;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-size: 0.9375rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent);
+            color: var(--text);
+            transform: translateY(-1px);
+        }
+
+        /* About Section */
+        .about-section {
+            padding: 3rem 2rem 0;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .about-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .about-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .about-subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .about-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2.5rem;
+        }
+
+        .about-image-wrapper {
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .workflow-image {
+            width: 100%;
+            border-radius: 0.75rem;
+            border: 1px solid var(--border);
+        }
+
+        .about-text {
+            font-size: 1.125rem;
+            line-height: 1.8;
+            color: var(--text-muted);
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .about-text p {
+            margin-bottom: 1rem;
+        }
+
+        .about-text p:last-child {
+            margin-bottom: 0;
+        }
+
+        .about-text strong {
+            color: var(--text);
+        }
+
+        /* Levels Section */
+        .levels-section {
+            padding: 4rem 2rem;
+            background: var(--bg-card);
+            margin-top: 4rem;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .levels-container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .levels-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .levels-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .levels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .level-card-home {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            transition: all 0.2s;
+            border-top: 3px solid transparent;
+        }
+
+        .level-card-home:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent);
+        }
+
+        .level-card-home.level-1 { border-top-color: #58a6ff; }
+        .level-card-home.level-2 { border-top-color: #a371f7; }
+        .level-card-home.level-3 { border-top-color: #f778ba; }
+        .level-card-home.level-4 { border-top-color: #3fb950; }
+
+        .level-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .level-icon {
+            font-size: 1.5rem;
+        }
+
+        .level-name {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        .level-count {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-left: auto;
+            background: var(--bg-hover);
+            padding: 0.25rem 0.5rem;
+            border-radius: 1rem;
+        }
+
+        .level-desc {
+            font-size: 1rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* Metrics Section */
+        .metrics-section {
+            padding: 4rem 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .metrics-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .metrics-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 2rem;
+        }
+
+        .metric-name-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .metric-name {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .metric-name-row .metric-name {
+            margin-bottom: 0;
+        }
+
+        .metric-name sub {
+            font-size: 1rem;
+        }
+
+        .metric-primary-tag {
+            display: inline-block;
+            font-size: 0.6875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: rgba(63, 185, 80, 0.15);
+            color: var(--success);
+            padding: 0.25rem 0.625rem;
+            border-radius: 0.25rem;
+        }
+
+        .metric-desc {
+            font-size: 1.125rem;
+            color: var(--text-muted);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .metric-examples {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .metric-example {
+            display: flex;
+            align-items: baseline;
+            gap: 0.75rem;
+            font-size: 1.0625rem;
+        }
+
+        .metric-example code {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--bg);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            color: var(--accent);
+        }
+
+        .metric-example span {
+            color: var(--text-muted);
+        }
+
+        /* Eval Settings Box */
+        .eval-settings-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 1.5rem 2rem;
+            margin-top: 2rem;
+        }
+
+        .eval-settings-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+
+        .eval-settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .eval-settings-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9375rem;
+        }
+
+        .eval-settings-label {
+            color: var(--text-muted);
+        }
+
+        .eval-settings-value {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .eval-settings-note {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin: 0;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .eval-settings-note a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .eval-settings-note a:hover {
+            text-decoration: underline;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 4rem 2rem;
+            text-align: center;
+            background: linear-gradient(180deg, transparent 0%, rgba(88, 166, 255, 0.05) 100%);
+        }
+
+        .cta-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .cta-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .cta-text {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Links Grid */
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            max-width: 800px;
+            margin: 2rem auto 0;
+        }
+
+        .link-card {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.25rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            text-decoration: none;
+            color: var(--text);
+            transition: all 0.2s;
+        }
+
+        .link-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-1px);
+            color: var(--text);
+        }
+
+        .link-icon {
+            font-size: 1.25rem;
+        }
+
+        .link-text {
+            font-weight: 500;
+        }
+
+        .link-arrow {
+            margin-left: auto;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+    </style>
 </head>
-<body>
+<body class="home-body">
     <!-- Header -->
     <header class="header">
         <a href="index.html" class="logo">
-            <span class="logo-icon">&#x1F9EA;</span>
+            <img src="assets/KernelBenchMascot-removebg-preview.png" alt="KernelBench" class="logo-img">
             <span>KernelBench</span>
         </a>
         <nav class="nav">
-            <a href="index.html" class="nav-link active">Leaderboard</a>
-            <a href="kernels.html" class="nav-link">Kernels</a>
-            <a href="models.html" class="nav-link">Models</a>
-            <a href="https://arxiv.org/abs/2502.10517" class="nav-link external" target="_blank">Paper</a>
-            <a href="https://github.com/ScalingIntelligence/KernelBench" class="nav-link external" target="_blank">GitHub</a>
+<a href="index.html" class="nav-link active">Home</a>
+                <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+                <a href="kernels.html" class="nav-link">Kernels</a>
+                <a href="models.html" class="nav-link">Models</a>
+                <a href="eval.html" class="nav-link">Eval</a>
+                <a href="submit.html" class="nav-link">Submit</a>
+            <div class="nav-dropdown">
+                <button class="nav-dropdown-toggle">
+                    About <span class="nav-dropdown-arrow">▼</span>
+                </button>
+                <div class="nav-dropdown-menu">
+                    <a href="https://arxiv.org/abs/2502.10517" class="nav-dropdown-item" target="_blank">
+                        <span class="nav-dropdown-item-icon">📄</span>
+                        Paper
+                        <span class="nav-dropdown-item-arrow">↗</span>
+                    </a>
+                    <a href="https://github.com/ScalingIntelligence/KernelBench" class="nav-dropdown-item" target="_blank">
+                        <span class="nav-dropdown-item-icon">💻</span>
+                        GitHub
+                        <span class="nav-dropdown-item-arrow">↗</span>
+                    </a>
+                </div>
+            </div>
             <button class="theme-toggle" id="theme-toggle" title="Toggle theme">
                 <span class="theme-icon"></span>
             </button>
         </nav>
     </header>
 
-    <!-- Main Content -->
-    <main class="main">
-        <!-- Leaderboard Section -->
-        <section class="section">
-            <div class="section-header">
-                <h1 class="section-title">Leaderboard</h1>
-                <p class="section-subtitle">Compare model performance across all 250 GPU kernel optimization tasks.</p>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <img src="assets/KernelBenchMascot-removebg-preview.png" alt="KernelBench Mascot" class="hero-mascot">
+            <h1 class="hero-title">
+                Can LLMs Write<br><span class="highlight">Efficient GPU Kernels?</span>
+            </h1>
+            <p class="hero-subtitle">
+                KernelBench is a benchmark for evaluating the ability of large language models to generate efficient GPU kernels. It consists of 250 carefully curated problems across 3 difficulty levels.
+            </p>
+            <div class="hero-buttons">
+                <a href="leaderboard.html" class="btn btn-primary">
+                    <span>📊</span> View Leaderboard
+                </a>
+                <a href="https://arxiv.org/abs/2502.10517" class="btn btn-secondary" target="_blank">
+                    <span>📄</span> Read Paper
+                </a>
+                <a href="https://github.com/ScalingIntelligence/KernelBench" class="btn btn-secondary" target="_blank">
+                    <span>💻</span> GitHub
+                </a>
             </div>
+        </div>
+    </section>
 
-            <!-- Tabs -->
-            <div class="tabs" id="chart-tabs">
-                <button class="tab active" data-chart="fastp">fast<sub>p</sub></button>
-                <button class="tab" data-chart="correctness">Correctness</button>
+    <!-- About Section -->
+    <section class="about-section">
+        <div class="about-header">
+            <h2 class="about-title">The Task</h2>
+            <p class="about-subtitle">Transpile PyTorch operators to optimized CUDA kernels</p>
+        </div>
+        <div class="about-content">
+            <div class="about-image-wrapper">
+                <img src="KernelBench/assets/figures/KernelBenchWorkFlow.png" alt="KernelBench Workflow" class="workflow-image">
             </div>
-            <p class="tab-description" id="tab-description">Percentage of kernels achieving at least P× speedup over baseline. Higher is better. Click on the chart to pin a threshold.</p>
+            <div class="about-text">
+                <p>
+                    <strong>KernelBench</strong> structures the problem for LLMs to transpile operators described in PyTorch to CUDA kernels, at whatever level of granularity they desire.
+                </p>
+                <p>
+                    Each problem provides a reference PyTorch implementation that the model must convert into an efficient CUDA kernel. The generated kernel is then evaluated for both <strong>correctness</strong> (does it produce the same output?) and <strong>performance</strong> (is it faster than the baseline?).
+                </p>
+                <p>
+                    This benchmark tests whether LLMs can understand and optimize the low-level computational patterns that power modern deep learning, from simple matrix multiplications to full model architectures like transformers and diffusion models.
+                </p>
+            </div>
+        </div>
+    </section>
 
-            <!-- Chart -->
-            <div class="chart-section">
-                <div class="chart-header">
-                    <div>
-                        <div class="chart-title">
-                            <span id="chart-title-text">fast<sub>p</sub></span>
-                        </div>
-                        <div class="chart-info">n = <span id="workload-count">250</span> kernels</div>
+    <!-- Levels Section -->
+    <section class="levels-section">
+        <div class="levels-container">
+            <div class="levels-header">
+                <h2 class="levels-title">Difficulty Levels</h2>
+                <p class="about-subtitle">250 problems across 3 levels of increasing complexity</p>
+            </div>
+            <div class="levels-grid">
+                <div class="level-card-home level-1">
+                    <div class="level-header">
+                        <span class="level-icon">🧱</span>
+                        <span class="level-name">Level 1</span>
+                        <span class="level-count">100 problems</span>
                     </div>
-                    <div class="model-legend" id="model-legend"></div>
+                    <p class="level-desc">
+                        Single-kernel operators: the foundational building blocks of neural nets — convolutions, matrix multiplies, layer normalization, and more.
+                    </p>
                 </div>
-                <div class="chart-container">
-                    <canvas id="main-chart"></canvas>
+                <div class="level-card-home level-2">
+                    <div class="level-header">
+                        <span class="level-icon">🔗</span>
+                        <span class="level-name">Level 2</span>
+                        <span class="level-count">100 problems</span>
+                    </div>
+                    <p class="level-desc">
+                        Simple fusion patterns where a fused kernel would be faster than separated kernels — Conv + Bias + ReLU, Matmul + Scale + Sigmoid.
+                    </p>
                 </div>
-                <div class="chart-controls" id="threshold-controls">
-                    <span class="slider-label">P range</span>
-                    <input type="range" class="slider" id="range-slider" min="0.5" max="3" step="0.01" value="3">
-                    <span class="slider-value" id="range-value">3.0x</span>
+                <div class="level-card-home level-3">
+                    <div class="level-header">
+                        <span class="level-icon">⚛️</span>
+                        <span class="level-name">Level 3</span>
+                        <span class="level-count">50 problems</span>
+                    </div>
+                    <p class="level-desc">
+                        Full model architectures requiring end-to-end optimization — MobileNet, VGG, ResNet, MiniGPT, Mamba, and Vision Transformers.
+                    </p>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Rankings Section -->
-        <section class="section">
-            <div class="table-container">
-                <div class="table-header">
-                    <span class="table-title">Rankings</span>
-                </div>
-                <div class="loading" id="loading">Loading leaderboard</div>
-                <table id="leaderboard" class="hidden">
-                    <thead>
-                        <tr>
-                            <th style="width: 60px;">Rank</th>
-                            <th>Model</th>
-                            <th>Organization</th>
-                            <th style="width: 80px;">Hardware</th>
-                            <th class="sortable" data-sort="geo_mean" style="width: 120px;">GeoMean</th>
-                            <th class="sortable" data-sort="fast_p" style="width: 100px;">Fast@1x</th>
-                            <th style="width: 100px;">Correct</th>
-                            <th class="sortable" data-sort="date" style="width: 100px;">Date</th>
-                            <th style="width: 80px;"></th>
-                        </tr>
-                    </thead>
-                    <tbody id="leaderboard-body"></tbody>
-                </table>
-                <div id="empty-state" class="empty-state hidden">
-                    <h3>No submissions yet</h3>
-                    <p>Be the first to submit your optimized CUDA kernels.</p>
-                    <a href="https://github.com/ScalingIntelligence/KernelBench-Leaderboard#how-to-submit">Learn how to submit</a>
-                </div>
-            </div>
-        </section>
-    </main>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2 class="cta-title">Explore KernelBench</h2>
+            <p class="cta-text">
+                Check out the leaderboard to see how different models perform, browse the kernel problems, or read the paper for more details.
+            </p>
+        </div>
+        <div class="links-grid">
+            <a href="leaderboard.html" class="link-card">
+                <span class="link-icon">📊</span>
+                <span class="link-text">Leaderboard</span>
+                <span class="link-arrow">→</span>
+            </a>
+            <a href="kernels.html" class="link-card">
+                <span class="link-icon">🧩</span>
+                <span class="link-text">Browse Kernels</span>
+                <span class="link-arrow">→</span>
+            </a>
+            <a href="models.html" class="link-card">
+                <span class="link-icon">🤖</span>
+                <span class="link-text">Models</span>
+                <span class="link-arrow">→</span>
+            </a>
+            <a href="eval.html" class="link-card">
+                <span class="link-icon">⚙️</span>
+                <span class="link-text">Evaluation</span>
+                <span class="link-arrow">→</span>
+            </a>
+            <a href="submit.html" class="link-card">
+                <span class="link-icon">📤</span>
+                <span class="link-text">Submit Results</span>
+                <span class="link-arrow">→</span>
+            </a>
+            <a href="https://arxiv.org/abs/2502.10517" class="link-card" target="_blank">
+                <span class="link-icon">📄</span>
+                <span class="link-text">Read the Paper</span>
+                <span class="link-arrow">↗</span>
+            </a>
+            <a href="https://github.com/ScalingIntelligence/KernelBench" class="link-card" target="_blank">
+                <span class="link-icon">💻</span>
+                <span class="link-text">GitHub Repo</span>
+                <span class="link-arrow">↗</span>
+            </a>
+        </div>
+    </section>
 
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-content">
             <span class="footer-text">KernelBench Leaderboard</span>
-            <span class="footer-divider">|</span>
-            <a href="https://github.com/ScalingIntelligence/KernelBench" class="footer-link" target="_blank">GitHub</a>
-            <span class="footer-divider">|</span>
-            <a href="https://arxiv.org/abs/2502.10517" class="footer-link" target="_blank">Paper</a>
-            <span class="footer-divider">|</span>
-            <a href="https://github.com/ScalingIntelligence/KernelBench-Leaderboard#how-to-submit" class="footer-link" target="_blank">Submit</a>
         </div>
     </footer>
 
     <script src="js/common.js"></script>
-    <script>
-        let leaderboardData = [];
-        let detailedResults = {};
-        let currentSort = { field: 'geo_mean', direction: 'desc' };
-        let mainChart = null;
-        let currentChartType = 'fastp';
-        let currentThreshold = 1.0;  // Vertical line position (controlled by click)
-        let currentXAxisMax = 3.0;   // X-axis maximum (controlled by slider)
-        let precomputedChartData = null;  // Pre-computed data for smooth updates
-        let rafPending = false;  // For requestAnimationFrame throttling
-        let hiddenDatasets = new Set();  // Track which datasets are hidden
-
-        async function loadLeaderboard() {
-            const loading = document.getElementById('loading');
-            const table = document.getElementById('leaderboard');
-            const emptyState = document.getElementById('empty-state');
-
-            try {
-                const response = await fetch('data/metadata.json');
-                if (!response.ok) throw new Error('Failed to fetch');
-
-                leaderboardData = await response.json();
-
-                loading.classList.add('hidden');
-
-                if (leaderboardData.length === 0) {
-                    emptyState.classList.remove('hidden');
-                } else {
-                    table.classList.remove('hidden');
-                    sortAndRender();
-                    renderModelLegend();
-                    await loadDetailedResults();
-                    renderChart();
-                }
-            } catch (error) {
-                console.error('Failed to load leaderboard:', error);
-                loading.textContent = 'Failed to load leaderboard data';
-            }
-        }
-
-        async function loadDetailedResults() {
-            for (const entry of leaderboardData) {
-                const uniqueId = entry.unique_id || entry.id;
-                try {
-                    const response = await fetch(`data/results/${uniqueId}.json`);
-                    if (response.ok) {
-                        detailedResults[uniqueId] = await response.json();
-                    }
-                } catch (e) {
-                    console.warn(`Could not load results for ${uniqueId}`);
-                }
-            }
-        }
-
-        function renderModelLegend() {
-            const legend = document.getElementById('model-legend');
-            legend.innerHTML = leaderboardData.map((entry, index) => `
-                <span class="model-badge clickable" data-index="${index}">
-                    <span class="model-dot" style="background: ${MODEL_COLORS[index % MODEL_COLORS.length]}"></span>
-                    ${escapeHtml(entry.display_name || entry.id)}
-                </span>
-            `).join('');
-
-            // Add click handlers to toggle dataset visibility
-            legend.querySelectorAll('.model-badge').forEach(badge => {
-                badge.addEventListener('click', () => {
-                    const index = parseInt(badge.dataset.index);
-                    toggleDataset(index, badge);
-                });
-            });
-        }
-
-        function toggleDataset(index, badge) {
-            if (!mainChart) return;
-
-            if (hiddenDatasets.has(index)) {
-                hiddenDatasets.delete(index);
-                badge.classList.remove('dimmed');
-            } else {
-                hiddenDatasets.add(index);
-                badge.classList.add('dimmed');
-            }
-
-            // Update chart dataset visibility
-            if (mainChart.data.datasets[index]) {
-                mainChart.data.datasets[index].hidden = hiddenDatasets.has(index);
-                mainChart.update('none');
-            }
-        }
-
-        function sortAndRender() {
-            const sorted = [...leaderboardData].sort((a, b) => {
-                let aVal, bVal;
-
-                switch (currentSort.field) {
-                    case 'geo_mean':
-                        aVal = a.metrics?.geo_mean || 0;
-                        bVal = b.metrics?.geo_mean || 0;
-                        break;
-                    case 'fast_p':
-                        aVal = a.metrics?.fast_p_1_0 || 0;
-                        bVal = b.metrics?.fast_p_1_0 || 0;
-                        break;
-                    case 'date':
-                        aVal = new Date(a.timestamp || 0);
-                        bVal = new Date(b.timestamp || 0);
-                        break;
-                    default:
-                        aVal = 0;
-                        bVal = 0;
-                }
-
-                return currentSort.direction === 'desc' ? bVal - aVal : aVal - bVal;
-            });
-
-            renderTable(sorted);
-            updateSortIndicators();
-        }
-
-        function renderTable(data) {
-            const tbody = document.getElementById('leaderboard-body');
-            tbody.innerHTML = '';
-
-            data.forEach((entry, index) => {
-                const rank = index + 1;
-                const row = document.createElement('tr');
-
-                const geoMean = entry.metrics?.geo_mean || 0;
-                const fastP = entry.metrics?.fast_p_1_0 || 0;
-                const totalCorrect = entry.metrics?.total_correct || 0;
-                const totalSubmitted = entry.metrics?.total_submitted || 0;
-                const uniqueId = entry.unique_id || entry.id;
-
-                let rankClass = 'rank';
-                if (rank <= 3) rankClass += ` rank-${rank}`;
-
-                let geoClass = 'metric';
-                if (geoMean >= 1.0) geoClass += ' good';
-                else if (geoMean >= 0.8) geoClass += ' warning';
-                else geoClass += ' bad';
-
-                const date = entry.timestamp ? new Date(entry.timestamp).toLocaleDateString() : '-';
-
-                row.innerHTML = `
-                    <td class="${rankClass}">#${rank}</td>
-                    <td class="model-name"><a href="models.html?model=${encodeURIComponent(uniqueId)}" class="model-name-link">${escapeHtml(entry.display_name || 'Unknown')}</a></td>
-                    <td>${escapeHtml(entry.organization || '-')}</td>
-                    <td><span class="badge badge-hw">${escapeHtml(entry.hardware || 'Unknown')}</span></td>
-                    <td class="${geoClass}">${geoMean.toFixed(3)}x</td>
-                    <td class="metric">${(fastP * 100).toFixed(1)}%</td>
-                    <td>${totalCorrect}/${totalSubmitted}</td>
-                    <td>${date}</td>
-                    <td><a href="models.html?model=${encodeURIComponent(uniqueId)}" class="link">Details →</a></td>
-                `;
-
-                tbody.appendChild(row);
-            });
-        }
-
-        function updateSortIndicators() {
-            document.querySelectorAll('th.sortable').forEach(th => {
-                th.classList.remove('sorted-asc', 'sorted-desc');
-                if (th.dataset.sort === currentSort.field) {
-                    th.classList.add(`sorted-${currentSort.direction}`);
-                }
-            });
-        }
-
-        function renderChart() {
-            const ctx = document.getElementById('main-chart').getContext('2d');
-
-            if (mainChart) {
-                mainChart.destroy();
-            }
-
-            if (currentChartType === 'fastp') {
-                renderFastPChart(ctx);
-            } else {
-                renderCorrectnessChart(ctx);
-            }
-        }
-
-        // Pre-compute chart data once for smooth slider updates
-        function precomputeChartData() {
-            if (precomputedChartData) return precomputedChartData;
-
-            // Pre-compute at fine granularity (0.01 intervals from 0 to 3)
-            const allThresholds = [];
-            for (let t = 0; t <= 3; t += 0.02) {
-                allThresholds.push(parseFloat(t.toFixed(2)));
-            }
-
-            const datasets = leaderboardData.map((entry, index) => {
-                const result = detailedResults[entry.unique_id || entry.id];
-
-                // Pre-compute all data points as {x, y} coordinates
-                const data = allThresholds.map(threshold => {
-                    let y;
-                    if (result && result.kernel_results) {
-                        const correct = result.kernel_results.filter(k => k.correct && k.speedup >= threshold);
-                        y = (correct.length / result.kernel_results.length) * 100;
-                    } else {
-                        const metrics = entry.metrics || {};
-                        if (threshold <= 0) y = (metrics.correct_rate || 0) * 100;
-                        else if (threshold <= 1.0) y = (metrics.fast_p_1_0 || 0) * 100;
-                        else if (threshold <= 1.5) y = (metrics.fast_p_1_5 || 0) * 100;
-                        else if (threshold <= 2.0) y = (metrics.fast_p_2_0 || 0) * 100;
-                        else y = 0;
-                    }
-                    return { x: threshold, y: y };
-                });
-
-                return {
-                    label: entry.display_name || entry.id,
-                    data: data,
-                    borderColor: MODEL_COLORS[index % MODEL_COLORS.length],
-                    backgroundColor: 'transparent',
-                    borderWidth: 2,
-                    tension: 0.3,
-                    pointRadius: 0,
-                    pointHoverRadius: 4,
-                    showLine: true
-                };
-            });
-
-            precomputedChartData = { datasets };
-            return precomputedChartData;
-        }
-
-        function renderFastPChart(ctx) {
-            // Get pre-computed data
-            const chartData = precomputeChartData();
-
-            // Clone datasets for the chart and apply hidden state
-            const datasets = chartData.datasets.map((ds, index) => ({
-                ...ds,
-                hidden: hiddenDatasets.has(index)
-            }));
-
-            const textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-muted').trim() || '#8b949e';
-            const borderColor = getComputedStyle(document.documentElement).getPropertyValue('--border').trim() || '#30363d';
-
-            mainChart = new Chart(ctx, {
-                type: 'scatter',
-                data: { datasets: datasets },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    animation: false,  // Disable animation for smooth updates
-                    interaction: {
-                        mode: 'nearest',
-                        axis: 'x',
-                        intersect: false
-                    },
-                    onClick: (event, elements, chart) => {
-                        // Allow clicking on chart to pin threshold (like FlashInfer)
-                        const canvasPosition = Chart.helpers.getRelativePosition(event, chart);
-                        const xScale = chart.scales.x;
-                        const clickedX = xScale.getValueForPixel(canvasPosition.x);
-                        if (clickedX >= 0 && clickedX <= currentXAxisMax) {
-                            currentThreshold = parseFloat(Math.max(0, Math.min(clickedX, currentXAxisMax)).toFixed(2));
-                            updateThresholdLine();
-                        }
-                    },
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            callbacks: {
-                                title: (items) => `Threshold: ${items[0].parsed.x.toFixed(2)}x`,
-                                label: (context) => `${context.dataset.label}: ${context.parsed.y.toFixed(1)}%`
-                            }
-                        },
-                        annotation: {
-                            annotations: {
-                                thresholdLine: {
-                                    type: 'line',
-                                    xMin: currentThreshold,
-                                    xMax: currentThreshold,
-                                    borderColor: '#58a6ff',
-                                    borderWidth: 2,
-                                    label: {
-                                        display: true,
-                                        content: `p = ${currentThreshold.toFixed(2)}`,
-                                        position: 'start',
-                                        backgroundColor: 'rgba(88, 166, 255, 0.8)',
-                                        color: '#fff',
-                                        font: { size: 11 },
-                                        padding: 4
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            type: 'linear',
-                            min: 0,
-                            max: currentXAxisMax,
-                            title: {
-                                display: true,
-                                text: 'Speedup Threshold',
-                                color: textColor
-                            },
-                            grid: { color: borderColor, drawBorder: false },
-                            ticks: {
-                                color: textColor,
-                                callback: (value) => value.toFixed(1) + 'x'
-                            }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'Percentage of Kernels',
-                                color: textColor
-                            },
-                            min: 0,
-                            max: 100,
-                            grid: { color: borderColor, drawBorder: false },
-                            ticks: {
-                                color: textColor,
-                                callback: (value) => value + '%'
-                            }
-                        }
-                    }
-                }
-            });
-
-            // Update threshold display
-            updateThresholdLine();
-        }
-
-        function renderCorrectnessChart(ctx) {
-            const levels = ['Level 1', 'Level 2', 'Level 3'];
-            const expected = [100, 100, 50];
-
-            const textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-muted').trim() || '#8b949e';
-            const borderColor = getComputedStyle(document.documentElement).getPropertyValue('--border').trim() || '#30363d';
-
-            const datasets = leaderboardData.map((entry, index) => {
-                const stats = entry.level_stats || {};
-                return {
-                    label: entry.display_name || entry.id,
-                    data: [
-                        stats.level1?.correct || 0,
-                        stats.level2?.correct || 0,
-                        stats.level3?.correct || 0
-                    ],
-                    backgroundColor: MODEL_COLORS[index % MODEL_COLORS.length],
-                    borderRadius: 4,
-                    hidden: hiddenDatasets.has(index)
-                };
-            });
-
-            mainChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: levels,
-                    datasets: datasets
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            callbacks: {
-                                label: (context) => {
-                                    const exp = expected[context.dataIndex];
-                                    return `${context.dataset.label}: ${context.parsed.y}/${exp}`;
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            grid: { display: false },
-                            ticks: { color: textColor }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'Correct Kernels',
-                                color: textColor
-                            },
-                            grid: { color: borderColor, drawBorder: false },
-                            ticks: { color: textColor }
-                        }
-                    }
-                }
-            });
-        }
-
-        function updateThresholdLine() {
-            // Update the chart annotation if chart exists (for click-to-pin behavior)
-            if (mainChart && mainChart.options.plugins.annotation) {
-                const annotation = mainChart.options.plugins.annotation.annotations.thresholdLine;
-                annotation.xMin = currentThreshold;
-                annotation.xMax = currentThreshold;
-                annotation.label.content = `p = ${currentThreshold.toFixed(2)}`;
-                mainChart.update('none'); // Update without animation for smooth interaction
-            }
-        }
-
-        // Smooth chart range update - just changes x-axis scale, no data recalculation
-        function updateChartRange() {
-            if (!mainChart || currentChartType !== 'fastp') return;
-
-            // Just update the x-axis max - data stays the same!
-            mainChart.options.scales.x.max = currentXAxisMax;
-
-            // Update annotation position (clamp to visible range)
-            if (mainChart.options.plugins.annotation) {
-                const annotation = mainChart.options.plugins.annotation.annotations.thresholdLine;
-                const clampedThreshold = Math.min(currentThreshold, currentXAxisMax);
-                annotation.xMin = clampedThreshold;
-                annotation.xMax = clampedThreshold;
-                annotation.label.content = `p = ${clampedThreshold.toFixed(2)}`;
-            }
-
-            // Update without animation for instant response
-            mainChart.update('none');
-        }
-
-        // Throttled update using requestAnimationFrame
-        function scheduleChartUpdate() {
-            if (rafPending) return;
-            rafPending = true;
-            requestAnimationFrame(() => {
-                updateChartRange();
-                rafPending = false;
-            });
-        }
-
-        // Chart tab switching
-        document.querySelectorAll('#chart-tabs .tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                document.querySelectorAll('#chart-tabs .tab').forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                currentChartType = tab.dataset.chart;
-
-                const titleEl = document.getElementById('chart-title-text');
-                const controlsEl = document.getElementById('threshold-controls');
-                const descEl = document.getElementById('tab-description');
-
-                if (currentChartType === 'fastp') {
-                    titleEl.innerHTML = 'fast<sub>p</sub>';
-                    controlsEl.classList.remove('hidden');
-                    descEl.textContent = 'Percentage of kernels achieving at least P× speedup over baseline. Higher is better. Click on the chart to pin a threshold.';
-                } else {
-                    titleEl.textContent = 'Correctness by Level';
-                    controlsEl.classList.add('hidden');
-                    descEl.textContent = 'Number of kernels producing correct output for each difficulty level. Level 1 has 100 problems, Level 2 has 100, and Level 3 has 50.';
-                }
-
-                renderChart();
-            });
-        });
-
-        // P range slider - controls x-axis zoom (smooth update with RAF throttling)
-        document.getElementById('range-slider').addEventListener('input', (e) => {
-            currentXAxisMax = parseFloat(e.target.value);
-            document.getElementById('range-value').textContent = currentXAxisMax.toFixed(1) + 'x';
-
-            // Clamp threshold to be within visible range
-            if (currentThreshold > currentXAxisMax) {
-                currentThreshold = currentXAxisMax;
-            }
-
-            // Use requestAnimationFrame for smooth updates
-            scheduleChartUpdate();
-        });
-
-        // Sort handlers
-        document.querySelectorAll('th.sortable').forEach(th => {
-            th.addEventListener('click', () => {
-                const field = th.dataset.sort;
-                if (currentSort.field === field) {
-                    currentSort.direction = currentSort.direction === 'desc' ? 'asc' : 'desc';
-                } else {
-                    currentSort.field = field;
-                    currentSort.direction = 'desc';
-                }
-                sortAndRender();
-            });
-        });
-
-        // Initialize
-        loadLeaderboard();
-    </script>
 </body>
 </html>

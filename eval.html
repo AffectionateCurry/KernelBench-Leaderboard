@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluation - KernelBench</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+    <style>
+        /* Eval page specific styles */
+        .eval-body {
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        .eval-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .eval-header {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.25rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .eval-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .eval-subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        .eval-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.375rem 0.75rem;
+            background: rgba(210, 153, 34, 0.15);
+            border: 1px solid rgba(210, 153, 34, 0.3);
+            border-radius: 0.375rem;
+            font-size: 0.8125rem;
+            color: var(--warning);
+            margin-bottom: 1rem;
+        }
+
+        .eval-content {
+            line-height: 1.8;
+        }
+
+        .eval-content h2 {
+            font-size: 1.375rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .eval-content h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .eval-content p {
+            font-size: 0.9375rem;
+            color: var(--text-muted);
+            margin-bottom: 0.875rem;
+        }
+
+        .eval-content strong {
+            color: var(--text);
+        }
+
+        .eval-content a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .eval-content a:hover {
+            text-decoration: underline;
+        }
+
+        .eval-content ul, .eval-content ol {
+            margin-bottom: 0.875rem;
+            padding-left: 1.25rem;
+        }
+
+        .eval-content li {
+            font-size: 0.9375rem;
+            color: var(--text-muted);
+            margin-bottom: 0.375rem;
+        }
+
+        .eval-content code {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--bg-card);
+            padding: 0.125rem 0.375rem;
+            border-radius: 0.25rem;
+            font-size: 0.8125rem;
+            color: var(--accent);
+        }
+
+        /* Warning callout */
+        .callout {
+            padding: 1rem 1.25rem;
+            border-radius: 0.5rem;
+            margin: 1.25rem 0;
+        }
+
+        .callout-warning {
+            background: rgba(210, 153, 34, 0.1);
+            border: 1px solid rgba(210, 153, 34, 0.3);
+            border-left: 4px solid var(--warning);
+        }
+
+        .callout-info {
+            background: rgba(88, 166, 255, 0.1);
+            border: 1px solid rgba(88, 166, 255, 0.3);
+            border-left: 4px solid var(--accent);
+        }
+
+        .callout-title {
+            font-weight: 600;
+            font-size: 0.9375rem;
+            margin-bottom: 0.375rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .callout-warning .callout-title {
+            color: var(--warning);
+        }
+
+        .callout-info .callout-title {
+            color: var(--accent);
+        }
+
+        .callout p {
+            margin-bottom: 0;
+        }
+
+        /* Quote block */
+        .quote-block {
+            background: var(--bg-card);
+            border-left: 4px solid var(--accent);
+            padding: 1rem 1.25rem;
+            margin: 1.25rem 0;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+
+        .quote-text {
+            font-size: 1rem;
+            font-style: italic;
+            color: var(--text);
+            margin-bottom: 0.375rem;
+        }
+
+        .quote-author {
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+        }
+
+        /* Resource cards */
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.875rem;
+            margin: 1.25rem 0;
+        }
+
+        .resource-card {
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .resource-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .resource-card-title {
+            font-weight: 600;
+            font-size: 0.9375rem;
+            color: var(--text);
+            margin-bottom: 0.25rem;
+        }
+
+        .resource-card-desc {
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .resource-card-arrow {
+            margin-top: auto;
+            padding-top: 0.625rem;
+            font-size: 0.8125rem;
+            color: var(--accent);
+        }
+
+        /* Disclaimer box */
+        .disclaimer-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 1rem 1.25rem;
+            margin: 1.5rem 0;
+        }
+
+        .disclaimer-title {
+            font-weight: 600;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.375rem;
+        }
+
+        .disclaimer-text {
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* Adversarial examples list */
+        .adversarial-list {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 1rem 1.25rem;
+            margin: 0.875rem 0;
+        }
+
+        .adversarial-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.875rem;
+        }
+
+        .adversarial-list li:last-child {
+            border-bottom: none;
+        }
+
+        /* Shoutout section */
+        .shoutout {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+        }
+
+        .shoutout strong {
+            color: var(--text);
+        }
+    </style>
+</head>
+<body class="eval-body">
+    <!-- Header -->
+    <header class="header">
+        <a href="index.html" class="logo">
+            <img src="assets/KernelBenchMascot-removebg-preview.png" alt="KernelBench" class="logo-img">
+            <span>KernelBench</span>
+        </a>
+        <nav class="nav">
+<a href="index.html" class="nav-link">Home</a>
+                <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+                <a href="kernels.html" class="nav-link">Kernels</a>
+                <a href="models.html" class="nav-link">Models</a>
+                <a href="eval.html" class="nav-link active">Eval</a>
+                <a href="submit.html" class="nav-link">Submit</a>
+            <div class="nav-dropdown">
+                <button class="nav-dropdown-toggle">
+                    About <span class="nav-dropdown-arrow">▼</span>
+                </button>
+                <div class="nav-dropdown-menu">
+                    <a href="https://arxiv.org/abs/2502.10517" class="nav-dropdown-item" target="_blank">
+                        <span class="nav-dropdown-item-icon">📄</span>
+                        Paper
+                        <span class="nav-dropdown-item-arrow">↗</span>
+                    </a>
+                    <a href="https://github.com/ScalingIntelligence/KernelBench" class="nav-dropdown-item" target="_blank">
+                        <span class="nav-dropdown-item-icon">💻</span>
+                        GitHub
+                        <span class="nav-dropdown-item-arrow">↗</span>
+                    </a>
+                </div>
+            </div>
+            <button class="theme-toggle" id="theme-toggle" title="Toggle theme">
+                <span class="theme-icon"></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="eval-container">
+        <div class="eval-header">
+            <div class="eval-badge">
+                <span>🚧</span>
+                <span>Work in Progress</span>
+            </div>
+            <h1 class="eval-title">Evaluation Guide</h1>
+            <p class="eval-subtitle">Notes on benchmarking, correctness checking, and avoiding reward hacking.</p>
+        </div>
+
+        <div class="eval-content">
+            <div class="callout callout-warning">
+                <div class="callout-title">
+                    <span>⚠️</span>
+                    <span>Be Extra Careful!</span>
+                </div>
+                <p>Always be paranoid about suspiciously good results — kernel engineers and existing compilers are already pretty good, so a <strong>>2x speedup</strong> for anything is highly unlikely.</p>
+            </div>
+
+            <div class="quote-block">
+                <div class="quote-text">"If you beat cuDNN by more than 10%, think again."</div>
+                <div class="quote-author">— <a href="https://x.com/itsclivetime/status/1992155951630307633" target="_blank">@itsclivetime</a></div>
+            </div>
+
+            <p>If the model can reward hack, it will find ways to reward hack! This can especially happen during RL training or evolutionary search.</p>
+
+            <h3>Recommended Resources</h3>
+            <div class="resource-grid">
+                <a href="https://scalingintelligence.stanford.edu/blogs/kernelbenchv01/" class="resource-card" target="_blank">
+                    <div class="resource-card-title">KernelBench v0.1 Release</div>
+                    <div class="resource-card-desc">Official release blog post with evaluation methodology updates.</div>
+                    <div class="resource-card-arrow">Read more →</div>
+                </a>
+                <a href="https://arxiv.org/abs/2507.11948" class="resource-card" target="_blank">
+                    <div class="resource-card-title">Kevin Project</div>
+                    <div class="resource-card-desc">Cognition and Stanford's research on various hacking behaviors observed in RL training.</div>
+                    <div class="resource-card-arrow">Read paper →</div>
+                </a>
+                <a href="https://deep-reinforce.com/defense_kernel_hack.html" class="resource-card" target="_blank">
+                    <div class="resource-card-title">Hacks and Defenses</div>
+                    <div class="resource-card-desc">Jiwei Li's blogpost on defense strategies for automatic GPU kernel generation.</div>
+                    <div class="resource-card-arrow">Read more →</div>
+                </a>
+                <a href="https://deep-reinforce.com/correctness_check.html" class="resource-card" target="_blank">
+                    <div class="resource-card-title">Correctness Checking</div>
+                    <div class="resource-card-desc">Detailed guide on verifying kernel correctness and common pitfalls.</div>
+                    <div class="resource-card-arrow">Read more →</div>
+                </a>
+            </div>
+
+            <div class="disclaimer-box">
+                <div class="disclaimer-title">Disclaimer</div>
+                <div class="disclaimer-text">
+                    KernelBench is an open-source evaluation framework. Due to limited bandwidth, the KernelBench team does not inspect, validate, or endorse any third-party kernels or reported results. Users are welcome to use the software infrastructure for evaluation, but should independently verify all results.
+                </div>
+            </div>
+
+            <h2>Methodology</h2>
+            <p>To ensure <strong>consistency and reproducibility</strong>, we recommend using <code>modal</code>. We have provided (and are adding more) various Modal cloud functions to standardize the evaluation environment.</p>
+
+            <h3>Correctness</h3>
+            <p>Correctness verification is critical for valid benchmarking. We also want to highlight community efforts such as <a href="https://www.youtube.com/watch?v=BTfjdyZOKww" target="_blank">BackendBench</a>.</p>
+
+            <h3>Performance</h3>
+            <p>We highly recommend watching this <a href="https://www.youtube.com/watch?v=1i7dxoAfKOU" target="_blank">lecture from GPU Mode</a> on kernel profiling.</p>
+
+            <p>We have (and continue to) implement various approaches to conduct kernel timing to understand the tradeoffs. Check out <code>timing.py</code> to see available timing methods and <code>src/unit_tests/test_eval_timing.py</code> to test various timing methods including:</p>
+            <ul>
+                <li>CUDA event markers (<code>cuda_event</code>)</li>
+                <li>Triton's <code>do_bench</code></li>
+                <li>Host time end-to-end timing (<code>host_time</code>)</li>
+            </ul>
+
+            <h2>Unit Tests with Adversarial Examples</h2>
+            <p>We've included unit tests for the eval script in <code>src/unit_tests/test_eval_adversarial.py</code>. These tests run adversarial kernels (see <code>src/unit_tests/test_kernels/</code>) that contain examples of reward hacking that we've seen from LLMs and ensures that the eval script catches them.</p>
+
+            <div class="callout callout-info">
+                <div class="callout-title">
+                    <span>🔍</span>
+                    <span>Known Adversarial Patterns</span>
+                </div>
+                <p>Our tests catch these behaviors by failing correctness checks or flagging excessive speedups:</p>
+            </div>
+
+            <ul class="adversarial-list">
+                <li><strong>Computation caching:</strong> Reusing computations cached during the PyTorch reference execution</li>
+                <li><strong>Input modification:</strong> Modifying inputs to cheat correctness checks</li>
+                <li><strong>Stream manipulation:</strong> Moving computation to a non-default CUDA stream</li>
+            </ul>
+
+            <p>We will continue to add more tests as we explore additional adversarial scenarios.</p>
+
+            <div class="callout callout-info">
+                <div class="callout-title">
+                    <span>💡</span>
+                    <span>Help Us Improve</span>
+                </div>
+                <p>KernelBench is an ongoing open-source effort — please help us with <a href="https://github.com/ScalingIntelligence/KernelBench/issues" target="_blank">issues</a> and <a href="https://github.com/ScalingIntelligence/KernelBench/pulls" target="_blank">PRs</a>!</p>
+            </div>
+
+            <div class="shoutout">
+                <strong>Shoutout</strong> to @bkal01, @palic, @miru_why, @ngc92, @itsclivetime for their suggestions and feedback.
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <span class="footer-text">KernelBench Leaderboard</span>
+        </div>
+    </footer>
+
+    <script src="js/common.js"></script>
+</body>
+</html>
+
