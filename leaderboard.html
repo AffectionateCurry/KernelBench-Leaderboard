@@ -93,17 +93,24 @@
                         <div class="eval-info-metric">
                             <div class="eval-info-metric-title">GeoMean Speedup</div>
                             <p class="eval-info-metric-desc">
-                                <strong>Geometric Mean</strong> of speedups across all <em>correct</em> kernels. This single number summarizes overall performance — 
-                                a GeoMean of <strong>1.0×</strong> means the model matches PyTorch on average, while <strong>>1.0×</strong> means it's faster overall.
+                                <strong>Geometric Mean</strong> of speedups across all <em>correct</em> kernels vs <strong>torch.compile</strong> (inductor) baseline.
+                                A GeoMean of <strong>1.0×</strong> means the model matches torch.compile on average, while <strong>>1.0×</strong> means it's faster.
                                 The leaderboard is ranked by GeoMean by default.
                             </p>
                         </div>
                         <div class="eval-info-metric">
                             <div class="eval-info-metric-title">Understanding fast<sub>p</sub></div>
                             <p class="eval-info-metric-desc">
-                                <strong>fast<sub>p</sub></strong> measures the fraction of kernels that are both <em>correct</em> and achieve at least <em>p×</em> speedup over PyTorch. 
-                                For example, <strong>fast<sub>1</sub></strong> = percentage faster than PyTorch, <strong>fast<sub>2</sub></strong> = percentage at least 2× faster.
-                                The chart shows this across different thresholds.
+                                <strong>fast<sub>p</sub></strong> measures the fraction of kernels that are both <em>correct</em> and achieve at least <em>p×</em> speedup over torch.compile.
+                                For example, <strong>fast<sub>1</sub></strong> = percentage faster than torch.compile, <strong>fast<sub>2</sub></strong> = percentage at least 2× faster.
+                            </p>
+                        </div>
+                        <div class="eval-info-metric">
+                            <div class="eval-info-metric-title">Baseline Types</div>
+                            <p class="eval-info-metric-desc">
+                                <strong>torch.compile</strong> (inductor): PyTorch's optimizing compiler — a strong baseline.
+                                <strong>torch eager</strong>: Standard PyTorch execution — the easier baseline to beat.
+                                Kernel detail pages show speedups vs both baselines.
                             </p>
                         </div>
                     </div>
@@ -112,6 +119,17 @@
                     </div>
                 </div>
             </details>
+
+            <!-- Baseline Mode Toggle -->
+            <div class="baseline-toggle-container">
+                <span class="baseline-label">Baseline Mode:</span>
+                <div class="baseline-toggle" id="baseline-toggle">
+                    <button class="baseline-btn active" data-mode="smart" title="Level 1 uses Eager, Levels 2-3 use Compile">Smart</button>
+                    <button class="baseline-btn" data-mode="compile" title="All levels vs torch.compile">vs Compile</button>
+                    <button class="baseline-btn" data-mode="eager" title="All levels vs torch eager">vs Eager</button>
+                </div>
+                <span class="baseline-info" id="baseline-info">L1: Eager, L2-3: Compile</span>
+            </div>
 
             <!-- Rankings Table -->
             <div class="table-container">
@@ -184,6 +202,7 @@
     <script src="js/common.js"></script>
     <script>
         let leaderboardData = [];
+        let kernelsData = null;  // Kernel-level data with dual speedups
         let detailedResults = {};
         let currentSort = { field: 'geo_mean', direction: 'desc' };
         let mainChart = null;
@@ -193,6 +212,60 @@
         let precomputedChartData = null;  // Pre-computed data for smooth updates
         let rafPending = false;  // For requestAnimationFrame throttling
         let hiddenDatasets = new Set();  // Track which datasets are hidden
+        let baselineMode = 'smart';  // 'smart', 'compile', or 'eager'
+
+        // Get the appropriate speedup for a kernel based on baseline mode
+        function getSpeedup(modelResult, level) {
+            if (!modelResult) return 0;
+            if (baselineMode === 'compile') {
+                return modelResult.speedup_vs_compile || modelResult.speedup || 0;
+            } else if (baselineMode === 'eager') {
+                return modelResult.speedup_vs_eager || 0;
+            } else {
+                // Smart mode: Level 1 uses eager, Levels 2-3 use compile
+                if (level === 1) {
+                    return modelResult.speedup_vs_eager || 0;
+                } else {
+                    return modelResult.speedup_vs_compile || modelResult.speedup || 0;
+                }
+            }
+        }
+
+        // Calculate metrics for a model based on current baseline mode
+        function calculateModelMetrics(modelId) {
+            if (!kernelsData) return null;
+
+            const modelKernels = kernelsData.kernels.filter(k => k.models && k.models[modelId]);
+            if (modelKernels.length === 0) return null;
+
+            let totalCorrect = 0;
+            let totalCompiled = 0;
+            let fastCount = 0;
+            let speedups = [];
+
+            modelKernels.forEach(kernel => {
+                const result = kernel.models[modelId];
+                if (result.compiled) totalCompiled++;
+                if (result.correct) {
+                    totalCorrect++;
+                    const speedup = getSpeedup(result, kernel.level);
+                    if (speedup >= 1.0) fastCount++;
+                    if (speedup > 0) speedups.push(speedup);
+                }
+            });
+
+            const geoMean = speedups.length > 0
+                ? Math.exp(speedups.reduce((sum, s) => sum + Math.log(s), 0) / speedups.length)
+                : 0;
+
+            return {
+                geo_mean: geoMean,
+                fast_p_1_0: modelKernels.length > 0 ? fastCount / modelKernels.length : 0,
+                total_correct: totalCorrect,
+                total_compiled: totalCompiled,
+                total_submitted: modelKernels.length
+            };
+        }
 
         async function loadLeaderboard() {
             const loading = document.getElementById('loading');
@@ -200,10 +273,19 @@
             const emptyState = document.getElementById('empty-state');
 
             try {
-                const response = await fetch('data/metadata.json');
-                if (!response.ok) throw new Error('Failed to fetch');
+                // Load both metadata and kernels data
+                const [metadataRes, kernelsRes] = await Promise.all([
+                    fetch('data/metadata.json'),
+                    fetch('data/kernels.json')
+                ]);
 
-                leaderboardData = await response.json();
+                if (!metadataRes.ok) throw new Error('Failed to fetch metadata');
+
+                leaderboardData = await metadataRes.json();
+
+                if (kernelsRes.ok) {
+                    kernelsData = await kernelsRes.json();
+                }
 
                 loading.classList.add('hidden');
 
@@ -215,6 +297,7 @@
                     renderModelLegend();
                     await loadDetailedResults();
                     renderChart();
+                    setupBaselineToggle();
                 }
             } catch (error) {
                 console.error('Failed to load leaderboard:', error);
@@ -234,6 +317,31 @@
                     console.warn(`Could not load results for ${uniqueId}`);
                 }
             }
+        }
+
+        function setupBaselineToggle() {
+            document.querySelectorAll('#baseline-toggle .baseline-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('#baseline-toggle .baseline-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    baselineMode = btn.dataset.mode;
+
+                    // Update info text
+                    const infoEl = document.getElementById('baseline-info');
+                    if (baselineMode === 'smart') {
+                        infoEl.textContent = 'L1: Eager, L2-3: Compile';
+                    } else if (baselineMode === 'compile') {
+                        infoEl.textContent = 'All levels vs torch.compile';
+                    } else {
+                        infoEl.textContent = 'All levels vs torch eager';
+                    }
+
+                    // Recompute and re-render
+                    precomputedChartData = null;  // Clear chart cache
+                    sortAndRender();
+                    renderChart();
+                });
+            });
         }
 
         function renderModelLegend() {
@@ -273,21 +381,33 @@
         }
 
         function sortAndRender() {
-            const sorted = [...leaderboardData].sort((a, b) => {
+            // Calculate metrics for each model based on current baseline mode
+            const modelsWithMetrics = leaderboardData.map(entry => {
+                const uniqueId = entry.unique_id || entry.id;
+                const calculatedMetrics = calculateModelMetrics(uniqueId);
+                return {
+                    ...entry,
+                    calculatedMetrics: calculatedMetrics || entry.metrics  // Fallback to original if no kernels data
+                };
+            });
+
+            const sorted = [...modelsWithMetrics].sort((a, b) => {
                 let aVal, bVal;
+                const aMetrics = a.calculatedMetrics || a.metrics || {};
+                const bMetrics = b.calculatedMetrics || b.metrics || {};
 
                 switch (currentSort.field) {
                     case 'geo_mean':
-                        aVal = a.metrics?.geo_mean || 0;
-                        bVal = b.metrics?.geo_mean || 0;
+                        aVal = aMetrics.geo_mean || 0;
+                        bVal = bMetrics.geo_mean || 0;
                         break;
                     case 'fast_p':
-                        aVal = a.metrics?.fast_p_1_0 || 0;
-                        bVal = b.metrics?.fast_p_1_0 || 0;
+                        aVal = aMetrics.fast_p_1_0 || 0;
+                        bVal = bMetrics.fast_p_1_0 || 0;
                         break;
                     case 'correct':
-                        aVal = a.metrics?.total_correct || 0;
-                        bVal = b.metrics?.total_correct || 0;
+                        aVal = aMetrics.total_correct || 0;
+                        bVal = bMetrics.total_correct || 0;
                         break;
                     case 'date':
                         aVal = new Date(a.timestamp || 0);
@@ -313,10 +433,11 @@
                 const rank = index + 1;
                 const row = document.createElement('tr');
 
-                const geoMean = entry.metrics?.geo_mean || 0;
-                const fastP = entry.metrics?.fast_p_1_0 || 0;
-                const totalCorrect = entry.metrics?.total_correct || 0;
-                const totalSubmitted = entry.metrics?.total_submitted || 0;
+                const metrics = entry.calculatedMetrics || entry.metrics || {};
+                const geoMean = metrics.geo_mean || 0;
+                const fastP = metrics.fast_p_1_0 || 0;
+                const totalCorrect = metrics.total_correct || 0;
+                const totalSubmitted = metrics.total_submitted || 0;
                 const uniqueId = entry.unique_id || entry.id;
 
                 let rankClass = 'rank';
@@ -374,14 +495,34 @@
             const textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-muted').trim() || '#8b949e';
             const borderColor = getComputedStyle(document.documentElement).getPropertyValue('--border').trim() || '#30363d';
 
+            // Calculate GeoMeans based on current baseline mode
+            const modelsWithGeoMean = leaderboardData.map(entry => {
+                const uniqueId = entry.unique_id || entry.id;
+                const metrics = calculateModelMetrics(uniqueId);
+                return {
+                    ...entry,
+                    calculatedGeoMean: metrics ? metrics.geo_mean : (entry.metrics?.geo_mean || 0)
+                };
+            });
+
             // Sort models by GeoMean for consistent display
-            const sortedData = [...leaderboardData].sort((a, b) => 
-                (b.metrics?.geo_mean || 0) - (a.metrics?.geo_mean || 0)
+            const sortedData = [...modelsWithGeoMean].sort((a, b) =>
+                (b.calculatedGeoMean || 0) - (a.calculatedGeoMean || 0)
             );
 
             const labels = sortedData.map(entry => entry.display_name || entry.id);
-            const geoMeans = sortedData.map(entry => entry.metrics?.geo_mean || 0);
+            const geoMeans = sortedData.map(entry => entry.calculatedGeoMean || 0);
             const colors = sortedData.map((_, index) => MODEL_COLORS[index % MODEL_COLORS.length]);
+
+            // Dynamic baseline label based on mode
+            let baselineLabel = 'Baseline (1.0×)';
+            if (baselineMode === 'compile') {
+                baselineLabel = 'torch.compile (1.0×)';
+            } else if (baselineMode === 'eager') {
+                baselineLabel = 'torch eager (1.0×)';
+            } else {
+                baselineLabel = 'Smart baseline (1.0×)';
+            }
 
             mainChart = new Chart(ctx, {
                 type: 'bar',
@@ -416,7 +557,7 @@
                                     borderDash: [5, 5],
                                     label: {
                                         display: true,
-                                        content: 'PyTorch baseline (1.0×)',
+                                        content: baselineLabel,
                                         position: 'end',
                                         backgroundColor: 'rgba(88, 166, 255, 0.8)',
                                         color: '#fff',
@@ -443,7 +584,7 @@
                         },
                         y: {
                             grid: { display: false },
-                            ticks: { 
+                            ticks: {
                                 color: textColor,
                                 font: { size: 10 }
                             }
@@ -464,15 +605,24 @@
             }
 
             const datasets = leaderboardData.map((entry, index) => {
-                const result = detailedResults[entry.unique_id || entry.id];
+                const uniqueId = entry.unique_id || entry.id;
 
-                // Pre-compute all data points as {x, y} coordinates
+                // Pre-compute all data points as {x, y} coordinates using kernelsData
                 const data = allThresholds.map(threshold => {
-                    let y;
-                    if (result && result.kernel_results) {
-                        const correct = result.kernel_results.filter(k => k.correct && k.speedup >= threshold);
-                        y = (correct.length / result.kernel_results.length) * 100;
+                    let y = 0;
+                    if (kernelsData) {
+                        const modelKernels = kernelsData.kernels.filter(k => k.models && k.models[uniqueId]);
+                        if (modelKernels.length > 0) {
+                            const passing = modelKernels.filter(kernel => {
+                                const result = kernel.models[uniqueId];
+                                if (!result.correct) return false;
+                                const speedup = getSpeedup(result, kernel.level);
+                                return speedup >= threshold;
+                            });
+                            y = (passing.length / modelKernels.length) * 100;
+                        }
                     } else {
+                        // Fallback to original metrics if no kernels data
                         const metrics = entry.metrics || {};
                         if (threshold <= 0) y = (metrics.correct_rate || 0) * 100;
                         else if (threshold <= 1.0) y = (metrics.fast_p_1_0 || 0) * 100;

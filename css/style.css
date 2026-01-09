@@ -666,6 +666,62 @@ tbody tr:last-child td {
     border-color: var(--accent);
 }
 
+/* Baseline Toggle */
+.baseline-toggle-container {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.baseline-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text);
+}
+
+.baseline-toggle {
+    display: flex;
+    gap: 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.baseline-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    border-right: 1px solid var(--border);
+}
+
+.baseline-btn:last-child {
+    border-right: none;
+}
+
+.baseline-btn:hover {
+    color: var(--text);
+    background: var(--bg-hover);
+}
+
+.baseline-btn.active {
+    color: #fff;
+    background: var(--accent);
+}
+
+.baseline-info {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
 /* Cards Grid */
 .cards-grid {
     display: grid;

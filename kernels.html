@@ -529,6 +529,15 @@
             });
         }
 
+        // Get default speedup based on level (L1: eager, L2-3: compile)
+        function getDefaultSpeedup(result, level) {
+            if (level === 1) {
+                return result.speedup_vs_eager || 0;
+            } else {
+                return result.speedup_vs_compile || result.speedup || 0;
+            }
+        }
+
         function createKernelCard(kernel) {
             const card = document.createElement('div');
             card.className = 'card';
@@ -538,15 +547,32 @@
 
             const modelResults = Object.entries(kernel.models || {});
             const correctModels = modelResults.filter(([_, r]) => r.correct);
-            const bestSpeedup = correctModels.length > 0
-                ? Math.max(...correctModels.map(([_, r]) => r.speedup))
+
+            // Get best speedup using level-appropriate baseline
+            const bestSpeedupDefault = correctModels.length > 0
+                ? Math.max(...correctModels.map(([_, r]) => getDefaultSpeedup(r, kernel.level)))
+                : 0;
+            const bestSpeedupCompile = correctModels.length > 0
+                ? Math.max(...correctModels.map(([_, r]) => r.speedup_vs_compile || r.speedup || 0))
+                : 0;
+            const bestSpeedupEager = correctModels.length > 0
+                ? Math.max(...correctModels.map(([_, r]) => r.speedup_vs_eager || 0))
                 : 0;
 
             let speedupClass = 'bad';
-            if (bestSpeedup >= 1.0) speedupClass = 'good';
-            else if (bestSpeedup >= 0.8) speedupClass = 'warning';
+            if (bestSpeedupDefault >= 1.0) speedupClass = 'good';
+            else if (bestSpeedupDefault >= 0.8) speedupClass = 'warning';
 
-            const fillWidth = Math.min(bestSpeedup * 50, 100);
+            const fillWidth = Math.min(bestSpeedupDefault * 50, 100);
+            const compileTime = (kernel.baseline_time_compile || kernel.baseline_time).toFixed(2);
+            const eagerTime = (kernel.baseline_time_eager || kernel.baseline_time).toFixed(2);
+
+            // Show appropriate primary/secondary speedups based on level
+            const isL1 = kernel.level === 1;
+            const primaryLabel = isL1 ? 'vs Eager' : 'vs Compile';
+            const primarySpeedup = isL1 ? bestSpeedupEager : bestSpeedupCompile;
+            const secondaryLabel = isL1 ? 'vs Compile' : 'vs Eager';
+            const secondarySpeedup = isL1 ? bestSpeedupCompile : bestSpeedupEager;
 
             card.innerHTML = `
                 <div class="card-header">
@@ -561,11 +587,15 @@
                         <div class="progress-track">
                             <div class="progress-fill ${speedupClass}" style="width: ${fillWidth}%;"></div>
                         </div>
-                        <span class="progress-value">${bestSpeedup > 0 ? bestSpeedup.toFixed(2) + 'x' : '-'}</span>
+                        <span class="progress-value">${primarySpeedup > 0 ? primarySpeedup.toFixed(2) + 'x' : '-'}</span>
                     </div>
                     <div class="card-stats" style="margin-top: 0.75rem;">
                         <span><span class="card-stat-value">${correctModels.length}/${modelResults.length}</span> correct</span>
-                        <span>Baseline: <span class="card-stat-value">${kernel.baseline_time.toFixed(2)}ms</span></span>
+                        <span>${secondaryLabel}: <span class="card-stat-value">${secondarySpeedup > 0 ? secondarySpeedup.toFixed(2) + 'x' : '-'}</span></span>
+                    </div>
+                    <div class="card-stats" style="margin-top: 0.25rem; font-size: 0.7rem; color: var(--text-muted);">
+                        <span>Compile: ${compileTime}ms</span>
+                        <span>Eager: ${eagerTime}ms</span>
                     </div>
                 </div>
             `;
@@ -597,15 +627,36 @@
                 ? Math.max(...correctModels.map(([_, r]) => r.speedup))
                 : 0;
 
+            // Get best speedups against both baselines
+            const bestSpeedupCompile = correctModels.length > 0
+                ? Math.max(...correctModels.map(([_, r]) => r.speedup_vs_compile || r.speedup || 0))
+                : 0;
+            const bestSpeedupEager = correctModels.length > 0
+                ? Math.max(...correctModels.map(([_, r]) => r.speedup_vs_eager || 0))
+                : 0;
+
+            // Determine which baseline is primary based on level
+            const isL1 = kernel.level === 1;
+            const primaryBaseline = isL1 ? 'Eager' : 'Compile';
+            const primaryBestSpeedup = isL1 ? bestSpeedupEager : bestSpeedupCompile;
+
             const infoGrid = document.getElementById('kernel-info');
             infoGrid.innerHTML = `
-                <div class="info-item">
-                    <div class="info-label">Baseline Time</div>
-                    <div class="info-value">${kernel.baseline_time.toFixed(2)} ms</div>
+                <div class="info-item" style="${isL1 ? '' : 'border: 1px solid var(--accent);'}">
+                    <div class="info-label">Torch Compile Baseline ${!isL1 ? '(Default)' : ''}</div>
+                    <div class="info-value">${(kernel.baseline_time_compile || kernel.baseline_time).toFixed(2)} ms</div>
                 </div>
-                <div class="info-item">
-                    <div class="info-label">Best Speedup</div>
-                    <div class="info-value" style="color: ${bestSpeedup >= 1 ? 'var(--green)' : 'var(--text-primary)'}">${bestSpeedup > 0 ? bestSpeedup.toFixed(2) + 'x' : '-'}</div>
+                <div class="info-item" style="${isL1 ? 'border: 1px solid var(--accent);' : ''}">
+                    <div class="info-label">Torch Eager Baseline ${isL1 ? '(Default)' : ''}</div>
+                    <div class="info-value">${(kernel.baseline_time_eager || kernel.baseline_time).toFixed(2)} ms</div>
+                </div>
+                <div class="info-item" style="${!isL1 ? 'border: 1px solid var(--accent);' : ''}">
+                    <div class="info-label">Best vs Compile ${!isL1 ? '(Primary)' : ''}</div>
+                    <div class="info-value" style="color: ${bestSpeedupCompile >= 1 ? 'var(--green)' : 'var(--text-primary)'}">${bestSpeedupCompile > 0 ? bestSpeedupCompile.toFixed(2) + 'x' : '-'}</div>
+                </div>
+                <div class="info-item" style="${isL1 ? 'border: 1px solid var(--accent);' : ''}">
+                    <div class="info-label">Best vs Eager ${isL1 ? '(Primary)' : ''}</div>
+                    <div class="info-value" style="color: ${bestSpeedupEager >= 1 ? 'var(--green)' : 'var(--text-primary)'}">${bestSpeedupEager > 0 ? bestSpeedupEager.toFixed(2) + 'x' : '-'}</div>
                 </div>
                 <div class="info-item">
                     <div class="info-label">Correct Solutions</div>
@@ -647,14 +698,19 @@
 
             solutionsList.innerHTML = modelResults.map(([modelId, result], index) => {
                 const displayName = modelId.replace('_H100', '').replace(/_/g, ' ');
-                const speedup = result.speedup || 0;
+                const speedupCompile = result.speedup_vs_compile || result.speedup || 0;
+                const speedupEager = result.speedup_vs_eager || 0;
                 const isBest = index === bestIndex;
 
-                let speedupClass = 'bad';
-                if (speedup >= 1.0) speedupClass = 'good';
-                else if (speedup >= 0.8) speedupClass = 'warning';
+                let speedupCompileClass = 'bad';
+                if (speedupCompile >= 1.0) speedupCompileClass = 'good';
+                else if (speedupCompile >= 0.8) speedupCompileClass = 'warning';
 
-                const progressWidth = Math.min(speedup * 50, 100);
+                let speedupEagerClass = 'bad';
+                if (speedupEager >= 1.0) speedupEagerClass = 'good';
+                else if (speedupEager >= 0.8) speedupEagerClass = 'warning';
+
+                const progressWidthCompile = Math.min(speedupCompile * 50, 100);
 
                 const bestBadge = isBest ? '<span class="status-pill best">&#x1F3C6; Best</span>' : '';
 
@@ -704,11 +760,15 @@
                                     <div class="solution-stat-value">${result.runtime > 0 ? result.runtime.toFixed(2) + ' ms' : '-'}</div>
                                 </div>
                                 <div class="solution-stat">
-                                    <div class="solution-stat-label">Speedup</div>
-                                    <div class="solution-stat-value" style="color: ${speedup >= 1 ? 'var(--green)' : 'inherit'}">${speedup > 0 ? speedup.toFixed(2) + 'x' : '-'}</div>
+                                    <div class="solution-stat-label">vs Compile</div>
+                                    <div class="solution-stat-value" style="color: ${speedupCompile >= 1 ? 'var(--green)' : 'inherit'}">${speedupCompile > 0 ? speedupCompile.toFixed(2) + 'x' : '-'}</div>
+                                </div>
+                                <div class="solution-stat">
+                                    <div class="solution-stat-label">vs Eager</div>
+                                    <div class="solution-stat-value" style="color: ${speedupEager >= 1 ? 'var(--green)' : 'inherit'}">${speedupEager > 0 ? speedupEager.toFixed(2) + 'x' : '-'}</div>
                                 </div>
                                 <div class="solution-progress">
-                                    <div class="solution-progress-fill ${speedupClass}" style="width: ${progressWidth}%"></div>
+                                    <div class="solution-progress-fill ${speedupCompileClass}" style="width: ${progressWidthCompile}%"></div>
                                 </div>
                                 <span class="solution-expand-icon">&#x25BC;</span>
                             </div>
@@ -724,12 +784,24 @@
                                     <span class="detail-value">H100</span>
                                 </div>
                                 <div class="detail-item">
-                                    <span class="detail-label">Baseline</span>
-                                    <span class="detail-value">${kernel.baseline_time.toFixed(2)} ms</span>
-                                </div>
-                                <div class="detail-item">
                                     <span class="detail-label">Model Runtime</span>
                                     <span class="detail-value">${result.runtime > 0 ? result.runtime.toFixed(2) + ' ms' : '-'}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Compile Baseline</span>
+                                    <span class="detail-value">${(kernel.baseline_time_compile || kernel.baseline_time).toFixed(2)} ms</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Eager Baseline</span>
+                                    <span class="detail-value">${(kernel.baseline_time_eager || kernel.baseline_time).toFixed(2)} ms</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Speedup vs Compile</span>
+                                    <span class="detail-value" style="color: ${speedupCompile >= 1 ? 'var(--green)' : 'inherit'}">${speedupCompile > 0 ? speedupCompile.toFixed(2) + 'x' : '-'}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Speedup vs Eager</span>
+                                    <span class="detail-value" style="color: ${speedupEager >= 1 ? 'var(--green)' : 'inherit'}">${speedupEager > 0 ? speedupEager.toFixed(2) + 'x' : '-'}</span>
                                 </div>
                             </div>
                             ${errorHtml}

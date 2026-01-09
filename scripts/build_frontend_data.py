@@ -5,6 +5,10 @@ Builds kernels.json for the frontend by combining baseline times with eval resul
 This script generates a pre-computed JSON file containing per-kernel performance
 data across all models, enabling fast frontend loading without fetching multiple files.
 
+Supports dual baselines:
+- torch compile (inductor) baseline: H100.json
+- torch eager baseline: H100_eager.json
+
 Usage:
     python scripts/build_frontend_data.py
 """
@@ -21,15 +25,31 @@ RUNS_DIR = REPO_ROOT / "KernelBench" / "runs"
 PROBLEMS_DIR = REPO_ROOT / "KernelBench" / "KernelBench"
 
 
-def load_baselines(hardware: str = "H100") -> dict:
-    """Load baseline timing data for given hardware."""
-    baseline_path = BASELINES_DIR / f"{hardware}.json"
-    if not baseline_path.exists():
-        print(f"Warning: Baseline file not found: {baseline_path}")
-        return {}
+def load_baselines(hardware: str = "H100") -> tuple[dict, dict]:
+    """Load both baseline timing data for given hardware.
 
-    with open(baseline_path, 'r') as f:
-        return json.load(f)
+    Returns:
+        tuple: (compile_baselines, eager_baselines)
+    """
+    # Torch compile (inductor) baseline
+    compile_path = BASELINES_DIR / f"{hardware}.json"
+    compile_baselines = {}
+    if compile_path.exists():
+        with open(compile_path, 'r') as f:
+            compile_baselines = json.load(f)
+    else:
+        print(f"Warning: Compile baseline file not found: {compile_path}")
+
+    # Torch eager baseline
+    eager_path = BASELINES_DIR / f"{hardware}_eager.json"
+    eager_baselines = {}
+    if eager_path.exists():
+        with open(eager_path, 'r') as f:
+            eager_baselines = json.load(f)
+    else:
+        print(f"Warning: Eager baseline file not found: {eager_path}")
+
+    return compile_baselines, eager_baselines
 
 
 def load_metadata() -> list:
@@ -115,8 +135,14 @@ def get_compilation_error(result: dict) -> str:
     return error
 
 
-def build_kernels_data(baselines: dict, metadata: list) -> dict:
-    """Build comprehensive kernels data structure."""
+def build_kernels_data(compile_baselines: dict, eager_baselines: dict, metadata: list) -> dict:
+    """Build comprehensive kernels data structure with dual baselines.
+
+    Args:
+        compile_baselines: Torch compile (inductor) baseline times
+        eager_baselines: Torch eager baseline times
+        metadata: Leaderboard metadata entries
+    """
     kernels = []
     model_names = [entry.get('unique_id', entry.get('id')) for entry in metadata]
 
@@ -132,25 +158,28 @@ def build_kernels_data(baselines: dict, metadata: list) -> dict:
     # Process each level
     for level in [1, 2, 3]:
         level_key = f"level{level}"
-        if level_key not in baselines:
+        if level_key not in compile_baselines:
             continue
 
-        baseline_data = baselines[level_key]
+        compile_data = compile_baselines[level_key]
+        eager_data = eager_baselines.get(level_key, {})
 
         # Sort by problem number
         sorted_kernels = sorted(
-            baseline_data.items(),
+            compile_data.items(),
             key=lambda x: int(re.match(r'^(\d+)', x[0]).group(1)) if re.match(r'^(\d+)', x[0]) else 0
         )
 
-        for filename, baseline_info in sorted_kernels:
+        for filename, compile_info in sorted_kernels:
             # Extract problem ID from filename
             match = re.match(r'^(\d+)', filename)
             if not match:
                 continue
 
             problem_id = int(match.group(1))
-            baseline_time = baseline_info.get('mean', 0)
+            compile_time = compile_info.get('mean', 0)
+            eager_info = eager_data.get(filename, {})
+            eager_time = eager_info.get('mean', 0)
 
             # Load reference implementation code
             ref_code = load_reference_code(level, filename)
@@ -161,7 +190,11 @@ def build_kernels_data(baselines: dict, metadata: list) -> dict:
                 "problem_id": problem_id,
                 "name": clean_kernel_name(filename),
                 "filename": filename,
-                "baseline_time": baseline_time,
+                # Dual baseline times
+                "baseline_time_compile": compile_time,
+                "baseline_time_eager": eager_time,
+                # Keep backward compat alias (compile baseline is primary)
+                "baseline_time": compile_time,
                 "reference_code": ref_code,
                 "models": {}
             }
@@ -187,9 +220,14 @@ def build_kernels_data(baselines: dict, metadata: list) -> dict:
                         compiled = result.get('compiled', False)
                         correct = result.get('correctness', False)
 
-                        speedup = 0
-                        if correct and runtime > 0 and baseline_time > 0:
-                            speedup = baseline_time / runtime
+                        # Compute speedups against both baselines
+                        speedup_compile = 0
+                        speedup_eager = 0
+                        if correct and runtime > 0:
+                            if compile_time > 0:
+                                speedup_compile = compile_time / runtime
+                            if eager_time > 0:
+                                speedup_eager = eager_time / runtime
 
                         # Get compilation error if failed
                         error = get_compilation_error(result) if not compiled else ""
@@ -202,7 +240,11 @@ def build_kernels_data(baselines: dict, metadata: list) -> dict:
                             "compiled": compiled,
                             "correct": correct,
                             "runtime": runtime,
-                            "speedup": round(speedup, 4),
+                            # Dual speedups
+                            "speedup_vs_compile": round(speedup_compile, 4),
+                            "speedup_vs_eager": round(speedup_eager, 4),
+                            # Keep backward compat alias (vs compile is primary)
+                            "speedup": round(speedup_compile, 4),
                             "error": error,
                             "code": solution_code
                         }
@@ -224,20 +266,23 @@ def build_kernels_data(baselines: dict, metadata: list) -> dict:
 def main():
     print("Building frontend data...")
 
-    # Load baselines
-    baselines = load_baselines("H100")
-    if not baselines:
-        print("Error: No baseline data found")
+    # Load both baselines
+    compile_baselines, eager_baselines = load_baselines("H100")
+    if not compile_baselines:
+        print("Error: No compile baseline data found")
         return
 
-    print(f"Loaded baselines for {sum(len(v) for v in baselines.values())} kernels")
+    compile_count = sum(len(v) for v in compile_baselines.values())
+    eager_count = sum(len(v) for v in eager_baselines.values())
+    print(f"Loaded compile baselines for {compile_count} kernels")
+    print(f"Loaded eager baselines for {eager_count} kernels")
 
     # Load metadata
     metadata = load_metadata()
     print(f"Found {len(metadata)} models in metadata")
 
-    # Build kernels data
-    kernels_data = build_kernels_data(baselines, metadata)
+    # Build kernels data with dual baselines
+    kernels_data = build_kernels_data(compile_baselines, eager_baselines, metadata)
     print(f"Built data for {kernels_data['total_kernels']} kernels")
     print(f"  Level 1: {kernels_data['levels'][1]}")
     print(f"  Level 2: {kernels_data['levels'][2]}")

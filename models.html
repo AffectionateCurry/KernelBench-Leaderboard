@@ -85,10 +85,12 @@
                 <div class="stat-card">
                     <div class="stat-label">GeoMean Speedup</div>
                     <div class="stat-value" id="model-geomean">-</div>
+                    <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 0.25rem;">L1: vs Eager, L2-3: vs Compile</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">Fast@1x</div>
                     <div class="stat-value" id="model-fastp">-</div>
+                    <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 0.25rem;">L1: vs Eager, L2-3: vs Compile</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">Correct</div>
@@ -105,7 +107,7 @@
                 <h2 style="font-size: 1rem; font-weight: 600; margin-bottom: 1rem;">Performance by Level</h2>
                 <div class="level-grid">
                     <div class="level-card level-1">
-                        <div class="level-title">Level 1</div>
+                        <div class="level-title">Level 1 <span style="font-size: 0.7rem; color: var(--text-muted); font-weight: normal;">(vs Eager)</span></div>
                         <div class="level-stats">
                             <div class="level-stat">
                                 <span class="level-stat-label">Fast@1x</span>
@@ -122,7 +124,7 @@
                         </div>
                     </div>
                     <div class="level-card level-2">
-                        <div class="level-title">Level 2</div>
+                        <div class="level-title">Level 2 <span style="font-size: 0.7rem; color: var(--text-muted); font-weight: normal;">(vs Compile)</span></div>
                         <div class="level-stats">
                             <div class="level-stat">
                                 <span class="level-stat-label">Fast@1x</span>
@@ -139,7 +141,7 @@
                         </div>
                     </div>
                     <div class="level-card level-3">
-                        <div class="level-title">Level 3</div>
+                        <div class="level-title">Level 3 <span style="font-size: 0.7rem; color: var(--text-muted); font-weight: normal;">(vs Compile)</span></div>
                         <div class="level-stats">
                             <div class="level-stat">
                                 <span class="level-stat-label">Fast@1x</span>
@@ -186,13 +188,13 @@
                     <table>
                         <thead>
                             <tr>
-                                <th class="sortable" data-sort="level" style="width: 60px;">Level</th>
-                                <th class="sortable" data-sort="problem" style="width: 50px;">ID</th>
+                                <th class="sortable" data-sort="level" style="width: 50px;">Level</th>
+                                <th class="sortable" data-sort="problem" style="width: 40px;">ID</th>
                                 <th class="sortable" data-sort="name">Kernel</th>
-                                <th class="sortable" data-sort="status" style="width: 70px;">Status</th>
-                                <th class="sortable" data-sort="baseline" style="width: 90px;">Baseline</th>
-                                <th class="sortable" data-sort="runtime" style="width: 90px;">Runtime</th>
-                                <th class="sortable" data-sort="speedup" style="width: 90px;">Speedup</th>
+                                <th class="sortable" data-sort="status" style="width: 60px;">Status</th>
+                                <th class="sortable" data-sort="runtime" style="width: 80px;">Runtime</th>
+                                <th class="sortable" data-sort="speedup" style="width: 85px;">vs Compile</th>
+                                <th class="sortable" data-sort="speedup_eager" style="width: 85px;">vs Eager</th>
                             </tr>
                         </thead>
                         <tbody id="kernels-tbody"></tbody>
@@ -309,6 +311,15 @@
             setupFilters();
         }
 
+        // Smart mode: Level 1 uses eager baseline, Levels 2-3 use compile baseline
+        function getSmartSpeedup(result, level) {
+            if (level === 1) {
+                return result.speedup_vs_eager || 0;
+            } else {
+                return result.speedup_vs_compile || result.speedup || 0;
+            }
+        }
+
         function calculateModelStats(kernels, modelId) {
             let totalCorrect = 0, totalCompiled = 0, totalKernels = 0;
             let fastCount = 0;
@@ -321,8 +332,10 @@
                     if (result.compiled) totalCompiled++;
                     if (result.correct) {
                         totalCorrect++;
-                        if (result.speedup >= 1.0) fastCount++;
-                        if (result.speedup > 0) speedups.push(result.speedup);
+                        // Use smart mode: L1 vs eager, L2-3 vs compile
+                        const speedup = getSmartSpeedup(result, k.level);
+                        if (speedup >= 1.0) fastCount++;
+                        if (speedup > 0) speedups.push(speedup);
                     }
                 }
             });
@@ -350,7 +363,9 @@
                     if (result.compiled) compiled++;
                     if (result.correct) {
                         correct++;
-                        if (result.speedup >= 1.0) fast++;
+                        // Use level-appropriate baseline
+                        const speedup = getSmartSpeedup(result, level);
+                        if (speedup >= 1.0) fast++;
                     }
                 }
             });
@@ -384,18 +399,22 @@
                 const result = k.models[modelId];
                 if (!result || !result.correct) {
                     buckets['Failed']++;
-                } else if (result.speedup < 0.5) {
-                    buckets['<0.5x']++;
-                } else if (result.speedup < 0.8) {
-                    buckets['0.5-0.8x']++;
-                } else if (result.speedup < 1.0) {
-                    buckets['0.8-1.0x']++;
-                } else if (result.speedup < 1.5) {
-                    buckets['1.0-1.5x']++;
-                } else if (result.speedup < 2.0) {
-                    buckets['1.5-2.0x']++;
                 } else {
-                    buckets['>2.0x']++;
+                    // Use smart mode speedup based on level
+                    const speedup = getSmartSpeedup(result, k.level);
+                    if (speedup < 0.5) {
+                        buckets['<0.5x']++;
+                    } else if (speedup < 0.8) {
+                        buckets['0.5-0.8x']++;
+                    } else if (speedup < 1.0) {
+                        buckets['0.8-1.0x']++;
+                    } else if (speedup < 1.5) {
+                        buckets['1.0-1.5x']++;
+                    } else if (speedup < 2.0) {
+                        buckets['1.5-2.0x']++;
+                    } else {
+                        buckets['>2.0x']++;
+                    }
                 }
             });
 
@@ -474,9 +493,9 @@
                         valA = resultA.correct ? 2 : resultA.compiled ? 1 : 0;
                         valB = resultB.correct ? 2 : resultB.compiled ? 1 : 0;
                         break;
-                    case 'baseline': valA = a.baseline_time; valB = b.baseline_time; break;
                     case 'runtime': valA = resultA.runtime || 999999; valB = resultB.runtime || 999999; break;
-                    case 'speedup': valA = resultA.speedup || 0; valB = resultB.speedup || 0; break;
+                    case 'speedup': valA = resultA.speedup_vs_compile || resultA.speedup || 0; valB = resultB.speedup_vs_compile || resultB.speedup || 0; break;
+                    case 'speedup_eager': valA = resultA.speedup_vs_eager || 0; valB = resultB.speedup_vs_eager || 0; break;
                     default: valA = a.level; valB = b.level;
                 }
 
@@ -488,8 +507,13 @@
 
             tbody.innerHTML = filtered.map(kernel => {
                 const result = kernel.models[modelId] || {};
-                const speedupInfo = result.correct && result.speedup > 0
-                    ? formatSpeedup(result.speedup)
+                const speedupCompile = result.speedup_vs_compile || result.speedup || 0;
+                const speedupEager = result.speedup_vs_eager || 0;
+                const speedupCompileInfo = result.correct && speedupCompile > 0
+                    ? formatSpeedup(speedupCompile)
+                    : { class: 'bad', text: '-' };
+                const speedupEagerInfo = result.correct && speedupEager > 0
+                    ? formatSpeedup(speedupEager)
                     : { class: 'bad', text: '-' };
 
                 let statusHtml = '';
@@ -501,15 +525,19 @@
                     statusHtml = '<span class="status-icon error" title="Failed">&#10007;</span>';
                 }
 
+                // Highlight the default baseline column: L1 = eager, L2-3 = compile
+                const compileHighlight = kernel.level !== 1 ? 'font-weight: 600;' : 'opacity: 0.7;';
+                const eagerHighlight = kernel.level === 1 ? 'font-weight: 600;' : 'opacity: 0.7;';
+
                 return `
                     <tr>
                         <td><span class="badge badge-level-${kernel.level}">L${kernel.level}</span></td>
                         <td>${kernel.problem_id}</td>
-                        <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><a href="kernels.html?kernel=level_${kernel.level}_problem_${kernel.problem_id}&model=${encodeURIComponent(modelId)}" class="kernel-link">${escapeHtml(kernel.name)}</a></td>
+                        <td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><a href="kernels.html?kernel=level_${kernel.level}_problem_${kernel.problem_id}&model=${encodeURIComponent(modelId)}" class="kernel-link">${escapeHtml(kernel.name)}</a></td>
                         <td>${statusHtml}</td>
-                        <td class="metric">${kernel.baseline_time.toFixed(2)} ms</td>
                         <td class="metric">${result.runtime > 0 ? result.runtime.toFixed(2) + ' ms' : '-'}</td>
-                        <td class="metric ${speedupInfo.class}">${speedupInfo.text}</td>
+                        <td class="metric ${speedupCompileInfo.class}" style="${compileHighlight}">${speedupCompileInfo.text}</td>
+                        <td class="metric ${speedupEagerInfo.class}" style="${eagerHighlight}">${speedupEagerInfo.text}</td>
                     </tr>
                 `;
             }).join('');
