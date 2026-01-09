@@ -91,18 +91,17 @@
                     </div>
                     <div class="eval-info-metrics-grid">
                         <div class="eval-info-metric">
-                            <div class="eval-info-metric-title">GeoMean Speedup</div>
+                            <div class="eval-info-metric-title">Ranking Methodology</div>
                             <p class="eval-info-metric-desc">
-                                <strong>Geometric Mean</strong> of speedups across all <em>correct</em> kernels vs <strong>torch.compile</strong> (inductor) baseline.
-                                A GeoMean of <strong>1.0×</strong> means the model matches torch.compile on average, while <strong>>1.0×</strong> means it's faster.
-                                The leaderboard is ranked by GeoMean by default.
+                                Models are ranked by <strong>Correctness</strong> first (how many kernels work), then <strong>fast<sub>1</sub></strong> (% faster than baseline), then <strong>GeoMean</strong> as tiebreaker.
+                                This prevents outliers from inflating rankings and rewards models that work reliably across more kernels.
                             </p>
                         </div>
                         <div class="eval-info-metric">
                             <div class="eval-info-metric-title">Understanding fast<sub>p</sub></div>
                             <p class="eval-info-metric-desc">
-                                <strong>fast<sub>p</sub></strong> measures the fraction of kernels that are both <em>correct</em> and achieve at least <em>p×</em> speedup over torch.compile.
-                                For example, <strong>fast<sub>1</sub></strong> = percentage faster than torch.compile, <strong>fast<sub>2</sub></strong> = percentage at least 2× faster.
+                                <strong>fast<sub>p</sub></strong> measures the fraction of kernels that are both <em>correct</em> and achieve at least <em>p×</em> speedup over baseline.
+                                For example, <strong>fast<sub>1</sub></strong> = percentage faster than baseline, <strong>fast<sub>2</sub></strong> = percentage at least 2× faster.
                             </p>
                         </div>
                         <div class="eval-info-metric">
@@ -144,9 +143,9 @@
                             <th>Model</th>
                             <th>Organization</th>
                             <th style="width: 70px;">Hardware</th>
-                            <th class="sortable" data-sort="geo_mean" style="width: 100px;">GeoMean</th>
+                            <th class="sortable sorted-desc" data-sort="correct" style="width: 80px;">Correct</th>
                             <th class="sortable" data-sort="fast_p" style="width: 90px;">Fast@1x</th>
-                            <th class="sortable" data-sort="correct" style="width: 80px;">Correct</th>
+                            <th class="sortable" data-sort="geo_mean" style="width: 100px;">GeoMean</th>
                             <th class="sortable" data-sort="date" style="width: 90px;">Date</th>
                             <th style="width: 70px;"></th>
                         </tr>
@@ -164,17 +163,17 @@
         <!-- Chart Section -->
         <section class="section">
             <div class="tabs" id="chart-tabs">
-                <button class="tab active" data-chart="geomean">GeoMean</button>
+                <button class="tab active" data-chart="correctness">Correctness</button>
                 <button class="tab" data-chart="fastp">fast<sub>p</sub></button>
-                <button class="tab" data-chart="correctness">Correctness</button>
+                <button class="tab" data-chart="geomean">GeoMean</button>
             </div>
-            <p class="tab-description" id="tab-description">Geometric mean speedup across all correct kernels. Higher is better.</p>
+            <p class="tab-description" id="tab-description">Number of kernels producing correct output for each difficulty level. Level 1 has 100 problems, Level 2 has 100, and Level 3 has 50.</p>
 
             <div class="chart-section">
                 <div class="chart-header">
                     <div>
                         <div class="chart-title">
-                            <span id="chart-title-text">GeoMean Speedup</span>
+                            <span id="chart-title-text">Correctness by Level</span>
                         </div>
                         <div class="chart-info">n = <span id="workload-count">250</span> kernels</div>
                     </div>
@@ -204,9 +203,9 @@
         let leaderboardData = [];
         let kernelsData = null;  // Kernel-level data with dual speedups
         let detailedResults = {};
-        let currentSort = { field: 'geo_mean', direction: 'desc' };
+        let currentSort = { field: 'correct', direction: 'desc' };  // Primary: correctness
         let mainChart = null;
-        let currentChartType = 'geomean';
+        let currentChartType = 'correctness';
         let currentThreshold = 1.0;  // Vertical line position (controlled by click)
         let currentXAxisMax = 3.0;   // X-axis maximum (controlled by slider)
         let precomputedChartData = null;  // Pre-computed data for smooth updates
@@ -392,10 +391,31 @@
             });
 
             const sorted = [...modelsWithMetrics].sort((a, b) => {
-                let aVal, bVal;
                 const aMetrics = a.calculatedMetrics || a.metrics || {};
                 const bMetrics = b.calculatedMetrics || b.metrics || {};
 
+                // Multi-level sort when sorting by correctness: Correct → Fast_p → GeoMean
+                // This prevents GeoMean outliers from dominating rankings
+                if (currentSort.field === 'correct') {
+                    const aCorrect = aMetrics.total_correct || 0;
+                    const bCorrect = bMetrics.total_correct || 0;
+                    if (aCorrect !== bCorrect) {
+                        return currentSort.direction === 'desc' ? bCorrect - aCorrect : aCorrect - bCorrect;
+                    }
+                    // Tiebreaker 1: fast_p
+                    const aFastP = aMetrics.fast_p_1_0 || 0;
+                    const bFastP = bMetrics.fast_p_1_0 || 0;
+                    if (aFastP !== bFastP) {
+                        return currentSort.direction === 'desc' ? bFastP - aFastP : aFastP - bFastP;
+                    }
+                    // Tiebreaker 2: geo_mean
+                    const aGeo = aMetrics.geo_mean || 0;
+                    const bGeo = bMetrics.geo_mean || 0;
+                    return currentSort.direction === 'desc' ? bGeo - aGeo : aGeo - bGeo;
+                }
+
+                // Single-column sort for other fields
+                let aVal, bVal;
                 switch (currentSort.field) {
                     case 'geo_mean':
                         aVal = aMetrics.geo_mean || 0;
@@ -404,10 +424,6 @@
                     case 'fast_p':
                         aVal = aMetrics.fast_p_1_0 || 0;
                         bVal = bMetrics.fast_p_1_0 || 0;
-                        break;
-                    case 'correct':
-                        aVal = aMetrics.total_correct || 0;
-                        bVal = bMetrics.total_correct || 0;
                         break;
                     case 'date':
                         aVal = new Date(a.timestamp || 0);
@@ -455,9 +471,9 @@
                     <td class="model-name"><a href="models.html?model=${encodeURIComponent(uniqueId)}" class="model-name-link">${escapeHtml(entry.display_name || 'Unknown')}</a></td>
                     <td>${escapeHtml(entry.organization || '-')}</td>
                     <td><span class="badge badge-hw">${escapeHtml(entry.hardware || 'Unknown')}</span></td>
-                    <td class="${geoClass}">${geoMean.toFixed(3)}x</td>
+                    <td class="metric" style="font-weight: 600;">${totalCorrect}/${totalSubmitted}</td>
                     <td class="metric">${(fastP * 100).toFixed(1)}%</td>
-                    <td>${totalCorrect}/${totalSubmitted}</td>
+                    <td class="${geoClass}">${geoMean.toFixed(3)}x</td>
                     <td>${date}</td>
                     <td><a href="models.html?model=${encodeURIComponent(uniqueId)}" class="link">Details →</a></td>
                 `;
